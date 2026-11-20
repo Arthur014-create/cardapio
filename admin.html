@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="escuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - Sabor &amp; Brasa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root,
+    html[data-theme="escuro"] {
+      --bg-base: #0B0807;
+      --bg-sidebar: #100B0A;
+      --bg-card: #16100E;
+      --bg-input: #1E1613;
+      --texto-principal: #F5EFEA;
+      --texto-secundario: #B3A298;
+      --amarelo-suave: #E0A82E;
+      --laranja-suave: #D96528;
+      --vermelho-suave: #C2382B;
+      --borda-sutil: rgba(217, 101, 40, 0.28);
+      --borda-destaque: rgba(224, 168, 46, 0.45);
+      --sombra-card: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    html[data-theme="claro"] {
+      --bg-base: #FFF3DC;
+      --bg-sidebar: #FFF9EE;
+      --bg-card: #FFFDF9;
+      --bg-input: #FFFFFF;
+      --texto-principal: #3B1609;
+      --texto-secundario: #6E3B23;
+      --amarelo-suave: #D99200;
+      --laranja-suave: #D95B18;
+      --vermelho-suave: #B20D0D;
+      --borda-sutil: rgba(178, 13, 13, 0.18);
+      --borda-destaque: rgba(217, 91, 24, 0.45);
+      --sombra-card: 0 6px 18px rgba(84, 33, 15, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* TAMANHO GRANDE NO COMPUTADOR */
+    body {
+      background-color: var(--bg-base);
+      color: var(--texto-principal);
+      min-height: 100vh;
+      display: flex;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    .overlay-sidebar-admin {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.52);
+      z-index: 45;
+    }
+
+    .overlay-sidebar-admin.ativo {
+      display: block;
+    }
+
+    /* =========================================================
+       SIDEBAR LATERAL SOBREPOSTA (COMPUTADOR)
+    ========================================================= */
+    aside.sidebar-admin {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 68px;
+      height: 100vh;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--borda-sutil);
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 50;
+      transition: width 0.22s ease, box-shadow 0.22s ease;
+      overflow-y: auto;
+    }
+
+    aside.sidebar-admin.aberta {
+      width: 265px;
+      padding: 16px 14px;
+      box-shadow: 10px 0 28px rgba(0, 0, 0, 0.65);
+    }
+
+    .topo-sidebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .marca-admin {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .marca-admin-icone {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--amarelo-suave) 0%, var(--laranja-suave) 100%);
+      color: #1A0B05;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .marca-admin-texto {
+      display: none;
+      white-space: nowrap;
+    }
+
+    aside.sidebar-admin.aberta .marca-admin-texto {
+      display: block;
+    }
+
+    .marca-admin-texto h2 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--texto-principal);
+      line-height: 1.15;
+    }
+
+    .marca-admin-texto span {
+      font-size: 11px;
+      color: var(--texto-secundario);
+    }
+
+    .btn-toggle-sidebar {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--borda-destaque);
+      color: var(--amarelo-suave);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      transition: transform 0.22s ease, background 0.2s ease;
+    }
+
+    .btn-toggle-sidebar:hover {
+      background: rgba(224, 168, 46, 0.14);
+    }
+
+    aside.sidebar-admin.aberta .btn-toggle-sidebar i {
+      transform: rotate(180deg);
+    }
+
+    .menu-lateral {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .item-menu-admin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      padding: 11px;
+      border-radius: 11px;
+      color: var(--texto-secundario);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    aside.sidebar-admin.aberta .item-menu-admin {
+      justify-content: flex-start;
+      padding: 11px 13px;
+    }
+
+    .item-menu-admin i {
+      width: 18px;
+      text-align: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .texto-menu-item {
+      display: none;
+    }
+
+    aside.sidebar-admin.aberta .texto-menu-item {
+      display: inline;
+    }
+
+    .item-menu-admin:hover {
+      color: var(--texto-principal);
+      background: rgba(217, 101, 40, 0.1);
+    }
+
+    .item-menu-admin.ativo {
+      background: rgba(224, 168, 46, 0.16);
+      color: var(--amarelo-suave);
+      border-color: var(--borda-destaque);
+      font-weight: 700;
+    }
+
+    .rodape-sidebar {
+      padding-top: 14px;
+      border-top: 1px solid var(--borda-sutil);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    aside.sidebar-admin.aberta .rodape-sidebar {
+      align-items: flex-start;
+    }
+
+    .link-voltar-cardapio {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--laranja-suave);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px;
+      white-space: nowrap;
+    }
+
+    .link-voltar-cardapio span {
+      display: none;
+    }
+
+    aside.sidebar-admin.aberta .link-voltar-cardapio span {
+      display: inline;
+    }
+
+    /* =========================================================
+       ÁREA PRINCIPAL (COMPUTADOR)
+    ========================================================= */
+    main.conteudo-admin {
+      flex: 1;
+      margin-left: 68px;
+      padding: 24px 28px 56px;
+      max-width: 1380px;
+      min-width: 0;
+    }
+
+    .cabecalho-painel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cabecalho-titulo-grupo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icone-titulo-painel {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(224, 168, 46, 0.15);
+      border: 1px solid var(--borda-destaque);
+      color: var(--amarelo-suave);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .cabecalho-painel h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--texto-principal);
+      line-height: 1.15;
+    }
+
+    .cabecalho-painel p {
+      font-size: 13px;
+      color: var(--texto-secundario);
+      margin-top: 2px;
+    }
+
+    .acoes-topo-dir {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-acao-topo {
+      background: var(--bg-card);
+      color: var(--texto-principal);
+      border: 1px solid var(--borda-sutil);
+      padding: 8px 14px;
+      border-radius: 18px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .btn-acao-topo:hover {
+      border-color: var(--borda-destaque);
+      color: var(--amarelo-suave);
+    }
+
+    /* =========================================================
+       3 CARDS DE MÉTRICAS (COMPUTADOR)
+    ========================================================= */
+    .grid-metricas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .card-metrica {
+      background: var(--bg-card);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: var(--sombra-card);
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .card-metrica:hover {
+      border-color: var(--borda-destaque);
+      transform: translateY(-1px);
+    }
+
+    .metrica-esq {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .icone-metrica {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    .icone-metrica.caixa {
+      background: rgba(224, 168, 46, 0.14);
+      color: var(--amarelo-suave);
+    }
+
+    .icone-metrica.cupom {
+      background: rgba(217, 101, 40, 0.14);
+      color: var(--laranja-suave);
+    }
+
+    .icone-metrica.taxa {
+      background: rgba(46, 179, 108, 0.14);
+      color: #2EB36C;
+    }
+
+    .metrica-valor {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--texto-principal);
+      line-height: 1.1;
+    }
+
+    .metrica-label {
+      font-size: 12px;
+      color: var(--texto-secundario);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .metrica-seta {
+      color: var(--texto-secundario);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================
+       SEÇÕES DE ABAS E FORMULÁRIOS (COMPUTADOR)
+    ========================================================= */
+    .secao-aba {
+      display: none;
+    }
+
+    .secao-aba.ativa {
+      display: block;
+    }
+
+    .painel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 16px;
+      padding: 20px 22px;
+      box-shadow: var(--sombra-card);
+      margin-bottom: 18px;
+    }
+
+    .titulo-secao-form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .titulo-secao-esq {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--texto-principal);
+    }
+
+    .circulo-mais {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: var(--amarelo-suave);
+      color: #1A0B05;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .form-grade-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .form-grade-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .campo-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .campo-grupo label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--texto-secundario);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .campo-grupo label i {
+      color: var(--amarelo-suave);
+      font-size: 12px;
+    }
+
+    .campo-grupo input,
+    .campo-grupo select,
+    .campo-grupo textarea {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 10px;
+      padding: 10px 13px;
+      color: var(--texto-principal);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .campo-grupo input:focus,
+    .campo-grupo select:focus,
+    .campo-grupo textarea:focus {
+      border-color: var(--amarelo-suave);
+    }
+
+    .campo-grupo textarea {
+      min-height: 76px;
+      resize: vertical;
+    }
+
+    .acoes-form-rodape {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-salvar-produto {
+      background: linear-gradient(90deg, var(--vermelho-suave) 0%, var(--laranja-suave) 100%);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-salvar-produto:hover {
+      opacity: 0.92;
+    }
+
+    .btn-secundario-admin {
+      background: var(--bg-input);
+      color: var(--texto-secundario);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 20px;
+      padding: 9px 15px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .btn-secundario-admin:hover {
+      color: var(--texto-principal);
+      border-color: var(--borda-destaque);
+    }
+
+    /* =========================================================
+       LISTA DE PRODUTOS (COMPUTADOR)
+    ========================================================= */
+    .barra-filtro-cardapio {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .barra-filtro-cardapio input {
+      flex: 1;
+      min-width: 220px;
+      background: var(--bg-input);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--texto-principal);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .lista-produtos-admin {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 14px;
+    }
+
+    .card-item-admin {
+      background: var(--bg-input);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 12px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-item-admin img {
+      width: 54px;
+      height: 54px;
+      border-radius: 9px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .info-item-admin {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .info-item-admin strong {
+      display: block;
+      font-size: 13px;
+      color: var(--texto-principal);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .info-item-admin small {
+      display: block;
+      font-size: 11px;
+      color: var(--texto-secundario);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preco-item-admin {
+      color: var(--amarelo-suave);
+      font-weight: 700;
+      font-size: 12.5px;
+    }
+
+    .botoes-item-admin {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-mini {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .btn-mini.editar {
+      background: rgba(224, 168, 46, 0.15);
+      color: var(--amarelo-suave);
+      border-color: rgba(224, 168, 46, 0.3);
+    }
+
+    .btn-mini.excluir {
+      background: rgba(194, 56, 43, 0.15);
+      color: #E05A4E;
+      border-color: rgba(194, 56, 43, 0.3);
+    }
+
+    /* =========================================================
+       LISTA DE CUPONS E ÁREAS DE ENTREGA (COMPUTADOR)
+    ========================================================= */
+    .lista-registros {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .linha-registro {
+      background: var(--bg-input);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 11px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .linha-registro.bloqueado {
+      opacity: 0.6;
+    }
+
+    .registro-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .tag-codigo-cupom {
+      background: rgba(224, 168, 46, 0.16);
+      color: var(--amarelo-suave);
+      border: 1px solid var(--borda-destaque);
+      padding: 3px 9px;
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+
+    .status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 16px;
+    }
+
+    .status-pill.ativo {
+      background: rgba(46, 179, 108, 0.16);
+      color: #2EB36C;
+    }
+
+    .status-pill.bloqueado {
+      background: rgba(194, 56, 43, 0.18);
+      color: #E05A4E;
+    }
+
+    .acoes-registro {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-bloquear-cupom {
+      background: var(--bg-card);
+      color: var(--texto-principal);
+      border: 1px solid var(--borda-sutil);
+      border-radius: 8px;
+      padding: 6px 11px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-bloquear-cupom:hover {
+      border-color: var(--amarelo-suave);
+    }
+
+    /* =========================================================
+       AJUSTE COMPACTO APENAS NO CELULAR (<= 768px)
+    ========================================================= */
+    @media (max-width: 768px) {
+      body {
+        font-size: 12px;
+      }
+
+      aside.sidebar-admin {
+        width: 48px;
+        padding: 10px 5px;
+      }
+
+      aside.sidebar-admin.aberta {
+        width: 205px;
+        padding: 10px 9px;
+      }
+
+      .topo-sidebar {
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .marca-admin {
+        gap: 8px;
+      }
+
+      .marca-admin-icone {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        font-size: 13px;
+      }
+
+      .marca-admin-texto h2 {
+        font-size: 12px;
+      }
+
+      .marca-admin-texto span {
+        font-size: 9.5px;
+      }
+
+      .btn-toggle-sidebar {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        font-size: 10px;
+      }
+
+      .menu-lateral {
+        gap: 4px;
+      }
+
+      .item-menu-admin {
+        gap: 8px;
+        padding: 8px;
+        border-radius: 9px;
+        font-size: 11px;
+      }
+
+      aside.sidebar-admin.aberta .item-menu-admin {
+        padding: 8px 10px;
+      }
+
+      .item-menu-admin i {
+        width: 14px;
+        font-size: 12px;
+      }
+
+      .rodape-sidebar {
+        padding-top: 10px;
+        gap: 6px;
+      }
+
+      .link-voltar-cardapio {
+        gap: 7px;
+        font-size: 10.5px;
+        padding: 4px;
+      }
+
+      main.conteudo-admin {
+        margin-left: 48px;
+        padding: 12px 10px 34px;
+      }
+
+      .cabecalho-painel {
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .cabecalho-titulo-grupo {
+        gap: 9px;
+      }
+
+      .icone-titulo-painel {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        font-size: 14px;
+      }
+
+      .cabecalho-painel h1 {
+        font-size: 14px;
+      }
+
+      .cabecalho-painel p {
+        font-size: 9.5px;
+      }
+
+      .acoes-topo-dir {
+        gap: 6px;
+      }
+
+      .btn-acao-topo {
+        padding: 5px 10px;
+        border-radius: 14px;
+        font-size: 10.5px;
+        gap: 5px;
+      }
+
+      .grid-metricas {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .card-metrica {
+        border-radius: 11px;
+        padding: 10px 12px;
+        gap: 8px;
+      }
+
+      .metrica-esq {
+        gap: 9px;
+      }
+
+      .icone-metrica {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        font-size: 13px;
+      }
+
+      .metrica-valor {
+        font-size: 13.5px;
+      }
+
+      .metrica-label {
+        font-size: 9.5px;
+      }
+
+      .metrica-seta {
+        font-size: 10.5px;
+      }
+
+      .painel-box {
+        border-radius: 13px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+      }
+
+      .titulo-secao-form {
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .titulo-secao-esq {
+        gap: 7px;
+        font-size: 13px;
+      }
+
+      .circulo-mais {
+        width: 18px;
+        height: 18px;
+        font-size: 9.5px;
+      }
+
+      .form-grade-3,
+      .form-grade-2 {
+        grid-template-columns: 1fr;
+        gap: 10px 12px;
+        margin-bottom: 10px;
+      }
+
+      .campo-grupo {
+        gap: 4px;
+      }
+
+      .campo-grupo label {
+        font-size: 10.5px;
+        gap: 5px;
+      }
+
+      .campo-grupo label i {
+        font-size: 10px;
+      }
+
+      .campo-grupo input,
+      .campo-grupo select,
+      .campo-grupo textarea {
+        border-radius: 8px;
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+
+      .campo-grupo textarea {
+        min-height: 58px;
+      }
+
+      .acoes-form-rodape {
+        gap: 8px;
+        margin-top: 11px;
+      }
+
+      .btn-salvar-produto {
+        border-radius: 16px;
+        padding: 7px 15px;
+        font-size: 11px;
+        gap: 6px;
+      }
+
+      .btn-secundario-admin {
+        border-radius: 16px;
+        padding: 6px 11px;
+        font-size: 10.5px;
+        gap: 5px;
+      }
+
+      .barra-filtro-cardapio {
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .barra-filtro-cardapio input {
+        min-width: 180px;
+        border-radius: 8px;
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+
+      .lista-produtos-admin {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .card-item-admin {
+        border-radius: 9px;
+        padding: 6px;
+        gap: 6px;
+      }
+
+      .card-item-admin img {
+        width: 32px;
+        height: 32px;
+        border-radius: 7px;
+      }
+
+      .info-item-admin strong {
+        font-size: 10px;
+      }
+
+      .info-item-admin small {
+        font-size: 8.5px;
+      }
+
+      .preco-item-admin {
+        font-size: 9.5px;
+      }
+
+      .botoes-item-admin {
+        gap: 4px;
+      }
+
+      .btn-mini {
+        width: 21px;
+        height: 21px;
+        border-radius: 6px;
+        font-size: 9px;
+      }
+
+      .lista-registros {
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .linha-registro {
+        border-radius: 9px;
+        padding: 8px 11px;
+        gap: 8px;
+      }
+
+      .registro-info {
+        gap: 8px;
+        font-size: 11px;
+      }
+
+      .tag-codigo-cupom {
+        padding: 2px 7px;
+        border-radius: 6px;
+        font-size: 10.5px;
+      }
+
+      .status-pill {
+        font-size: 9.5px;
+        padding: 2px 7px;
+        border-radius: 14px;
+      }
+
+      .acoes-registro {
+        gap: 6px;
+      }
+
+      .btn-bloquear-cupom {
+        border-radius: 7px;
+        padding: 4px 8px;
+        font-size: 10px;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay-sidebar-admin" id="overlaySidebarAdmin" onclick="alternarSidebarAdmin(false)"></div>
+
+  <!-- SIDEBAR LATERAL SOBREPOSTA (RECOLHIDA POR PADRÃO, ABRE NA SETA) -->
+  <aside class="sidebar-admin" id="sidebarAdmin">
+    <div>
+      <div class="topo-sidebar">
+        <div class="marca-admin">
+          <div class="marca-admin-icone">
+            <i class="fa-solid fa-burger"></i>
+          </div>
+          <div class="marca-admin-texto">
+            <h2 id="nomeAdminSidebar">Sabor &amp; Brasa</h2>
+            <span>Gestão Administrativa</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-toggle-sidebar" onclick="alternarSidebarAdmin()" title="Expandir / Recolher Menu">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <nav class="menu-lateral">
+        <button type="button" class="item-menu-admin ativo" data-aba="criar" onclick="trocarAbaAdmin('criar', this)">
+          <i class="fa-solid fa-plus-circle"></i>
+          <span class="texto-menu-item">Criar Produto / Receita</span>
+        </button>
+
+        <button type="button" class="item-menu-admin" data-aba="cardapio" onclick="trocarAbaAdmin('cardapio', this)">
+          <i class="fa-solid fa-burger"></i>
+          <span class="texto-menu-item">Cardápio &amp; Estoque</span>
+        </button>
+
+        <button type="button" class="item-menu-admin" data-aba="cupons" onclick="trocarAbaAdmin('cupons', this)">
+          <i class="fa-solid fa-percent"></i>
+          <span class="texto-menu-item">Cupons de Desconto</span>
+        </button>
+
+        <button type="button" class="item-menu-admin" data-aba="areas" onclick="trocarAbaAdmin('areas', this)">
+          <i class="fa-solid fa-motorcycle"></i>
+          <span class="texto-menu-item">Áreas de Entrega</span>
+        </button>
+
+        <button type="button" class="item-menu-admin" data-aba="loja" onclick="trocarAbaAdmin('loja', this)">
+          <i class="fa-regular fa-clock"></i>
+          <span class="texto-menu-item">Horários &amp; Segurança</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="rodape-sidebar">
+      <a href="index.html" class="link-voltar-cardapio" title="Voltar ao Cardápio">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Voltar ao Cardápio</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="conteudo-admin">
+    <div class="cabecalho-painel">
+      <div class="cabecalho-titulo-grupo">
+        <div class="icone-titulo-painel">
+          <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div>
+          <h1 id="tituloPainelAdmin">Criar Produto / Receita</h1>
+          <p id="subtituloPainelAdmin">Cadastre novos itens e receitas para aparecerem no cardápio.</p>
+        </div>
+      </div>
+
+      <div class="acoes-topo-dir">
+        <button type="button" class="btn-acao-topo" onclick="alternarTemaAdmin()">
+          <i class="fa-solid fa-circle-half-stroke"></i> Tema
+        </button>
+        <a href="sacola.html" class="btn-acao-topo">
+          <i class="fa-solid fa-bag-shopping"></i> Sacola
+        </a>
+      </div>
+    </div>
+
+    <!-- 3 CARDS DE MÉTRICAS (CLICÁVEIS PARA IR DIRETO NA ABA) -->
+    <section class="grid-metricas">
+      <div class="card-metrica" onclick="abrirAbaPorNome('cardapio')">
+        <div class="metrica-esq">
+          <div class="icone-metrica caixa">
+            <i class="fa-solid fa-box-archive"></i>
+          </div>
+          <div>
+            <div class="metrica-valor" id="metricaTotalProdutos">0</div>
+            <div class="metrica-label">Itens no Cardápio</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right metrica-seta"></i>
+      </div>
+
+      <div class="card-metrica" onclick="abrirAbaPorNome('cupons')">
+        <div class="metrica-esq">
+          <div class="icone-metrica cupom">
+            <i class="fa-solid fa-ticket"></i>
+          </div>
+          <div>
+            <div class="metrica-valor" id="metricaCuponsAtivos">0</div>
+            <div class="metrica-label">Cupons Ativos</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right metrica-seta"></i>
+      </div>
+
+      <div class="card-metrica" onclick="abrirAbaPorNome('areas')">
+        <div class="metrica-esq">
+          <div class="icone-metrica taxa">
+            <i class="fa-solid fa-money-bill-1-wave"></i>
+          </div>
+          <div>
+            <div class="metrica-valor" id="metricaTaxaEntrega">R$ 5,00</div>
+            <div class="metrica-label">Taxa Base de Entrega</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right metrica-seta"></i>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ABA 1: CRIAR RECEITA / PRODUTO (SEPARADA DO CARDÁPIO)
+    ========================================================= -->
+    <section class="secao-aba ativa" id="aba-criar">
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <span class="circulo-mais"><i class="fa-solid fa-plus"></i></span>
+            <span id="tituloFormAdmin">Cadastrar Nova Receita / Produto</span>
+          </div>
+          <button type="button" class="btn-secundario-admin" onclick="limparFormAdmin()">
+            <i class="fa-solid fa-eraser"></i> Limpar Campos
+          </button>
+        </div>
+
+        <form id="formProdutoAdmin" onsubmit="salvarProdutoAdmin(event)">
+          <input type="hidden" id="idProdutoEditando">
+
+          <div class="form-grade-3">
+            <div class="campo-grupo">
+              <label for="nomeProdutoAdmin"><i class="fa-solid fa-burger"></i> Nome do Produto / Receita</label>
+              <input type="text" id="nomeProdutoAdmin" placeholder="Ex: Burguer Bacon BBQ" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="imagemProdutoAdmin"><i class="fa-regular fa-image"></i> URL da Foto (Opcional)</label>
+              <input type="text" id="imagemProdutoAdmin" placeholder="https://images.unsplash.com/...">
+            </div>
+
+            <div class="campo-grupo">
+              <label for="categoriaProdutoAdmin"><i class="fa-solid fa-utensils"></i> Categoria</label>
+              <select id="categoriaProdutoAdmin">
+                <option value="lanches">Lanches</option>
+                <option value="entradas">Entradas</option>
+                <option value="bebidas">Bebidas</option>
+                <option value="sobremesas">Sobremesas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grade-3">
+            <div class="campo-grupo">
+              <label for="precoProdutoAdmin"><i class="fa-solid fa-sack-dollar"></i> Preço (R$)</label>
+              <input type="text" id="precoProdutoAdmin" placeholder="29,90" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="estoqueProdutoAdmin"><i class="fa-solid fa-cubes-stacked"></i> Estoque Inicial</label>
+              <input type="number" id="estoqueProdutoAdmin" min="0" value="10" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="tagProdutoAdmin"><i class="fa-solid fa-tag"></i> Tag em Destaque</label>
+              <input type="text" id="tagProdutoAdmin" placeholder="Ex: Artesanal">
+            </div>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="descricaoProdutoAdmin"><i class="fa-solid fa-align-left"></i> Ingredientes / Modo de Preparo</label>
+            <textarea id="descricaoProdutoAdmin" placeholder="Descreva os ingredientes e detalhes da receita..."></textarea>
+          </div>
+
+          <div class="acoes-form-rodape">
+            <button type="submit" class="btn-salvar-produto" id="btnSubmitAdmin">
+              <i class="fa-solid fa-floppy-disk"></i> Salvar no Cardápio
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ABA 2: CARDÁPIO & ESTOQUE (SEPARADA DE CRIAR RECEITA)
+    ========================================================= -->
+    <section class="secao-aba" id="aba-cardapio">
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <i class="fa-solid fa-list-ul" style="color: var(--amarelo-suave);"></i>
+            <span>Itens Cadastrados no Cardápio (<span id="contadorListaAdmin">0</span>)</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn-secundario-admin" onclick="abrirAbaPorNome('criar')">
+              <i class="fa-solid fa-plus"></i> Novo Item
+            </button>
+            <button type="button" class="btn-secundario-admin" onclick="restaurarPadraoAdmin()">
+              <i class="fa-solid fa-rotate-left"></i> Restaurar Padrão
+            </button>
+          </div>
+        </div>
+
+        <div class="barra-filtro-cardapio">
+          <input type="text" id="buscaCardapioAdmin" placeholder="Buscar produto no cardápio..." oninput="renderizarListaAdmin()">
+        </div>
+
+        <div class="lista-produtos-admin" id="listaProdutosAdmin"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ABA 3: CUPONS DE DESCONTO (LISTA SALVA + BLOQUEAR/DESBLOQUEAR)
+    ========================================================= -->
+    <section class="secao-aba" id="aba-cupons">
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <i class="fa-solid fa-ticket" style="color: var(--amarelo-suave);"></i>
+            <span>Novo Cupom de Desconto</span>
+          </div>
+        </div>
+
+        <form onsubmit="adicionarCupomAdmin(event)">
+          <div class="form-grade-3">
+            <div class="campo-grupo">
+              <label for="novoCupomCodigo"><i class="fa-solid fa-tag"></i> Código do Cupom</label>
+              <input type="text" id="novoCupomCodigo" placeholder="Ex: PROMO15" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="novoCupomDesconto"><i class="fa-solid fa-percent"></i> Desconto (%)</label>
+              <input type="number" id="novoCupomDesconto" min="1" max="100" placeholder="15" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="novoCupomStatus"><i class="fa-solid fa-toggle-on"></i> Status Inicial</label>
+              <select id="novoCupomStatus">
+                <option value="ativo">Ativo (Liberado)</option>
+                <option value="bloqueado">Bloqueado</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-salvar-produto">
+            <i class="fa-solid fa-plus"></i> Salvar Cupom
+          </button>
+        </form>
+      </div>
+
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <i class="fa-solid fa-tags" style="color: var(--amarelo-suave);"></i>
+            <span>Cupons Salvos (<span id="totalCuponsLista">0</span>)</span>
+          </div>
+        </div>
+
+        <div class="lista-registros" id="listaCuponsAdmin"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ABA 4: ÁREAS DE ENTREGA
+    ========================================================= -->
+    <section class="secao-aba" id="aba-areas">
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <i class="fa-solid fa-motorcycle" style="color: var(--amarelo-suave);"></i>
+            <span>Configuração Geral &amp; Nova Área de Entrega</span>
+          </div>
+        </div>
+
+        <div class="form-grade-2" style="border-bottom: 1px solid var(--borda-sutil); padding-bottom: 12px; margin-bottom: 14px;">
+          <div class="campo-grupo">
+            <label for="taxaBaseEntregaInput"><i class="fa-solid fa-sack-dollar"></i> Taxa Base Padrão (R$)</label>
+            <input type="text" id="taxaBaseEntregaInput" value="5,00">
+          </div>
+          <div class="campo-grupo" style="justify-content: flex-end;">
+            <button type="button" class="btn-salvar-produto" style="width: fit-content;" onclick="salvarTaxaBaseEntrega()">
+              <i class="fa-solid fa-check"></i> Atualizar Taxa Base
+            </button>
+          </div>
+        </div>
+
+        <form onsubmit="adicionarAreaEntregaAdmin(event)">
+          <div class="form-grade-3">
+            <div class="campo-grupo">
+              <label for="nomeBairroArea"><i class="fa-solid fa-location-dot"></i> Bairro / Região</label>
+              <input type="text" id="nomeBairroArea" placeholder="Ex: Jardim Leblon" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="taxaBairroArea"><i class="fa-solid fa-money-bill-wave"></i> Taxa do Bairro (R$)</label>
+              <input type="text" id="taxaBairroArea" placeholder="6,00" required>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="tempoBairroArea"><i class="fa-regular fa-clock"></i> Tempo Estimado</label>
+              <input type="text" id="tempoBairroArea" placeholder="Ex: 30-40 min" value="30-40 min">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-salvar-produto">
+            <i class="fa-solid fa-plus"></i> Adicionar Área de Entrega
+          </button>
+        </form>
+      </div>
+
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <i class="fa-solid fa-map-location-dot" style="color: var(--amarelo-suave);"></i>
+            <span>Áreas Cadastradas (<span id="totalAreasLista">0</span>)</span>
+          </div>
+        </div>
+
+        <div class="lista-registros" id="listaAreasAdmin"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         ABA 5: HORÁRIOS & SEGURANÇA
+    ========================================================= -->
+    <section class="secao-aba" id="aba-loja">
+      <div class="painel-box">
+        <div class="titulo-secao-form">
+          <div class="titulo-secao-esq">
+            <i class="fa-solid fa-store" style="color: var(--amarelo-suave);"></i>
+            <span>Horários &amp; Segurança da Conta</span>
+          </div>
+        </div>
+
+        <form onsubmit="salvarConfigLojaAdmin(event)">
+          <div class="form-grade-2">
+            <div class="campo-grupo">
+              <label for="inputNomeLojaAdmin"><i class="fa-solid fa-shop"></i> Nome da Loja</label>
+              <input type="text" id="inputNomeLojaAdmin" value="Sabor & Brasa">
+            </div>
+
+            <div class="campo-grupo">
+              <label for="inputHorarioLoja"><i class="fa-regular fa-clock"></i> Horário de Funcionamento</label>
+              <input type="text" id="inputHorarioLoja" value="18:00 às 23:30">
+            </div>
+
+            <div class="campo-grupo">
+              <label for="inputEmailAdmin"><i class="fa-solid fa-envelope"></i> E-mail do Administrador</label>
+              <input type="email" id="inputEmailAdmin" value="admin@saborebrasa.com">
+            </div>
+
+            <div class="campo-grupo">
+              <label for="inputPinAdmin"><i class="fa-solid fa-lock"></i> PIN / Senha de Acesso</label>
+              <input type="password" id="inputPinAdmin" value="1234">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-salvar-produto">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar Configurações
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="produtos.js"></script>
+  <script>
+    /* =========================================================
+       CONTROLE DE TEMA E MENU LATERAL SOBREPOSTO
+    ========================================================= */
+    function aplicarTemaAdmin() {
+      const tema = localStorage.getItem('tema_preferido') || localStorage.getItem('tema_usuario') || 'escuro';
+      document.documentElement.setAttribute('data-theme', tema);
+    }
+
+    function alternarTemaAdmin() {
+      const atual = document.documentElement.getAttribute('data-theme') || 'escuro';
+      const proximo = atual === 'escuro' ? 'claro' : 'escuro';
+      document.documentElement.setAttribute('data-theme', proximo);
+      localStorage.setItem('tema_preferido', proximo);
+      localStorage.setItem('tema_usuario', proximo);
+    }
+
+    function alternarSidebarAdmin(forcarEstado) {
+      const sidebar = document.getElementById('sidebarAdmin');
+      const overlay = document.getElementById('overlaySidebarAdmin');
+      const abrir = typeof forcarEstado === 'boolean' ? forcarEstado : !sidebar.classList.contains('aberta');
+      sidebar.classList.toggle('aberta', abrir);
+      overlay.classList.toggle('ativo', abrir);
+    }
+
+    function trocarAbaAdmin(aba, btn) {
+      document.querySelectorAll('.item-menu-admin').forEach(el => el.classList.remove('ativo'));
+      if (btn) btn.classList.add('ativo');
+
+      document.querySelectorAll('.secao-aba').forEach(sec => sec.classList.remove('ativa'));
+      const secaoAlvo = document.getElementById(`aba-${aba}`);
+      if (secaoAlvo) secaoAlvo.classList.add('ativa');
+
+      const infoCabecalho = {
+        criar: {
+          titulo: 'Criar Produto / Receita',
+          sub: 'Cadastre novos itens e receitas para aparecerem no cardápio.'
+        },
+        cardapio: {
+          titulo: 'Cardápio & Estoque',
+          sub: 'Visualize, edite preços, ajuste estoque ou remova itens cadastrados.'
+        },
+        cupons: {
+          titulo: 'Cupons de Desconto',
+          sub: 'Gerencie os cupons salvos e bloqueie ou libere o uso a qualquer momento.'
+        },
+        areas: {
+          titulo: 'Áreas de Entrega',
+          sub: 'Configure a taxa base e os bairros atendidos pelo delivery.'
+        },
+        loja: {
+          titulo: 'Horários & Segurança',
+          sub: 'Atualize os dados da loja e credenciais do administrador.'
+        }
+      };
+
+      const dados = infoCabecalho[aba] || infoCabecalho.criar;
+      document.getElementById('tituloPainelAdmin').innerText = dados.titulo;
+      document.getElementById('subtituloPainelAdmin').innerText = dados.sub;
+      alternarSidebarAdmin(false);
+    }
+
+    function abrirAbaPorNome(aba) {
+      const btn = document.querySelector(`.item-menu-admin[data-aba="${aba}"]`);
+      trocarAbaAdmin(aba, btn);
+    }
+
+    /* =========================================================
+       CUPONS SALVOS (BLOQUEAR / DESBLOQUEAR)
+    ========================================================= */
+    function obterCuponsAdmin() {
+      const salvos = JSON.parse(localStorage.getItem('cupons_admin_db'));
+      if (Array.isArray(salvos) && salvos.length > 0) return salvos;
+
+      const padrao = [
+        { codigo: 'SABOR10', desconto: 10, bloqueado: false },
+        { codigo: 'VIP20', desconto: 20, bloqueado: false }
+      ];
+      localStorage.setItem('cupons_admin_db', JSON.stringify(padrao));
+      return padrao;
+    }
+
+    function salvarCuponsAdmin(lista) {
+      localStorage.setItem('cupons_admin_db', JSON.stringify(lista));
+      const ativos = lista.filter(c => !c.bloqueado).length;
+      localStorage.setItem('cupons_ativos_qtd', String(ativos));
+      atualizarMetricasAdmin();
+    }
+
+    function renderizarCuponsAdmin() {
+      const cupons = obterCuponsAdmin();
+      const container = document.getElementById('listaCuponsAdmin');
+      document.getElementById('totalCuponsLista').innerText = cupons.length;
+
+      if (!cupons.length) {
+        container.innerHTML = '<p style="color: var(--texto-secundario); font-size: 11px;">Nenhum cupom cadastrado.</p>';
+        return;
+      }
+
+      container.innerHTML = cupons.map((cupom, idx) => `
+        <div class="linha-registro ${cupom.bloqueado ? 'bloqueado' : ''}">
+          <div class="registro-info">
+            <span class="tag-codigo-cupom">${cupom.codigo}</span>
+            <strong style="font-size: 11px;">${cupom.desconto}% OFF</strong>
+            <span class="status-pill ${cupom.bloqueado ? 'bloqueado' : 'ativo'}">
+              ${cupom.bloqueado ? 'Bloqueado' : 'Ativo'}
+            </span>
+          </div>
+
+          <div class="acoes-registro">
+            <button type="button" class="btn-bloquear-cupom" onclick="alternarBloqueioCupom(${idx})">
+              <i class="fa-solid ${cupom.bloqueado ? 'fa-lock-open' : 'fa-ban'}"></i>
+              ${cupom.bloqueado ? 'Desbloquear' : 'Bloquear'}
+            </button>
+            <button type="button" class="btn-mini excluir" onclick="excluirCupomAdmin(${idx})" title="Excluir Cupom">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function adicionarCupomAdmin(event) {
+      event.preventDefault();
+      const codigo = document.getElementById('novoCupomCodigo').value.trim().toUpperCase();
+      const desconto = Math.min(100, Math.max(1, parseInt(document.getElementById('novoCupomDesconto').value, 10) || 10));
+      const bloqueado = document.getElementById('novoCupomStatus').value === 'bloqueado';
+
+      if (!codigo) return;
+      const cupons = obterCuponsAdmin();
+      const existente = cupons.findIndex(c => c.codigo === codigo);
+
+      if (existente >= 0) {
+        cupons[existente] = { codigo, desconto, bloqueado };
+      } else {
+        cupons.push({ codigo, desconto, bloqueado });
+      }
+
+      salvarCuponsAdmin(cupons);
+      document.getElementById('novoCupomCodigo').value = '';
+      document.getElementById('novoCupomDesconto').value = '';
+      renderizarCuponsAdmin();
+    }
+
+    function alternarBloqueioCupom(indice) {
+      const cupons = obterCuponsAdmin();
+      if (!cupons[indice]) return;
+      cupons[indice].bloqueado = !cupons[indice].bloqueado;
+      salvarCuponsAdmin(cupons);
+      renderizarCuponsAdmin();
+    }
+
+    function excluirCupomAdmin(indice) {
+      const cupons = obterCuponsAdmin();
+      cupons.splice(indice, 1);
+      salvarCuponsAdmin(cupons);
+      renderizarCuponsAdmin();
+    }
+
+    /* =========================================================
+       ÁREAS DE ENTREGA
+    ========================================================= */
+    function obterAreasEntregaAdmin() {
+      const salvas = JSON.parse(localStorage.getItem('areas_entrega_db'));
+      if (Array.isArray(salvas) && salvas.length > 0) return salvas;
+
+      const padrao = [
+        { bairro: 'Centro', taxa: 5.00, tempo: '25-35 min' },
+        { bairro: 'Jardim Leblon', taxa: 6.50, tempo: '30-45 min' }
+      ];
+      localStorage.setItem('areas_entrega_db', JSON.stringify(padrao));
+      return padrao;
+    }
+
+    function salvarTaxaBaseEntrega() {
+      const raw = document.getElementById('taxaBaseEntregaInput').value.replace(',', '.');
+      const valor = parseFloat(raw);
+      if (!Number.isNaN(valor) && valor >= 0) {
+        localStorage.setItem('taxa_entrega_valor', String(valor));
+        atualizarMetricasAdmin();
+      }
+    }
+
+    function renderizarAreasEntregaAdmin() {
+      const areas = obterAreasEntregaAdmin();
+      const container = document.getElementById('listaAreasAdmin');
+      document.getElementById('totalAreasLista').innerText = areas.length;
+
+      const taxaBase = Number(localStorage.getItem('taxa_entrega_valor') || 5);
+      document.getElementById('taxaBaseEntregaInput').value = taxaBase.toFixed(2).replace('.', ',');
+
+      if (!areas.length) {
+        container.innerHTML = '<p style="color: var(--texto-secundario); font-size: 11px;">Nenhuma área cadastrada.</p>';
+        return;
+      }
+
+      container.innerHTML = areas.map((area, idx) => `
+        <div class="linha-registro">
+          <div class="registro-info">
+            <i class="fa-solid fa-location-dot" style="color: var(--laranja-suave);"></i>
+            <strong style="font-size: 11px;">${area.bairro}</strong>
+            <span class="tag-codigo-cupom">${formatarPreco(Number(area.taxa) || 0)}</span>
+            <small style="color: var(--texto-secundario); font-size: 10px;">${area.tempo || '30-40 min'}</small>
+          </div>
+          <div class="acoes-registro">
+            <button type="button" class="btn-mini excluir" onclick="excluirAreaEntregaAdmin(${idx})" title="Remover Área">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function adicionarAreaEntregaAdmin(event) {
+      event.preventDefault();
+      const bairro = document.getElementById('nomeBairroArea').value.trim();
+      const taxaRaw = document.getElementById('taxaBairroArea').value.replace(',', '.');
+      const taxa = parseFloat(taxaRaw) || 0;
+      const tempo = document.getElementById('tempoBairroArea').value.trim() || '30-40 min';
+
+      if (!bairro) return;
+      const areas = obterAreasEntregaAdmin();
+      areas.push({ bairro, taxa, tempo });
+      localStorage.setItem('areas_entrega_db', JSON.stringify(areas));
+
+      document.getElementById('nomeBairroArea').value = '';
+      document.getElementById('taxaBairroArea').value = '';
+      renderizarAreasEntregaAdmin();
+    }
+
+    function excluirAreaEntregaAdmin(indice) {
+      const areas = obterAreasEntregaAdmin();
+      areas.splice(indice, 1);
+      localStorage.setItem('areas_entrega_db', JSON.stringify(areas));
+      renderizarAreasEntregaAdmin();
+    }
+
+    /* =========================================================
+       PRODUTOS & RECEITAS (CRIAR SEPARADO DO CARDÁPIO)
+    ========================================================= */
+    function atualizarMetricasAdmin() {
+      const lista = obterCatalogo();
+      document.getElementById('metricaTotalProdutos').innerText = lista.length;
+      document.getElementById('contadorListaAdmin').innerText = lista.length;
+
+      const cuponsAtivos = obterCuponsAdmin().filter(c => !c.bloqueado).length;
+      document.getElementById('metricaCuponsAtivos').innerText = cuponsAtivos;
+
+      const taxa = Number(localStorage.getItem('taxa_entrega_valor') || 5);
+      document.getElementById('metricaTaxaEntrega').innerText = formatarPreco(taxa);
+    }
+
+    function renderizarListaAdmin() {
+      const termo = (document.getElementById('buscaCardapioAdmin')?.value || '').toLowerCase();
+      const lista = obterCatalogo().filter(p =>
+        p.nome.toLowerCase().includes(termo) ||
+        (p.categoria && p.categoria.toLowerCase().includes(termo))
+      );
+
+      const container = document.getElementById('listaProdutosAdmin');
+      atualizarMetricasAdmin();
+
+      if (!lista.length) {
+        container.innerHTML = '<p style="color: var(--texto-secundario); font-size: 11px;">Nenhum item encontrado no cardápio.</p>';
+        return;
+      }
+
+      container.innerHTML = lista.map(p => {
+        const precoNum = typeof p.preco === 'number' ? p.preco : parseFloat(String(p.preco).replace(',', '.')) || 0;
+        return `
+          <div class="card-item-admin">
+            <img src="${p.imagem || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600'}" alt="${p.nome}">
+            <div class="info-item-admin">
+              <strong>${p.nome}</strong>
+              <small>${p.sub || p.categoria || 'Geral'} • Est: ${p.estoque ?? 10}</small>
+              <span class="preco-item-admin">${formatarPreco(precoNum)}</span>
+            </div>
+            <div class="botoes-item-admin">
+              <button type="button" class="btn-mini editar" onclick="prepararEdicaoAdmin(${p.id})" title="Editar">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button type="button" class="btn-mini excluir" onclick="excluirProdutoAdmin(${p.id})" title="Excluir">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function prepararEdicaoAdmin(id) {
+      const prod = obterCatalogo().find(item => Number(item.id) === Number(id));
+      if (!prod) return;
+
+      document.getElementById('idProdutoEditando').value = prod.id;
+      document.getElementById('nomeProdutoAdmin').value = prod.nome || '';
+      document.getElementById('imagemProdutoAdmin').value = prod.imagem || '';
+      document.getElementById('categoriaProdutoAdmin').value = prod.categoria || 'lanches';
+      const precoNum = typeof prod.preco === 'number' ? prod.preco : parseFloat(String(prod.preco).replace(',', '.')) || 0;
+      document.getElementById('precoProdutoAdmin').value = precoNum.toFixed(2).replace('.', ',');
+      document.getElementById('estoqueProdutoAdmin').value = prod.estoque ?? 10;
+      document.getElementById('tagProdutoAdmin').value = prod.tag || prod.sub || '';
+      document.getElementById('descricaoProdutoAdmin').value = prod.descricao || '';
+
+      document.getElementById('tituloFormAdmin').innerText = 'Editar Produto / Receita';
+      document.getElementById('btnSubmitAdmin').innerHTML = '<i class="fa-solid fa-check"></i> Atualizar Item';
+      abrirAbaPorNome('criar');
+      document.getElementById('nomeProdutoAdmin').focus();
+    }
+
+    function limparFormAdmin() {
+      document.getElementById('idProdutoEditando').value = '';
+      document.getElementById('formProdutoAdmin').reset();
+      document.getElementById('estoqueProdutoAdmin').value = 10;
+      document.getElementById('tituloFormAdmin').innerText = 'Cadastrar Nova Receita / Produto';
+      document.getElementById('btnSubmitAdmin').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar no Cardápio';
+    }
+
+    function salvarProdutoAdmin(event) {
+      event.preventDefault();
+
+      const idEdit = document.getElementById('idProdutoEditando').value;
+      const nome = document.getElementById('nomeProdutoAdmin').value.trim();
+      const imagemInput = document.getElementById('imagemProdutoAdmin').value.trim();
+      const categoria = document.getElementById('categoriaProdutoAdmin').value;
+      const precoRaw = document.getElementById('precoProdutoAdmin').value.replace(',', '.');
+      const preco = parseFloat(precoRaw) || 0;
+      const estoque = parseInt(document.getElementById('estoqueProdutoAdmin').value, 10) || 0;
+      const tag = document.getElementById('tagProdutoAdmin').value.trim();
+      const descricao = document.getElementById('descricaoProdutoAdmin').value.trim();
+
+      const dados = {
+        nome,
+        categoria,
+        sub: tag || categoria.charAt(0).toUpperCase() + categoria.slice(1),
+        tag: tag || 'Destaque',
+        preco,
+        estoque,
+        imagem: imagemInput || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600',
+        descricao
+      };
+
+      if (idEdit) {
+        editarProdutoCatalogo(Number(idEdit), dados);
+      } else {
+        adicionarProdutoCatalogo(dados);
+      }
+
+      localStorage.setItem('produtos_db', JSON.stringify(obterCatalogo()));
+
+      limparFormAdmin();
+      renderizarListaAdmin();
+      abrirAbaPorNome('cardapio');
+    }
+
+    function excluirProdutoAdmin(id) {
+      removerProdutoCatalogo(id);
+      localStorage.setItem('produtos_db', JSON.stringify(obterCatalogo()));
+      renderizarListaAdmin();
+    }
+
+    function restaurarPadraoAdmin() {
+      restaurarCatalogoPadrao();
+      localStorage.setItem('produtos_db', JSON.stringify(obterCatalogo()));
+      limparFormAdmin();
+      renderizarListaAdmin();
+    }
+
+    /* =========================================================
+       CONFIGURAÇÕES DA LOJA
+    ========================================================= */
+    function salvarConfigLojaAdmin(event) {
+      event.preventDefault();
+      const nomeLoja = document.getElementById('inputNomeLojaAdmin').value.trim() || 'Sabor & Brasa';
+      const horario = document.getElementById('inputHorarioLoja').value.trim() || '18:00 às 23:30';
+      const email = document.getElementById('inputEmailAdmin').value.trim();
+      const pin = document.getElementById('inputPinAdmin').value;
+
+      const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
+      cfg.nome = nomeLoja;
+      localStorage.setItem('config_restaurante', JSON.stringify(cfg));
+      localStorage.setItem('nomeEstabelecimento', nomeLoja);
+      localStorage.setItem('lojaNome', nomeLoja);
+      localStorage.setItem('horario_funcionamento', horario);
+      localStorage.setItem('admin_email_conta', email);
+      localStorage.setItem('admin_pin_acesso', pin);
+
+      document.getElementById('nomeAdminSidebar').innerText = nomeLoja;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      aplicarTemaAdmin();
+      const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
+      const nomeLoja = localStorage.getItem('nomeEstabelecimento') || localStorage.getItem('lojaNome') || cfg.nome || 'Sabor & Brasa';
+      document.getElementById('nomeAdminSidebar').innerText = nomeLoja;
+      document.getElementById('inputNomeLojaAdmin').value = nomeLoja;
+      document.getElementById('inputHorarioLoja').value = localStorage.getItem('horario_funcionamento') || '18:00 às 23:30';
+      document.getElementById('inputEmailAdmin').value = localStorage.getItem('admin_email_conta') || 'admin@saborebrasa.com';
+      document.getElementById('inputPinAdmin').value = localStorage.getItem('admin_pin_acesso') || '1234';
+
+      renderizarListaAdmin();
+      renderizarCuponsAdmin();
+      renderizarAreasEntregaAdmin();
+    });
+  </script>
+</body>
+</html>

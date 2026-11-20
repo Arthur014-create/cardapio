@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="tituloPagina">Sabor &amp; Brasa - Entrar ou Criar Conta</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --vermelho: #B20D0D;
+      --vermelho-hover: #8f0909;
+      --laranja: #FF8C00;
+      --amarelo: #FFB000;
+      --amarelo-hover: #e59e00;
+      --creme: #FFF3DC;
+      --marrom: #54210F;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--creme);
+      width: 100vw;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+    }
+
+    .tela-dividida {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* LADO ESQUERDO (45%): IDENTIDADE VISUAL E HAMBÚRGUER */
+    .lado-esquerdo {
+      width: 46%;
+      position: relative;
+      background-color: #160c07;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255, 140, 0, 0.18) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(18, 9, 5, 0.85) 0%, rgba(18, 9, 5, 0.35) 50%, rgba(12, 6, 3, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center bottom;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 45px 60px 45px 45px;
+      color: #ffffff;
+      overflow: hidden;
+    }
+
+    .marca-topo {
+      position: relative;
+      z-index: 3;
+      margin-top: 15px;
+    }
+
+    .logo-linha {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-burger-icon {
+      font-size: 54px;
+      color: var(--amarelo);
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-burger-icon::before {
+      content: '✦';
+      position: absolute;
+      top: -12px;
+      left: -10px;
+      font-size: 18px;
+      color: var(--amarelo);
+      transform: rotate(-25deg);
+    }
+
+    .nome-marca {
+      font-size: 42px;
+      font-weight: 800;
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      word-break: break-word;
+    }
+
+    .nome-marca span.destaque-amarelo {
+      color: var(--amarelo);
+    }
+
+    .sublinhado-marca {
+      width: 240px;
+      height: 6px;
+      background: var(--amarelo);
+      border-radius: 50px;
+      margin-top: 6px;
+      margin-left: 68px;
+      transform: rotate(-1.5deg);
+    }
+
+    .slogan-marca {
+      font-size: 22px;
+      font-weight: 600;
+      font-style: italic;
+      color: #ffffff;
+      margin-top: 18px;
+      margin-left: 40px;
+      line-height: 1.25;
+      transform: rotate(-4deg);
+      text-shadow: 0 3px 8px rgba(0,0,0,0.8);
+    }
+
+    .onda-divisoria {
+      position: absolute;
+      top: 0;
+      right: -2px;
+      height: 100%;
+      width: 85px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* LADO DIREITO (55%): LOGIN E CADASTRO */
+    .lado-direito {
+      width: 54%;
+      background-color: var(--creme);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 45px;
+      position: relative;
+    }
+
+    .decor-topo-dir {
+      position: absolute;
+      top: 22px;
+      right: 26px;
+      display: flex;
+      gap: 6px;
+      transform: rotate(35deg);
+    }
+    .decor-topo-dir span:nth-child(1) { width: 5px; height: 24px; background: var(--vermelho); border-radius: 4px; }
+    .decor-topo-dir span:nth-child(2) { width: 5px; height: 32px; background: var(--amarelo); border-radius: 4px; margin-top: -6px; }
+    .decor-topo-dir span:nth-child(3) { width: 5px; height: 20px; background: var(--vermelho); border-radius: 4px; margin-top: 4px; }
+
+    .decor-base-dir {
+      position: absolute;
+      bottom: 22px;
+      right: 26px;
+      display: flex;
+      gap: 6px;
+      transform: rotate(125deg);
+    }
+    .decor-base-dir span:nth-child(1) { width: 5px; height: 22px; background: var(--vermelho); border-radius: 4px; }
+    .decor-base-dir span:nth-child(2) { width: 5px; height: 30px; background: var(--amarelo); border-radius: 4px; margin-top: -5px; }
+    .decor-base-dir span:nth-child(3) { width: 5px; height: 18px; background: var(--vermelho); border-radius: 4px; margin-top: 4px; }
+
+    .box-formulario {
+      width: 100%;
+      max-width: 410px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cabecalho-form {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .icone-topo-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .traco-esq {
+      width: 34px;
+      height: 3.5px;
+      background-color: var(--vermelho);
+      border-radius: 4px;
+    }
+
+    .traco-dir {
+      width: 34px;
+      height: 3.5px;
+      background-color: var(--amarelo);
+      border-radius: 4px;
+    }
+
+    .icone-user-contorno {
+      font-size: 42px;
+      color: var(--vermelho);
+    }
+
+    .cabecalho-form h2 {
+      font-size: 28px;
+      font-weight: 800;
+      font-style: italic;
+      color: var(--vermelho);
+      line-height: 1.15;
+    }
+
+    .cabecalho-form p {
+      font-size: 13.5px;
+      color: var(--marrom);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .campo-grupo {
+      margin-bottom: 14px;
+    }
+
+    .input-pilula {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .input-pilula i.icone-esq {
+      position: absolute;
+      left: 18px;
+      color: var(--vermelho);
+      font-size: 16px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .input-pilula input {
+      width: 100%;
+      padding: 12px 44px 12px 46px;
+      background-color: rgba(255, 255, 255, 0.55);
+      border: 2px solid var(--amarelo);
+      border-radius: 14px;
+      font-size: 14px;
+      color: var(--marrom);
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-pilula input::placeholder {
+      color: #8c6d5e;
+      font-weight: 400;
+    }
+
+    .input-pilula input:focus {
+      background-color: #ffffff;
+      border-color: var(--laranja);
+      box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.18);
+    }
+
+    .btn-olho-senha {
+      position: absolute;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--vermelho);
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .opcoes-login {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      color: var(--marrom);
+      margin-bottom: 18px;
+      padding: 0 4px;
+    }
+
+    .check-lembrar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .check-lembrar input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--vermelho);
+      cursor: pointer;
+    }
+
+    .link-esqueceu {
+      color: var(--marrom);
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 12.5px;
+    }
+
+    .link-esqueceu:hover {
+      color: var(--vermelho);
+    }
+
+    .btn-logar {
+      width: 100%;
+      padding: 13px 20px;
+      background-color: var(--vermelho);
+      color: #ffffff;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 16px rgba(178, 13, 13, 0.28);
+      transition: all 0.2s;
+    }
+
+    .btn-logar:hover {
+      background-color: var(--vermelho-hover);
+      transform: translateY(-1px);
+    }
+
+    .divisor-ou {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 14px 0;
+      color: var(--marrom);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .divisor-ou::before,
+    .divisor-ou::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1.5px solid rgba(84, 33, 15, 0.2);
+    }
+
+    .divisor-ou span {
+      padding: 0 12px;
+    }
+
+    .btn-criar-conta {
+      width: 100%;
+      padding: 12px 20px;
+      background-color: transparent;
+      color: var(--vermelho);
+      border: 2px solid var(--vermelho);
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-criar-conta:hover {
+      background-color: rgba(178, 13, 13, 0.08);
+    }
+
+    .btn-visitante {
+      width: 100%;
+      margin-top: 10px;
+      padding: 11px 20px;
+      background-color: rgba(255, 255, 255, 0.65);
+      color: var(--marrom);
+      border: 2px solid var(--amarelo);
+      border-radius: 30px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: all 0.2s;
+    }
+
+    .btn-visitante:hover {
+      background-color: rgba(255, 176, 0, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .area-admin-separada {
+      margin-top: 22px;
+      padding-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-admin {
+      background-color: var(--amarelo);
+      color: var(--marrom);
+      border: none;
+      padding: 11px 28px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(255, 176, 0, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-admin:hover {
+      background-color: var(--amarelo-hover);
+      transform: translateY(-1px);
+    }
+
+    .grid-duplo {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 10px;
+    }
+
+    .secao-auth {
+      display: none;
+    }
+
+    .secao-auth.ativa {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================================================
+       QUADRADINHO CENTRAL DE BOAS-VINDAS (SUBSTITUI O ALERT)
+    ========================================================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 9, 5, 0.72);
+      backdrop-filter: blur(5px);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.ativo {
+      display: flex !important;
+      animation: aparecerCentro 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes aparecerCentro {
+      from { opacity: 0; transform: scale(0.88); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .quadrado-boas-vindas {
+      background-color: var(--creme);
+      border: 3px solid var(--laranja);
+      width: 100%;
+      max-width: 410px;
+      padding: 34px 28px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
+      position: relative;
+    }
+
+    .icone-check-burger {
+      width: 68px;
+      height: 68px;
+      background-color: rgba(178, 13, 13, 0.1);
+      color: var(--vermelho);
+      border: 2px solid var(--vermelho);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px auto;
+    }
+
+    .quadrado-boas-vindas h3 {
+      font-size: 25px;
+      font-weight: 800;
+      font-style: italic;
+      color: var(--vermelho);
+      margin-bottom: 6px;
+    }
+
+    .quadrado-boas-vindas h4 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--marrom);
+      margin-bottom: 12px;
+    }
+
+    .quadrado-boas-vindas h4 span {
+      color: var(--vermelho);
+    }
+
+    .quadrado-boas-vindas p {
+      font-size: 13.5px;
+      color: var(--marrom);
+      line-height: 1.5;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .btn-comecar-pedir {
+      background-color: var(--vermelho);
+      color: #ffffff;
+      border: none;
+      padding: 13px 24px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      box-shadow: 0 6px 16px rgba(178, 13, 13, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-comecar-pedir:hover {
+      background-color: var(--vermelho-hover);
+      transform: translateY(-1px);
+    }
+
+    /* MENSAGEM DE AVISO INTERNA (SEM ALERT PRETO) */
+    .aviso-erro {
+      background-color: rgba(178, 13, 13, 0.12);
+      border: 1.5px solid var(--vermelho);
+      color: var(--vermelho);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .tela-dividida {
+        flex-direction: column;
+      }
+      .lado-esquerdo {
+        width: 100%;
+        min-height: 240px;
+        padding: 30px 24px;
+      }
+      .nome-marca {
+        font-size: 32px;
+      }
+      .onda-divisoria {
+        display: none;
+      }
+      .lado-direito {
+        width: 100%;
+        padding: 35px 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      button,
+      [type="submit"],
+      [class*="btn"] {
+        padding: 7px 13px;
+        font-size: 11.5px;
+        border-radius: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- QUADRADINHO CENTRAL DE BOAS-VINDAS -->
+  <div class="modal-overlay" id="modalWelcome">
+    <div class="quadrado-boas-vindas">
+      <div class="icone-check-burger">
+        <i class="fa-solid fa-burger"></i>
+      </div>
+      <h3 id="modalTituloBoasVindas">Login realizado!</h3>
+      <h4 id="modalSaudacaoNome">Que bom ter você por aqui!</h4>
+      <p id="modalTextoBoasVindas">Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!</p>
+      <button type="button" class="btn-comecar-pedir" onclick="redirecionarParaCardapio()">
+        Começar a pedir <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="tela-dividida">
+    
+    <!-- LADO ESQUERDO (45%): IDENTIDADE VISUAL E HAMBÚRGUER -->
+    <div class="lado-esquerdo">
+      <div class="marca-topo">
+        <div class="logo-linha">
+          <i class="fa-solid fa-burger logo-burger-icon"></i>
+          <div class="nome-marca" id="logoNomeEstabelecimento">
+            Sabor<span class="destaque-amarelo">&amp;Brasa</span>
+          </div>
+        </div>
+        <div class="sublinhado-marca"></div>
+        <p class="slogan-marca">Sabor que faz<br>você voltar!</p>
+      </div>
+
+      <svg class="onda-divisoria" viewBox="0 0 100 1000" preserveAspectRatio="none">
+        <path d="M 35,0 C 85,250 -10,500 45,750 C 75,880 55,950 40,1000 L 100,1000 L 100,0 Z" fill="#B20D0D" />
+        <path d="M 55,0 C 105,250 10,500 65,750 C 95,880 75,950 60,1000 L 100,1000 L 100,0 Z" fill="#FF8C00" />
+        <path d="M 75,0 C 125,250 30,500 85,750 C 115,880 95,950 80,1000 L 100,1000 L 100,0 Z" fill="#FFF3DC" />
+      </svg>
+    </div>
+
+    <!-- LADO DIREITO (55%): LOGIN E CADASTRO -->
+    <div class="lado-direito">
+      
+      <div class="decor-topo-dir"><span></span><span></span><span></span></div>
+      <div class="decor-base-dir"><span></span><span></span><span></span></div>
+
+      <div class="box-formulario">
+        
+        <!-- TELA 1: ENTRAR NA CONTA (LOGIN) -->
+        <div id="secaoLogin" class="secao-auth ativa">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-regular fa-user icone-user-contorno"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Entrar na sua conta</h2>
+            <p>Faça login para continuar pedindo!</p>
+          </div>
+
+          <div id="avisoLogin" class="aviso-erro"></div>
+
+          <form onsubmit="executarLogin(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-user icone-esq"></i>
+                <input type="text" id="loginEmail" placeholder="E-mail ou usuário" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-lock icone-esq"></i>
+                <input type="password" id="loginSenha" placeholder="Senha" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('loginSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="opcoes-login">
+              <label class="check-lembrar">
+                <input type="checkbox" id="chkLembrar"> Lembrar de mim
+              </label>
+              <button type="button" class="link-esqueceu" onclick="recuperarSenha()">Esqueceu sua senha?</button>
+            </div>
+
+            <button type="submit" class="btn-logar">
+              <i class="fa-solid fa-right-to-bracket"></i> Logar conta
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>ou</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('cadastro')">
+            <i class="fa-solid fa-user-plus"></i> Criar conta
+          </button>
+
+          <button type="button" class="btn-visitante" onclick="entrarComoVisitante()">
+            <i class="fa-solid fa-user-secret"></i> Entrar como visitante
+          </button>
+
+          <div class="area-admin-separada">
+            <button type="button" class="btn-admin" onclick="mostrarSecao('admin')">
+              <i class="fa-solid fa-gear"></i> Área Administrativa <i class="fa-solid fa-chevron-right" style="font-size: 12px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- TELA 2: CRIAR CONTA (CADASTRO) -->
+        <div id="secaoCadastro" class="secao-auth">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-solid fa-user-plus icone-user-contorno" style="font-size: 36px;"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Criar sua conta</h2>
+            <p>Cadastre-se para fazer seus pedidos!</p>
+          </div>
+
+          <div id="avisoCadastro" class="aviso-erro"></div>
+
+          <form onsubmit="executarCadastro(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-user icone-esq"></i>
+                <input type="text" id="cadNome" placeholder="Nome completo" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-envelope icone-esq"></i>
+                <input type="email" id="cadEmail" placeholder="Seu melhor e-mail" required>
+              </div>
+            </div>
+
+            <div class="grid-duplo campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-id-card icone-esq"></i>
+                <input type="text" id="cadIdade" placeholder="Idade" maxlength="3" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+              </div>
+
+              <div class="input-pilula">
+                <i class="fa-solid fa-lock icone-esq"></i>
+                <input type="password" id="cadSenha" placeholder="Crie uma senha" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('cadSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-location-dot icone-esq"></i>
+                <input type="text" id="cadEndereco" placeholder="Endereço completo (Rua, Nº, Bairro)" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-logar" style="margin-top: 6px;">
+              <i class="fa-solid fa-check"></i> Concluir Cadastro
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>já tem cadastro?</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('login')">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para Login
+          </button>
+        </div>
+
+        <!-- TELA 3: ÁREA ADMINISTRATIVA -->
+        <div id="secaoAdmin" class="secao-auth">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-solid fa-shield-halved icone-user-contorno" style="font-size: 38px;"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Área Administrativa</h2>
+            <p>Acesso exclusivo para gestores da loja</p>
+          </div>
+
+          <div id="avisoAdmin" class="aviso-erro"></div>
+
+          <form onsubmit="executarLoginAdmin(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-user-tie icone-esq"></i>
+                <input type="text" id="admUsuario" placeholder="E-mail ou usuário admin" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-key icone-esq"></i>
+                <input type="password" id="admSenha" placeholder="Senha administrativa" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('admSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-admin" style="width: 100%; justify-content: center; padding: 13px; font-size: 16px; margin-top: 8px;">
+              <i class="fa-solid fa-right-to-bracket"></i> Entrar no Painel Admin
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>ou</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('login')">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para Login do Cliente
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let timerRedirecionamento = null;
+
+    function obterNomeEstabelecimento() {
+      const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
+      return (
+        localStorage.getItem('nomeEstabelecimento') ||
+        localStorage.getItem('lojaNome') ||
+        cfg.nome ||
+        'Sabor & Brasa'
+      ).trim() || 'Sabor & Brasa';
+    }
+
+    function aplicarNomeEstabelecimento() {
+      const nomeCompleto = obterNomeEstabelecimento();
+      const logoEl = document.getElementById('logoNomeEstabelecimento');
+      const tituloEl = document.getElementById('tituloPagina');
+
+      if (tituloEl) {
+        tituloEl.innerText = `${nomeCompleto} - Entrar ou Criar Conta`;
+      }
+
+      if (logoEl) {
+        const palavras = nomeCompleto.split(/\s+/).filter(Boolean);
+        if (palavras.length > 1) {
+          const ultima = palavras.pop();
+          const inicio = palavras.join(' ');
+          logoEl.innerHTML = `${inicio}<span class="destaque-amarelo">${ultima}</span>`;
+        } else {
+          logoEl.innerHTML = `<span class="destaque-amarelo">${nomeCompleto}</span>`;
+        }
+      }
+    }
+
+    function mostrarSecao(qual) {
+      document.getElementById('secaoLogin').classList.remove('ativa');
+      document.getElementById('secaoCadastro').classList.remove('ativa');
+      document.getElementById('secaoAdmin').classList.remove('ativa');
+
+      document.getElementById('avisoLogin').style.display = 'none';
+      document.getElementById('avisoCadastro').style.display = 'none';
+      document.getElementById('avisoAdmin').style.display = 'none';
+
+      if (qual === 'login') document.getElementById('secaoLogin').classList.add('ativa');
+      if (qual === 'cadastro') document.getElementById('secaoCadastro').classList.add('ativa');
+      if (qual === 'admin') document.getElementById('secaoAdmin').classList.add('ativa');
+    }
+
+    function mostrarAviso(idElemento, texto) {
+      const el = document.getElementById(idElemento);
+      el.innerText = texto;
+      el.style.display = 'block';
+    }
+
+    function alternarVisibilidadeSenha(idInput, btn) {
+      const input = document.getElementById(idInput);
+      const icone = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icone.classList.remove('fa-eye-slash');
+        icone.classList.add('fa-eye');
+      } else {
+        input.type = 'password';
+        icone.classList.remove('fa-eye');
+        icone.classList.add('fa-eye-slash');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      aplicarNomeEstabelecimento();
+
+      const emailLembrado = localStorage.getItem('lembrar_email');
+      const senhaLembrada = localStorage.getItem('lembrar_senha');
+      if (emailLembrado) {
+        document.getElementById('loginEmail').value = emailLembrado;
+        if (senhaLembrada) {
+          document.getElementById('loginSenha').value = senhaLembrada;
+        }
+        document.getElementById('chkLembrar').checked = true;
+      }
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (['nomeEstabelecimento', 'lojaNome', 'config_restaurante'].includes(e.key)) {
+        aplicarNomeEstabelecimento();
+      }
+    });
+
+    // ABRE O QUADRADINHO NO MEIO DA TELA COM O NOME DO CLIENTE
+    function abrirQuadradoBoasVindas(nomeCliente, tituloCustom, textoCustom) {
+      const nomeLoja = obterNomeEstabelecimento();
+      const primeiroNome = nomeCliente ? nomeCliente.split(' ')[0] : '';
+      const saudacaoEl = document.getElementById('modalSaudacaoNome');
+      const tituloEl = document.getElementById('modalTituloBoasVindas');
+      const textoEl = document.getElementById('modalTextoBoasVindas');
+
+      if (tituloEl) {
+        tituloEl.innerText = tituloCustom || 'Login realizado!';
+      }
+
+      if (primeiroNome) {
+        saudacaoEl.innerHTML = `Que bom ter você por aqui, <span>${primeiroNome}</span>!`;
+      } else {
+        saudacaoEl.innerText = `Que bom ter você no ${nomeLoja}!`;
+      }
+
+      if (textoEl) {
+        textoEl.innerText = textoCustom || 'Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!';
+      }
+
+      document.getElementById('modalWelcome').classList.add('ativo');
+
+      timerRedirecionamento = setTimeout(() => {
+        redirecionarParaCardapio();
+      }, 4500);
+    }
+
+    function redirecionarParaCardapio() {
+      if (timerRedirecionamento) clearTimeout(timerRedirecionamento);
+      window.location.href = 'index.html';
+    }
+
+    // ENTRAR COMO VISITANTE
+    function entrarComoVisitante() {
+      const visitante = {
+        nome: 'Visitante',
+        email: 'convidado',
+        visitante: true
+      };
+
+      localStorage.setItem('usuario_ativo', JSON.stringify(visitante));
+      localStorage.setItem('ultimo_email_logado', 'convidado');
+
+      abrirQuadradoBoasVindas(
+        'Visitante',
+        'Modo visitante ativado!',
+        'Você entrou como visitante. Explore o cardápio e monte sua sacola à vontade!'
+      );
+    }
+
+    // CADASTRO DO CLIENTE
+    function executarCadastro(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById('cadNome').value.trim();
+      const email = document.getElementById('cadEmail').value.trim().toLowerCase();
+      const idade = document.getElementById('cadIdade').value.trim();
+      const senha = document.getElementById('cadSenha').value.trim();
+      const endereco = document.getElementById('cadEndereco').value.trim();
+
+      let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+
+      if (usuariosCadastrados.some(u => u.email === email)) {
+        mostrarAviso('avisoCadastro', 'Este e-mail já está cadastrado! Volte para o login.');
+        return;
+      }
+
+      const novoUsuario = { nome, email, idade, senha, endereco };
+      usuariosCadastrados.push(novoUsuario);
+      localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
+
+      localStorage.setItem('usuario_ativo', JSON.stringify(novoUsuario));
+      localStorage.setItem('perfil_usuario', JSON.stringify(novoUsuario));
+      localStorage.setItem('ultimo_email_logado', email);
+      localStorage.setItem('lembrar_email', email);
+      localStorage.setItem('lembrar_senha', senha);
+      localStorage.setItem('enderecoLoja', endereco);
+
+      const chaveEnderecos = `enderecos_usuario_${email}`;
+      localStorage.setItem(chaveEnderecos, JSON.stringify([{
+        id: Date.now(),
+        rua: endereco,
+        numero: '',
+        bairro: '',
+        principal: true
+      }]));
+
+      abrirQuadradoBoasVindas(nome);
+    }
+
+    // LOGIN DO CLIENTE
+    function executarLogin(event) {
+      event.preventDefault();
+
+      const entradaBruta = document.getElementById('loginEmail').value.trim();
+      const entrada = entradaBruta.toLowerCase();
+      const senha = document.getElementById('loginSenha').value.trim();
+      const lembrar = document.getElementById('chkLembrar').checked;
+
+      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      
+      const usuarioEncontrado = usuariosCadastrados.find(u => 
+        (u.email === entrada || u.nome.toLowerCase() === entrada) && u.senha === senha
+      );
+
+      if (usuarioEncontrado) {
+        if (lembrar) {
+          localStorage.setItem('lembrar_email', entradaBruta);
+          localStorage.setItem('lembrar_senha', senha);
+        } else {
+          localStorage.removeItem('lembrar_email');
+          localStorage.removeItem('lembrar_senha');
+        }
+
+        localStorage.setItem('usuario_ativo', JSON.stringify(usuarioEncontrado));
+        localStorage.setItem('perfil_usuario', JSON.stringify(usuarioEncontrado));
+        localStorage.setItem('ultimo_email_logado', usuarioEncontrado.email);
+        
+        abrirQuadradoBoasVindas(usuarioEncontrado.nome);
+      } else {
+        mostrarAviso('avisoLogin', 'E-mail/usuário ou senha incorretos! Clique em "Criar conta" se ainda não tiver cadastro.');
+      }
+    }
+
+    function recuperarSenha() {
+      const entrada = document.getElementById('loginEmail').value.trim().toLowerCase();
+      if (!entrada) {
+        mostrarAviso('avisoLogin', 'Digite seu e-mail ou nome acima primeiro para recuperar a senha.');
+        return;
+      }
+      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      const user = usuariosCadastrados.find(u => u.email === entrada || u.nome.toLowerCase() === entrada);
+      if (user) {
+        mostrarAviso('avisoLogin', `Sua senha cadastrada é: ${user.senha}`);
+      } else {
+        mostrarAviso('avisoLogin', 'Usuário não encontrado no sistema.');
+      }
+    }
+
+    // LOGIN ADMINISTRATIVO
+    function executarLoginAdmin(event) {
+      event.preventDefault();
+      const usuario = document.getElementById('admUsuario').value.trim();
+      const senha = document.getElementById('admSenha').value.trim();
+
+      const senhaGerente = localStorage.getItem('senha_gerente') || '1234';
+
+      if (senha === senhaGerente) {
+        localStorage.setItem('admin_nome', usuario);
+        window.location.href = 'admin.html';
+      } else {
+        mostrarAviso('avisoAdmin', 'Senha administrativa incorreta! (Senha padrão inicial: 1234)');
+      }
+    }
+  </script>
+
+</body>
+</html>
