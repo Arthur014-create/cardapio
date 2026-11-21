@@ -1378,7 +1378,7 @@
       localStorage.setItem(chave, JSON.stringify(itensRestantes));
       atualizarTodaSacola();
 
-      const fone = localStorage.getItem('telefoneEstabelecimento') || localStorage.getItem('whatsappLoja') || cfg.whatsapp || '5567991695704';
+      const fone = localStorage.getItem('telefoneEstabelecimento') || localStorage.getItem('whatsappLoja') || cfg.whatsapp || '5567998036713';
       window.open(`https://wa.me/${fone}?text=${encodeURIComponent(mensagem)}`, '_blank');
     }
 
@@ -1393,5 +1393,6 @@
 
     document.addEventListener('DOMContentLoaded', atualizarTodaSacola);
   </script>
+  <script src="supabase-conta.js"></script>
 </body>
 </html>
