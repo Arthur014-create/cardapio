@@ -1,85 +1,24 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="claro">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="paginaTitulo">Sabor &amp; Brasa - Cardápio Digital</title>
-
+  <title id="tituloPagina">Sabor &amp; Brasa - Entrar ou Criar Conta</title>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
 
   <style>
-    /* =========================================================
-       PALETA E VARIÁVEIS — TEMA CLARO
-    ========================================================= */
-    :root,
-    html[data-theme="claro"] {
-      --bg-principal: #FFF3DC;
-      --header-bg: #FFF3DC;
-      --header-borda: rgba(84, 33, 15, 0.14);
-      --input-bg: #FFF9EE;
-      --input-borda: #D96B27;
-      --texto-escuro: #3B1609;
-      --texto-suave: #6E3B23;
-      --card-bg: #FFF9EE;
-      --borda-suave: rgba(178, 13, 13, 0.18);
-
-      --cor-vermelho: #B20D0D;
-      --cor-laranja: #FF6A00;
-      --cor-amarelo: #FFB000;
-      --cor-marrom: #54210F;
-
-      --neon-glow: none;
-      --chip-bg: #FFF9EE;
-      --chip-borda: rgba(178, 13, 13, 0.25);
-      --chip-texto: #54210F;
-      --chip-ativo-bg: #B20D0D;
-      --chip-ativo-texto: #FFFFFF;
-
-      --banner-gradiente: linear-gradient(90deg, #FFF3DC 0%, #FFE4B5 38%, rgba(178, 13, 13, 0.25) 68%, rgba(0, 0, 0, 0.12) 100%);
-      --banner-subtexto: #54210F;
-      --banner-slogan: #B20D0D;
-      --banner-btn-bg: #B20D0D;
-      --banner-btn-texto: #FFFFFF;
-      --onda-amarela: #FFB000;
-      --onda-laranja: #FF6A00;
-    }
-
-    /* =========================================================
-       PALETA E VARIÁVEIS — TEMA ESCURO (NEON SUAVE PARA OS OLHOS)
-    ========================================================= */
-    html[data-theme="escuro"] {
-      --bg-principal: #0C0A09;
-      --header-bg: #0C0A09;
-      --header-borda: rgba(232, 162, 48, 0.22);
-      --input-bg: #14100E;
-      --input-borda: rgba(217, 101, 40, 0.55);
-      --texto-escuro: #F5EFEA;
-      --texto-suave: #B8A79D;
-      --card-bg: #16110F;
-      --borda-suave: rgba(232, 162, 48, 0.34);
-
-      --cor-vermelho: #C83226;
-      --cor-laranja: #E06A2B;
-      --cor-amarelo: #E6A938;
-      --cor-marrom: #F5EFEA;
-
-      --neon-glow: 0 0 6px rgba(230, 169, 56, 0.16);
-      --chip-bg: #14100E;
-      --chip-borda: rgba(224, 106, 43, 0.45);
-      --chip-texto: #E6A938;
-      --chip-ativo-bg: #B8291E;
-      --chip-ativo-texto: #FFFFFF;
-
-      --banner-gradiente: linear-gradient(90deg, #0C0A09 0%, rgba(20, 14, 12, 0.94) 44%, rgba(184, 41, 30, 0.20) 75%, rgba(0, 0, 0, 0.15) 100%);
-      --banner-subtexto: #DDD0C6;
-      --banner-slogan: #E6A938;
-      --banner-btn-bg: linear-gradient(90deg, #B8291E 0%, #D96528 100%);
-      --banner-btn-texto: #FFFFFF;
-      --onda-amarela: #D49A2A;
-      --onda-laranja: #CC5C22;
+    :root {
+      --vermelho: #B20D0D;
+      --vermelho-hover: #8f0909;
+      --laranja: #FF8C00;
+      --amarelo: #FFB000;
+      --amarelo-hover: #e59e00;
+      --creme: #FFF3DC;
+      --marrom: #54210F;
     }
 
     * {
@@ -90,1489 +29,1441 @@
     }
 
     body {
-      background-color: var(--bg-principal);
-      color: var(--texto-escuro);
-      padding-bottom: 60px;
-      transition: background-color 0.25s ease, color 0.25s ease;
-    }
-
-    .container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 22px;
-    }
-
-    /* =========================================================
-       HEADER
-    ========================================================= */
-    header {
-      background-color: var(--header-bg);
-      color: var(--texto-escuro);
-      padding: 14px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1.5px solid var(--header-borda);
-      transition: background-color 0.25s ease, border-color 0.25s ease;
-    }
-
-    .header-content {
+      background-color: var(--creme);
+      width: 100vw;
+      min-height: 100vh;
+      overflow-x: hidden;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
     }
 
-    .logo-area {
+    .tela-dividida {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: max-content;
-    }
-
-    .logo-icon {
-      width: 46px;
-      height: 46px;
-      background-color: var(--cor-vermelho);
-      color: var(--cor-amarelo);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      border: 2px solid var(--cor-amarelo);
-      box-shadow: var(--neon-glow);
-    }
-
-    .logo-info h1 {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--texto-escuro);
-      line-height: 1.1;
-    }
-
-    .logo-info p {
-      font-size: 11px;
-      color: var(--texto-suave);
-    }
-
-    /* CAMPO DE BUSCA */
-    .header-search {
-      flex: 1;
-      max-width: 460px;
+      width: 100%;
+      min-height: 100vh;
       position: relative;
     }
 
-    .header-search input {
-      width: 100%;
-      background-color: var(--input-bg);
-      border: 1.5px solid var(--input-borda);
-      border-radius: 30px;
-      padding: 10px 18px 10px 42px;
-      color: var(--texto-escuro);
-      font-size: 13px;
-      outline: none;
-      box-shadow: var(--neon-glow);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    /* LADO ESQUERDO (45%): IDENTIDADE VISUAL E HAMBÚRGUER */
+    .lado-esquerdo {
+      width: 46%;
+      position: relative;
+      background-color: #160c07;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255, 140, 0, 0.18) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(18, 9, 5, 0.85) 0%, rgba(18, 9, 5, 0.35) 50%, rgba(12, 6, 3, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center bottom;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 45px 60px 45px 45px;
+      color: #ffffff;
+      overflow: hidden;
     }
 
-    .header-search input::placeholder {
-      color: var(--texto-suave);
+    .marca-topo {
+      position: relative;
+      z-index: 3;
+      margin-top: 15px;
     }
 
-    .header-search i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--texto-suave);
-      font-size: 14px;
-    }
-
-    /* AÇÕES HEADER */
-    .header-actions {
+    .logo-linha {
       display: flex;
       align-items: center;
       gap: 14px;
-      position: relative;
     }
 
-    .btn-tema-toggle,
-    .btn-notificacao,
-    .btn-sacola-header {
-      background: none;
-      border: 1.5px solid transparent;
-      color: var(--texto-escuro);
+    .logo-burger-icon {
+      font-size: 54px;
+      color: var(--amarelo);
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-burger-icon::before {
+      content: '✦';
+      position: absolute;
+      top: -12px;
+      left: -10px;
       font-size: 18px;
-      position: relative;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      transition: all 0.2s ease;
-      text-decoration: none;
+      color: var(--amarelo);
+      transform: rotate(-25deg);
     }
 
-    .btn-tema-toggle {
-      border-color: var(--chip-borda);
-      color: var(--cor-amarelo);
-      font-size: 15px;
-      box-shadow: var(--neon-glow);
+    .nome-marca {
+      font-size: 42px;
+      font-weight: 800;
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      word-break: break-word;
     }
 
-    .btn-tema-toggle:hover,
-    .btn-notificacao:hover,
-    .btn-sacola-header:hover {
-      color: var(--cor-laranja);
-      transform: translateY(-1px);
+    .nome-marca span.destaque-amarelo {
+      color: var(--amarelo);
     }
 
-    .badge-notificacao,
-    .badge-sacola {
+    .sublinhado-marca {
+      width: 240px;
+      height: 6px;
+      background: var(--amarelo);
+      border-radius: 50px;
+      margin-top: 6px;
+      margin-left: 68px;
+      transform: rotate(-1.5deg);
+    }
+
+    .slogan-marca {
+      font-size: 22px;
+      font-weight: 600;
+      font-style: italic;
+      color: #ffffff;
+      margin-top: 18px;
+      margin-left: 40px;
+      line-height: 1.25;
+      transform: rotate(-4deg);
+      text-shadow: 0 3px 8px rgba(0,0,0,0.8);
+    }
+
+    .onda-divisoria {
       position: absolute;
-      top: -2px;
+      top: 0;
       right: -2px;
-      background-color: var(--cor-vermelho);
-      color: #ffffff;
-      font-size: 10px;
-      font-weight: 700;
-      width: 17px;
-      height: 17px;
-      border-radius: 50%;
+      height: 100%;
+      width: 85px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* LADO DIREITO (55%): LOGIN E CADASTRO */
+    .lado-direito {
+      width: 54%;
+      background-color: var(--creme);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 45px;
+      position: relative;
+    }
+
+    .decor-topo-dir {
+      position: absolute;
+      top: 22px;
+      right: 26px;
+      display: flex;
+      gap: 6px;
+      transform: rotate(35deg);
+    }
+    .decor-topo-dir span:nth-child(1) { width: 5px; height: 24px; background: var(--vermelho); border-radius: 4px; }
+    .decor-topo-dir span:nth-child(2) { width: 5px; height: 32px; background: var(--amarelo); border-radius: 4px; margin-top: -6px; }
+    .decor-topo-dir span:nth-child(3) { width: 5px; height: 20px; background: var(--vermelho); border-radius: 4px; margin-top: 4px; }
+
+    .decor-base-dir {
+      position: absolute;
+      bottom: 22px;
+      right: 26px;
+      display: flex;
+      gap: 6px;
+      transform: rotate(125deg);
+    }
+    .decor-base-dir span:nth-child(1) { width: 5px; height: 22px; background: var(--vermelho); border-radius: 4px; }
+    .decor-base-dir span:nth-child(2) { width: 5px; height: 30px; background: var(--amarelo); border-radius: 4px; margin-top: -5px; }
+    .decor-base-dir span:nth-child(3) { width: 5px; height: 18px; background: var(--vermelho); border-radius: 4px; margin-top: 4px; }
+
+    .box-formulario {
+      width: 100%;
+      max-width: 410px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cabecalho-form {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .icone-topo-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--neon-glow);
+      gap: 14px;
+      margin-bottom: 8px;
     }
 
-    .perfil-avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      object-fit: cover;
-      cursor: pointer;
-      border: 2px solid var(--cor-amarelo);
-      box-shadow: var(--neon-glow);
+    .traco-esq {
+      width: 34px;
+      height: 3.5px;
+      background-color: var(--vermelho);
+      border-radius: 4px;
     }
 
-    /* DROPDOWN NOTIFICAÇÕES */
-    .dropdown-notificacoes {
-      position: absolute;
-      top: 48px;
-      right: 48px;
-      width: 300px;
-      background-color: var(--card-bg);
-      border-radius: 14px;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-      border: 1.5px solid var(--borda-suave);
-      z-index: 150;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      color: var(--texto-escuro);
+    .traco-dir {
+      width: 34px;
+      height: 3.5px;
+      background-color: var(--amarelo);
+      border-radius: 4px;
     }
 
-    .dropdown-notificacoes.active {
+    .icone-user-contorno {
+      font-size: 42px;
+      color: var(--vermelho);
+    }
+
+    .cabecalho-form h2 {
+      font-size: 28px;
+      font-weight: 800;
+      font-style: italic;
+      color: var(--vermelho);
+      line-height: 1.15;
+    }
+
+    .cabecalho-form p {
+      font-size: 13.5px;
+      color: var(--marrom);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .campo-grupo {
+      margin-bottom: 14px;
+    }
+
+    .input-pilula {
+      position: relative;
       display: flex;
+      align-items: center;
+      width: 100%;
     }
 
-    .dropdown-header {
-      background-color: var(--cor-vermelho);
-      color: #ffffff;
-      padding: 12px 15px;
+    .input-pilula i.icone-esq {
+      position: absolute;
+      left: 18px;
+      color: var(--vermelho);
+      font-size: 16px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .input-pilula input {
+      width: 100%;
+      padding: 12px 44px 12px 46px;
+      background-color: rgba(255, 255, 255, 0.55);
+      border: 2px solid var(--amarelo);
+      border-radius: 14px;
+      font-size: 14px;
+      color: var(--marrom);
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-pilula input::placeholder {
+      color: #8c6d5e;
+      font-weight: 400;
+    }
+
+    .input-pilula input:focus {
+      background-color: #ffffff;
+      border-color: var(--laranja);
+      box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.18);
+    }
+
+    .btn-olho-senha {
+      position: absolute;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--vermelho);
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .opcoes-login {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 12.5px;
+      color: var(--marrom);
+      margin-bottom: 18px;
+      padding: 0 4px;
+    }
+
+    .check-lembrar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .check-lembrar input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--vermelho);
+      cursor: pointer;
+    }
+
+    .link-esqueceu {
+      color: var(--marrom);
+      text-decoration: underline;
+      font-weight: 500;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 12.5px;
+    }
+
+    .link-esqueceu:hover {
+      color: var(--vermelho);
+    }
+
+    .btn-logar {
+      width: 100%;
+      padding: 13px 20px;
+      background-color: var(--vermelho);
+      color: #ffffff;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 16px rgba(178, 13, 13, 0.28);
+      transition: all 0.2s;
+    }
+
+    .btn-logar:hover {
+      background-color: var(--vermelho-hover);
+      transform: translateY(-1px);
+    }
+
+    .divisor-ou {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 14px 0;
+      color: var(--marrom);
       font-size: 13px;
       font-weight: 600;
     }
 
-    .dropdown-header button {
-      background: none;
-      border: none;
-      color: var(--cor-amarelo);
-      font-size: 11px;
+    .divisor-ou::before,
+    .divisor-ou::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1.5px solid rgba(84, 33, 15, 0.2);
+    }
+
+    .divisor-ou span {
+      padding: 0 12px;
+    }
+
+    .btn-criar-conta {
+      width: 100%;
+      padding: 12px 20px;
+      background-color: transparent;
+      color: var(--vermelho);
+      border: 2px solid var(--vermelho);
+      border-radius: 30px;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-    }
-
-    .dropdown-lista {
-      max-height: 250px;
-      overflow-y: auto;
-    }
-
-    .notificacao-item {
-      padding: 12px 15px;
-      border-bottom: 1px solid var(--header-borda);
       display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 10px;
-      align-items: flex-start;
-      font-size: 12px;
+      transition: all 0.2s;
     }
 
-    .notificacao-item:last-child {
-      border-bottom: none;
+    .btn-criar-conta:hover {
+      background-color: rgba(178, 13, 13, 0.08);
     }
 
-    .notificacao-item i {
-      color: var(--cor-laranja);
+    .btn-visitante {
+      width: 100%;
+      margin-top: 10px;
+      padding: 11px 20px;
+      background-color: rgba(255, 255, 255, 0.65);
+      color: var(--marrom);
+      border: 2px solid var(--amarelo);
+      border-radius: 30px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: all 0.2s;
+    }
+
+    .btn-visitante:hover {
+      background-color: rgba(255, 176, 0, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .area-admin-separada {
+      margin-top: 22px;
+      padding-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-admin {
+      background-color: var(--amarelo);
+      color: var(--marrom);
+      border: none;
+      padding: 11px 28px;
+      border-radius: 30px;
       font-size: 14px;
-      margin-top: 2px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(255, 176, 0, 0.35);
+      transition: all 0.2s;
     }
 
-    .notificacao-texto strong {
+    .btn-admin:hover {
+      background-color: var(--amarelo-hover);
+      transform: translateY(-1px);
+    }
+
+    .grid-duplo {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 10px;
+    }
+
+    .secao-auth {
+      display: none;
+    }
+
+    .secao-auth.ativa {
       display: block;
-      font-size: 12px;
-      color: var(--texto-escuro);
+      animation: fadeIn 0.25s ease;
     }
 
-    .notificacao-texto span {
-      font-size: 11px;
-      color: var(--texto-suave);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* =========================================================
-       BANNER HERO COM ONDAS E TRAÇOS
+       QUADRADINHO CENTRAL DE BOAS-VINDAS (SUBSTITUI O ALERT)
     ========================================================= */
-    .banner-hero {
-      margin: 24px 0;
-      background: #140704;
-      border-radius: 26px;
-      overflow: hidden;
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 9, 5, 0.72);
+      backdrop-filter: blur(5px);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.ativo {
+      display: flex !important;
+      animation: aparecerCentro 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes aparecerCentro {
+      from { opacity: 0; transform: scale(0.88); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .quadrado-boas-vindas {
+      background-color: var(--creme);
+      border: 3px solid var(--laranja);
+      width: 100%;
+      max-width: 410px;
+      padding: 34px 28px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.55);
       position: relative;
-      min-height: 310px;
+    }
+
+    .icone-check-burger {
+      width: 68px;
+      height: 68px;
+      background-color: rgba(178, 13, 13, 0.1);
+      color: var(--vermelho);
+      border: 2px solid var(--vermelho);
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      color: var(--texto-escuro);
-      border: 1.5px solid var(--borda-suave);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22), var(--neon-glow);
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px auto;
     }
 
-    .banner-bg {
-      position: absolute;
-      inset: 0;
-      background-image:
-        var(--banner-gradiente),
-        url('https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1400');
-      background-size: cover;
-      background-position: center right;
-      z-index: 1;
-    }
-
-    .banner-ondas-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .banner-text {
-      position: relative;
-      z-index: 4;
-      padding: 38px 46px;
-      max-width: 560px;
-    }
-
-    .banner-tag {
-      color: var(--cor-laranja);
-      font-size: 12px;
+    .quadrado-boas-vindas h3 {
+      font-size: 25px;
       font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      font-style: italic;
+      color: var(--vermelho);
+      margin-bottom: 6px;
     }
 
-    .banner-text h2 {
-      font-size: 34px;
-      line-height: 1.12;
-      font-weight: 800;
-      margin-bottom: 10px;
-      color: var(--texto-escuro);
-    }
-
-    .banner-text h2 span.destaque-caligrafico {
-      font-family: 'Caveat', cursive;
-      color: var(--cor-vermelho);
-      font-size: 46px;
+    .quadrado-boas-vindas h4 {
+      font-size: 17px;
       font-weight: 700;
-      display: inline-block;
-      border-bottom: 3px solid var(--cor-amarelo);
-      line-height: 0.95;
-      padding-bottom: 2px;
+      color: var(--marrom);
+      margin-bottom: 12px;
     }
 
-    html[data-theme="escuro"] .banner-text h2 span.destaque-caligrafico {
-      color: var(--cor-amarelo);
+    .quadrado-boas-vindas h4 span {
+      color: var(--vermelho);
     }
 
-    .banner-subtext {
-      font-size: 13px;
-      color: var(--banner-subtexto);
-      margin-bottom: 20px;
-      line-height: 1.45;
+    .quadrado-boas-vindas p {
+      font-size: 13.5px;
+      color: var(--marrom);
+      line-height: 1.5;
+      margin-bottom: 24px;
       font-weight: 500;
     }
 
-    .btn-ver-cardapio {
-      background: var(--banner-btn-bg);
-      color: var(--banner-btn-texto);
-      border: none;
-      padding: 12px 24px;
-      border-radius: 30px;
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25), var(--neon-glow);
-      transition: transform 0.2s ease;
-    }
-
-    .btn-ver-cardapio:hover {
-      transform: translateY(-2px);
-    }
-
-    .banner-seta {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 38px;
-      height: 38px;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1.5px solid var(--cor-laranja);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--cor-marrom);
-      cursor: pointer;
-      z-index: 5;
-      box-shadow: var(--neon-glow);
-    }
-
-    html[data-theme="escuro"] .banner-seta {
-      background: rgba(22, 17, 15, 0.9);
-      color: var(--cor-amarelo);
-    }
-
-    .banner-seta.esq { left: 16px; }
-    .banner-seta.dir { right: 16px; }
-
-    .banner-slogan-lado {
-      position: absolute;
-      right: 68px;
-      top: 50%;
-      transform: translateY(-50%);
-      text-align: center;
-      z-index: 4;
-      pointer-events: none;
-    }
-
-    .tracos-slogan {
-      display: flex;
-      justify-content: flex-end;
-      gap: 5px;
-      margin-bottom: -6px;
-      margin-right: -12px;
-      transform: rotate(22deg);
-    }
-
-    .tracos-slogan i {
-      display: block;
-      width: 3.5px;
-      height: 16px;
-      background-color: var(--cor-amarelo);
-      border-radius: 4px;
-    }
-
-    .banner-slogan-lado p {
-      font-family: 'Caveat', cursive;
-      font-size: 38px;
-      color: var(--banner-slogan);
-      line-height: 0.98;
-      transform: rotate(-8deg);
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
-    }
-
-    /* =========================================================
-       BARRA DE CATEGORIAS
-    ========================================================= */
-    .categorias-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .categorias-wrapper {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .btn-categoria {
-      background-color: var(--chip-bg);
-      border: 1.5px solid var(--chip-borda);
-      padding: 9px 20px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--chip-texto);
-      cursor: pointer;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: var(--neon-glow);
-      transition: all 0.2s ease;
-    }
-
-    .btn-categoria.active {
-      background-color: var(--chip-ativo-bg);
-      color: var(--chip-ativo-texto);
-      border-color: var(--chip-ativo-bg);
-    }
-
-    .escolha-preferida {
-      font-family: 'Caveat', cursive;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--texto-escuro);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    html[data-theme="escuro"] .escolha-preferida {
-      color: var(--cor-amarelo);
-    }
-
-    /* =========================================================
-       GRID DE PRODUTOS
-    ========================================================= */
-    .grid-produtos {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 22px;
-    }
-
-    .card-produto {
-      background-color: var(--card-bg);
-      border-radius: 20px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      border: 1.5px solid var(--borda-suave);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08), var(--neon-glow);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card-produto:hover {
-      transform: translateY(-3px);
-    }
-
-    .produto-img-box {
-      position: relative;
-      height: 205px;
-      overflow: hidden;
-    }
-
-    .produto-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .badge-tag {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background-color: var(--cor-amarelo);
-      color: #2B1005;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
-    }
-
-    .btn-favorito {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255, 249, 238, 0.92);
-      border: 1.5px solid var(--cor-vermelho);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--cor-vermelho);
-      font-size: 15px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-    }
-
-    html[data-theme="escuro"] .btn-favorito {
-      background: rgba(22, 17, 15, 0.88);
-      border-color: var(--cor-vermelho);
-      color: #F5EFEA;
-    }
-
-    .btn-favorito.ativo {
-      background-color: var(--cor-vermelho);
-      color: #FFFFFF;
-    }
-
-    .produto-detalhes {
-      padding: 16px 18px 18px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      justify-content: space-between;
-    }
-
-    .produto-info h4 {
-      font-size: 15.5px;
-      font-weight: 700;
-      color: var(--texto-escuro);
-      margin-bottom: 5px;
-    }
-
-    .produto-info p {
-      font-size: 12px;
-      color: var(--texto-suave);
-      margin-bottom: 14px;
-      line-height: 1.4;
-    }
-
-    .produto-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 10px;
-      border-top: 1px dashed var(--header-borda);
-    }
-
-    .produto-preco {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--cor-vermelho);
-    }
-
-    html[data-theme="escuro"] .produto-preco {
-      color: var(--cor-amarelo);
-    }
-
-    .btn-add-item {
-      width: 36px;
-      height: 36px;
-      background-color: var(--cor-vermelho);
+    .btn-comecar-pedir {
+      background-color: var(--vermelho);
       color: #ffffff;
-      border: 1.5px solid var(--cor-amarelo);
-      border-radius: 50%;
-      font-size: 16px;
+      border: none;
+      padding: 13px 24px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--neon-glow);
-      transition: transform 0.15s ease;
+      gap: 10px;
+      width: 100%;
+      box-shadow: 0 6px 16px rgba(178, 13, 13, 0.3);
+      transition: all 0.2s;
     }
 
-    .btn-add-item:hover {
-      transform: scale(1.06);
+    .btn-comecar-pedir:hover {
+      background-color: var(--vermelho-hover);
+      transform: translateY(-1px);
     }
 
-    /* TOAST COMPACTO */
-    .toast-container {
-      position: fixed;
-      top: 72px;
-      right: 14px;
-      z-index: 3000;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    /* MENSAGEM DE AVISO INTERNA (SEM ALERT PRETO) */
+    .aviso-erro {
+      background-color: rgba(178, 13, 13, 0.12);
+      border: 1.5px solid var(--vermelho);
+      color: var(--vermelho);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      text-align: center;
+      display: none;
     }
 
-    .toast-item {
-      background-color: var(--card-bg);
-      color: var(--texto-escuro);
-      padding: 6px 11px;
-      border-radius: 9px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      border: 1px solid var(--borda-suave);
-      border-left: 3px solid var(--cor-laranja);
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      max-width: 240px;
-      line-height: 1.25;
-      animation: slideIn 0.25s ease, fadeOut 0.25s ease 2.2s forwards;
+    .aviso-erro.sucesso {
+      background-color: rgba(22, 163, 74, 0.12);
+      border-color: #16a34a;
+      color: #15803d;
     }
 
-    .toast-item i {
-      color: var(--cor-laranja);
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-
-    @media (max-width: 860px) {
-      .header-content { flex-wrap: wrap; }
-      .header-search { order: 4; max-width: 100%; flex-basis: 100%; }
-      .banner-slogan-lado { display: none; }
-      .banner-text { padding: 28px 46px; }
-      .banner-text h2 { font-size: 26px; }
-    }
-
-    /* =========================================================
-       LAYOUT EXCLUSIVO PARA CELULAR — index.html (Até 768px)
-    ========================================================= */
-    @media (max-width: 768px) {
-      .container {
-        padding: 0 10px;
-      }
-
-      header {
-        padding: 8px 0;
-      }
-
-      .header-content {
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-      }
-
-      .logo-area {
-        order: 1;
-        flex: 1 1 auto;
-        min-width: 0;
-      }
-
-      .logo-icon {
-        width: 34px;
-        height: 34px;
-        font-size: 16px;
-      }
-
-      .logo-info h1 {
-        font-size: 15px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .logo-info p {
-        display: none;
-      }
-
-      .header-actions {
-        order: 2;
-        gap: 6px;
-        flex-shrink: 0;
-      }
-
-      .perfil-avatar {
-        width: 30px;
-        height: 30px;
-      }
-
-      .btn-tema-toggle,
-      .btn-notificacao,
-      .btn-sacola-header {
-        width: 28px;
-        height: 28px;
-        font-size: 12px;
-      }
-
-      /* Notificação de promoção menor no celular */
-      .dropdown-notificacoes {
-        top: 38px;
-        right: 0;
-        width: 225px;
-        border-radius: 10px;
-      }
-
-      .dropdown-header {
-        padding: 7px 10px;
-        font-size: 11px;
-      }
-
-      .dropdown-header button {
-        font-size: 9.5px;
-      }
-
-      .dropdown-lista {
-        max-height: 185px;
-      }
-
-      .notificacao-item {
-        padding: 7px 9px;
-        gap: 7px;
-        font-size: 10px;
-      }
-
-      .notificacao-item i {
-        font-size: 11px;
-        margin-top: 1px;
-      }
-
-      .notificacao-texto strong {
-        font-size: 10px;
-        line-height: 1.2;
-      }
-
-      .notificacao-texto span {
-        font-size: 9.5px;
-        line-height: 1.2;
-        display: block;
-      }
-
-      .header-search {
-        order: 3;
-        max-width: 100%;
-        flex-basis: 100%;
-        margin-top: 2px;
-      }
-
-      .header-search input {
-        padding: 8px 12px 8px 34px;
-        font-size: 12px;
-      }
-
-      /* Banner compacto */
-      .banner-hero {
-        margin: 10px 0 12px;
-        min-height: 165px;
-        border-radius: 14px;
-      }
-
-      .banner-ondas-svg,
-      .banner-slogan-lado,
-      .banner-seta {
-        display: none;
-      }
-
-      .banner-text {
-        padding: 14px;
-        max-width: 100%;
-      }
-
-      .banner-text h2 {
-        font-size: 17px;
-        line-height: 1.15;
-      }
-
-      .banner-text h2 span.destaque-caligrafico {
-        font-size: 24px;
-      }
-
-      .banner-subtext {
-        font-size: 10.5px;
-        margin-bottom: 10px;
-      }
-
-      .btn-ver-cardapio {
-        padding: 6px 11px;
-        font-size: 10.5px;
-        border-radius: 14px;
-      }
-
-      /* Categorias compactas */
-      .categorias-container {
-        margin-bottom: 12px;
-      }
-
-      .categorias-wrapper {
-        width: 100%;
-        padding-bottom: 6px;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .btn-categoria {
-        padding: 5px 10px;
-        font-size: 10.5px;
-        border-radius: 14px;
-      }
-
-      .escolha-preferida {
-        display: none;
-      }
-
-      /* Quadrados dos produtos pequenos/médios lado a lado (2 colunas) */
-      .grid-produtos {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-      }
-
-      .card-produto {
+    @media (max-width: 900px) {
+      .tela-dividida {
         flex-direction: column;
-        border-radius: 12px;
-        min-height: auto;
-        padding: 0;
       }
-
-      .produto-img-box {
+      .lado-esquerdo {
         width: 100%;
-        height: 88px;
-        min-height: 88px;
+        min-height: 240px;
+        padding: 30px 24px;
       }
-
-      .badge-tag {
-        top: 5px;
-        left: 5px;
-        font-size: 8px;
-        padding: 2px 6px;
+      .nome-marca {
+        font-size: 32px;
       }
-
-      .btn-favorito {
-        top: 5px;
-        right: 5px;
-        width: 22px;
-        height: 22px;
-        font-size: 10px;
+      .onda-divisoria {
+        display: none;
       }
-
-      .produto-detalhes {
-        padding: 7px 8px 8px;
+      .lado-direito {
+        width: 100%;
+        padding: 35px 24px;
       }
+    }
 
-      .produto-info h4 {
+    @media (max-width: 768px) {
+      button,
+      [type="submit"],
+      [class*="btn"] {
+        padding: 7px 13px;
         font-size: 11.5px;
-        line-height: 1.2;
-        margin-bottom: 2px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .produto-info p {
-        font-size: 9.5px;
-        line-height: 1.25;
-        margin-bottom: 6px;
-        display: -webkit-box;
-        
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      .produto-footer {
-        padding-top: 5px;
-        gap: 4px;
-      }
-
-      .produto-preco {
-        font-size: 12px;
-      }
-
-      .btn-add-item {
-        width: 24px;
-        height: 24px;
-        font-size: 11px;
-        border-radius: 7px;
-      }
-
-      /* Mensagem toast ainda mais discreta no celular */
-      .toast-container {
-        top: 64px;
-        right: 10px;
-      }
-
-      .toast-item {
-        padding: 5px 9px;
-        font-size: 10px;
-        max-width: 195px;
-        border-radius: 8px;
+        border-radius: 10px;
       }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- HEADER -->
-  <header>
-    <div class="container header-content">
-      <div class="logo-area">
-        <div class="logo-icon"><i class="fa-solid fa-burger"></i></div>
-        <div class="logo-info">
-          <h1 id="headerNomeLoja">Sabor &amp; Brasa</h1>
-          <p>Muito mais que um lanche, é uma experiência.</p>
-        </div>
+  <!-- QUADRADINHO CENTRAL DE BOAS-VINDAS -->
+  <div class="modal-overlay" id="modalWelcome">
+    <div class="quadrado-boas-vindas">
+      <div class="icone-check-burger">
+        <i class="fa-solid fa-burger"></i>
       </div>
-
-      <div class="header-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="inputBusca" placeholder="O que deseja saborear hoje?" oninput="filtrarProdutos()">
-      </div>
-
-      <div class="header-actions">
-        <button type="button" class="btn-tema-toggle" id="btnTemaIndex" title="Alternar Tema Claro / Escuro" onclick="alternarTema()">
-          <i class="fa-solid fa-moon" id="iconeTemaIndex"></i>
-        </button>
-
-        <button type="button" class="btn-notificacao" id="btnNotificacao" title="Notificações" onclick="alternarNotificacoes(event)">
-          <i class="fa-regular fa-bell"></i>
-          <span class="badge-notificacao" id="badgeNotificacao">3</span>
-        </button>
-
-        <div class="dropdown-notificacoes" id="dropdownNotificacoes">
-          <div class="dropdown-header">
-            <span>Notificações</span>
-            <button type="button" onclick="limparNotificacoes()">Limpar</button>
-          </div>
-          <div class="dropdown-lista" id="listaNotificacoes">
-            <div class="notificacao-item">
-              <i class="fa-solid fa-tag"></i>
-              <div class="notificacao-texto">
-                <strong>Desconto de Boas-Vindas!</strong>
-                <span>Use o cupom <b>SABOR10</b> para 10% OFF.</span>
-              </div>
-            </div>
-            <div class="notificacao-item">
-              <i class="fa-solid fa-fire"></i>
-              <div class="notificacao-texto">
-                <strong>Novidade no Cardápio</strong>
-                <span>Experimente nossos lanches e salgados artesanais!</span>
-              </div>
-            </div>
-            <div class="notificacao-item">
-              <i class="fa-solid fa-percent"></i>
-              <div class="notificacao-texto">
-                <strong>Super Desconto VIP</strong>
-                <span>Use o cupom <b>VIP20</b> para garantir 20% OFF.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <a href="sacola.html" class="btn-sacola-header" title="Sua Sacola">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="badge-sacola" id="badgeSacola">0</span>
-        </a>
-
-        <a href="perfil.html" id="btnPerfilLink">
-          <img src="https://i.pinimg.com/736x/3b/94/6e/3b946eb954f03a7eb2bbe6bfa02a22be.jpg" alt="Perfil" class="perfil-avatar" id="imgPerfilHeader">
-        </a>
-      </div>
+      <h3 id="modalTituloBoasVindas">Login realizado!</h3>
+      <h4 id="modalSaudacaoNome">Que bom ter você por aqui!</h4>
+      <p id="modalTextoBoasVindas">Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!</p>
+      <button type="button" class="btn-comecar-pedir" onclick="redirecionarParaCardapio()">
+        Começar a pedir <i class="fa-solid fa-arrow-right"></i>
+      </button>
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-    <!-- BANNER HERO -->
-    <div class="banner-hero">
-      <div class="banner-bg"></div>
+  <div class="tela-dividida">
+    
+    <!-- LADO ESQUERDO (45%): IDENTIDADE VISUAL E HAMBÚRGUER -->
+    <div class="lado-esquerdo">
+      <div class="marca-topo">
+        <div class="logo-linha">
+          <i class="fa-solid fa-burger logo-burger-icon"></i>
+          <div class="nome-marca" id="logoNomeEstabelecimento">
+            Sabor<span class="destaque-amarelo">&amp;Brasa</span>
+          </div>
+        </div>
+        <div class="sublinhado-marca"></div>
+        <p class="slogan-marca">Sabor que faz<br>você voltar!</p>
+      </div>
 
-      <!-- ONDAS DECORATIVAS LATERAIS -->
-      <svg class="banner-ondas-svg" viewBox="0 0 1200 320" preserveAspectRatio="none">
-        <path d="M 460,0 C 560,90 430,210 540,320 L 610,320 C 500,210 630,90 530,0 Z" fill="var(--onda-amarela)" opacity="0.9" />
-        <path d="M 510,0 C 610,90 480,210 590,320 L 645,320 C 535,210 665,90 565,0 Z" fill="var(--onda-laranja)" opacity="0.92" />
+      <svg class="onda-divisoria" viewBox="0 0 100 1000" preserveAspectRatio="none">
+        <path d="M 35,0 C 85,250 -10,500 45,750 C 75,880 55,950 40,1000 L 100,1000 L 100,0 Z" fill="#B20D0D" />
+        <path d="M 55,0 C 105,250 10,500 65,750 C 95,880 75,950 60,1000 L 100,1000 L 100,0 Z" fill="#FF8C00" />
+        <path d="M 75,0 C 125,250 30,500 85,750 C 115,880 95,950 80,1000 L 100,1000 L 100,0 Z" fill="#FFF3DC" />
       </svg>
+    </div>
 
-      <div class="banner-seta esq" onclick="rolarParaCardapio()"><i class="fa-solid fa-chevron-left"></i></div>
-      <div class="banner-seta dir" onclick="rolarParaCardapio()"><i class="fa-solid fa-chevron-right"></i></div>
+    <!-- LADO DIREITO (55%): LOGIN E CADASTRO -->
+    <div class="lado-direito">
+      
+      <div class="decor-topo-dir"><span></span><span></span><span></span></div>
+      <div class="decor-base-dir"><span></span><span></span><span></span></div>
 
-      <div class="banner-text">
-        <div class="banner-tag"><i class="fa-solid fa-fire"></i> QUALIDADE &amp; SABOR</div>
-        <h2>Sua melhor opção em <br><span class="destaque-caligrafico">pratos &amp; porções artesanais</span></h2>
-        <p class="banner-subtext">Ingredientes selecionados, preparo artesanal<br>e muito sabor em cada pedido.</p>
-        <button type="button" class="btn-ver-cardapio" onclick="rolarParaCardapio()">
-          <i class="fa-solid fa-utensils"></i> Ver cardápio <i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>
-        </button>
-      </div>
+      <div class="box-formulario">
+        
+        <!-- TELA 1: ENTRAR NA CONTA (LOGIN) -->
+        <div id="secaoLogin" class="secao-auth ativa">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-regular fa-user icone-user-contorno"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Entrar na sua conta</h2>
+            <p>Faça login para continuar pedindo!</p>
+          </div>
 
-      <div class="banner-slogan-lado">
-        <div class="tracos-slogan">
-          <i></i><i></i><i></i>
+          <div id="avisoLogin" class="aviso-erro"></div>
+
+          <form onsubmit="executarLogin(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-user icone-esq"></i>
+                <input type="text" id="loginEmail" placeholder="E-mail ou usuário" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-lock icone-esq"></i>
+                <input type="password" id="loginSenha" placeholder="Senha" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('loginSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="opcoes-login">
+              <label class="check-lembrar">
+                <input type="checkbox" id="chkLembrar"> Lembrar de mim
+              </label>
+              <button type="button" class="link-esqueceu" onclick="recuperarSenha()">Esqueceu sua senha?</button>
+            </div>
+
+            <button type="submit" class="btn-logar">
+              <i class="fa-solid fa-right-to-bracket"></i> Logar conta
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>ou</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('cadastro')">
+            <i class="fa-solid fa-user-plus"></i> Criar conta
+          </button>
+
+          <button type="button" class="btn-visitante" onclick="entrarComoVisitante()">
+            <i class="fa-solid fa-user-secret"></i> Entrar como visitante
+          </button>
+
+          <div class="area-admin-separada">
+            <button type="button" class="btn-admin" onclick="mostrarSecao('admin')">
+              <i class="fa-solid fa-gear"></i> Área Administrativa <i class="fa-solid fa-chevron-right" style="font-size: 12px;"></i>
+            </button>
+          </div>
         </div>
-        <p>Aqui o<br>sabor é<br>real!</p>
+
+        <!-- TELA 2: CRIAR CONTA (CADASTRO) -->
+        <div id="secaoCadastro" class="secao-auth">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-solid fa-user-plus icone-user-contorno" style="font-size: 36px;"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Criar sua conta</h2>
+            <p>Cadastre-se para fazer seus pedidos!</p>
+          </div>
+
+          <div id="avisoCadastro" class="aviso-erro"></div>
+
+          <form onsubmit="executarCadastro(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-user icone-esq"></i>
+                <input type="text" id="cadNome" placeholder="Nome completo" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-envelope icone-esq"></i>
+                <input type="email" id="cadEmail" placeholder="Seu melhor e-mail" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-phone icone-esq"></i>
+                <input type="tel" id="cadTelefone" placeholder="Telefone / WhatsApp (Ex: 67 99999-9999)" required oninput="this.value = this.value.replace(/[^0-9()\-\s+]/g, '')">
+              </div>
+            </div>
+
+            <div class="grid-duplo campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-id-card icone-esq"></i>
+                <input type="text" id="cadIdade" placeholder="Idade" maxlength="3" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+              </div>
+
+              <div class="input-pilula">
+                <i class="fa-solid fa-lock icone-esq"></i>
+                <input type="password" id="cadSenha" placeholder="Crie uma senha" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('cadSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-location-dot icone-esq"></i>
+                <input type="text" id="cadEndereco" placeholder="Endereço completo (Rua, Nº, Bairro)" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-logar" style="margin-top: 6px;">
+              <i class="fa-solid fa-check"></i> Concluir Cadastro
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>já tem cadastro?</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('login')">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para Login
+          </button>
+        </div>
+
+        <!-- TELA 3: RECUPERAR SENHA COM CÓDIGO POR E-MAIL -->
+        <div id="secaoRecuperar" class="secao-auth">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-solid fa-envelope-open-text icone-user-contorno" style="font-size: 36px;"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Recuperar senha</h2>
+            <p>Enviamos um código para o seu e-mail</p>
+          </div>
+
+          <div id="avisoRecuperar" class="aviso-erro"></div>
+
+          <form onsubmit="solicitarCodigoEmail(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-regular fa-envelope icone-esq"></i>
+                <input type="email" id="recEmail" placeholder="Digite seu e-mail cadastrado" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-logar">
+              <i class="fa-solid fa-paper-plane"></i> Enviar código por e-mail
+            </button>
+          </form>
+
+          <form onsubmit="confirmarRedefinicaoSenha(event)" style="margin-top: 14px; padding-top: 14px; border-top: 1.5px solid rgba(84, 33, 15, 0.18);">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-hashtag icone-esq"></i>
+                <input type="text" id="recCodigo" placeholder="Código de 6 dígitos" maxlength="6" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-lock icone-esq"></i>
+                <input type="password" id="recNovaSenha" placeholder="Nova senha" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('recNovaSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-visitante" style="margin-top: 4px; background-color: var(--amarelo); color: var(--marrom);">
+              <i class="fa-solid fa-rotate"></i> Salvar nova senha
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>ou</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('login')">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para Login
+          </button>
+        </div>
+
+        <!-- TELA 4: ÁREA ADMINISTRATIVA -->
+        <div id="secaoAdmin" class="secao-auth">
+          <div class="cabecalho-form">
+            <div class="icone-topo-wrapper">
+              <span class="traco-esq"></span>
+              <i class="fa-solid fa-shield-halved icone-user-contorno" style="font-size: 38px;"></i>
+              <span class="traco-dir"></span>
+            </div>
+            <h2>Área Administrativa</h2>
+            <p>Acesso exclusivo para gestores da loja</p>
+          </div>
+
+          <div id="avisoAdmin" class="aviso-erro"></div>
+
+          <form onsubmit="executarLoginAdmin(event)">
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-user-tie icone-esq"></i>
+                <input type="text" id="admUsuario" placeholder="E-mail ou usuário admin" required>
+              </div>
+            </div>
+
+            <div class="campo-grupo">
+              <div class="input-pilula">
+                <i class="fa-solid fa-key icone-esq"></i>
+                <input type="password" id="admSenha" placeholder="Senha administrativa" required>
+                <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('admSenha', this)">
+                  <i class="fa-regular fa-eye-slash"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-admin" style="width: 100%; justify-content: center; padding: 13px; font-size: 16px; margin-top: 8px;">
+              <i class="fa-solid fa-right-to-bracket"></i> Entrar no Painel Admin
+            </button>
+          </form>
+
+          <div class="divisor-ou"><span>ou</span></div>
+
+          <button type="button" class="btn-criar-conta" onclick="mostrarSecao('login')">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para Login do Cliente
+          </button>
+        </div>
+
       </div>
     </div>
 
-    <!-- BARRA DE CATEGORIAS -->
-    <div class="categorias-container">
-      <div class="categorias-wrapper">
-        <button type="button" class="btn-categoria active" onclick="filtrarCategoria('todos', this)"><i class="fa-solid fa-border-all"></i> Todos</button>
-        <button type="button" class="btn-categoria" onclick="filtrarCategoria('favoritos', this)"><i class="fa-solid fa-heart" style="color: #ef4444;"></i> Favoritos</button>
-        <button type="button" class="btn-categoria" onclick="filtrarCategoria('lanches', this)"><i class="fa-solid fa-burger"></i> Lanches</button>
-        <button type="button" class="btn-categoria" onclick="filtrarCategoria('entradas', this)"><i class="fa-solid fa-utensils"></i> Entradas</button>
-        <button type="button" class="btn-categoria" onclick="filtrarCategoria('bebidas', this)"><i class="fa-solid fa-wine-glass"></i> Bebidas</button>
-        <button type="button" class="btn-categoria" onclick="filtrarCategoria('sobremesas', this)"><i class="fa-solid fa-ice-cream"></i> Sobremesas</button>
-      </div>
+  </div>
 
-      <div class="escolha-preferida">
-        Escolha sua preferida! <i class="fa-solid fa-arrow-turn-down"></i>
-      </div>
-    </div>
-
-    <!-- GRID DE PRODUTOS -->
-    <div class="grid-produtos" id="gridProdutos"></div>
-  </main>
-
+  <script src="supabase-conta.js"></script>
   <script>
-    const bancoDeProdutos = [
-      {
-        id: 1001,
-        nome: "Pão de Queijo Mineiro Tradicional",
-        categoria: "lanches",
-        sub: "Salgados",
-        imagem: "https://cdn1.matadornetwork.com/blogs/1/2014/07/Pao-de-queijo-traditional-snack-from-Brazil-560x420.jpg",
-        preco: 24.90,
-        descricao: "Pão de queijo mineiro tradicional, com queijo meia-cura e casquinha dourada. Pacote com 20 unidades."
-      },
-      {
-        id: 1002,
-        nome: "Bauru Clássico no Pão Francês",
-        categoria: "lanches",
-        sub: "Sanduíches",
-        imagem: "https://cdn.tasteatlas.com/images/dishrestaurants/69a13a35d2404f998b246dc2d605ef33.jpg?height=513&width=800",
-        preco: 19.90,
-        descricao: "Pão francês recheado com roast beef, combinação de queijos, tomate e pepino em conserva."
-      },
-      {
-        id: 1003,
-        nome: "Tapioca com Queijo Coalho e Presunto",
-        categoria: "lanches",
-        sub: "Tapiocas",
-        imagem: "https://www.arise-app.com/images/dishes/pt/tapioca-com-queijo-e-presunto-122vce.webp",
-        preco: 14.90,
-        descricao: "Tapioca preparada na hora, recheada com queijo coalho e presunto."
-      },
-      {
-        id: 1004,
-        nome: "Coxinha de Frango com Catupiry",
-        categoria: "lanches",
-        sub: "Salgados Fritos",
-        imagem: "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/J3DMTSMSVVN77DQQO2JIATOHPU.jpg?auth=bd523a36b8d23958edb9e2d5a4d57e9cde5a2eaf53122e93152f9ee4b91ebf18&height=667&width=1000",
-        preco: 42.90,
-        descricao: "Coxinhas douradas, com recheio de frango temperado e catupiry. Caixa com 15 unidades."
-      },
-      {
-        id: 1005,
-        nome: "Crepioca de Frango Desfiado",
-        categoria: "lanches",
-        sub: "Fitness",
-        imagem: "https://www.arise-app.com/images/dishes/pt/crepioca-de-frango-com-chia-5722sg.webp",
-        preco: 16.90,
-        descricao: "Crepioca macia recheada com frango desfiado e requeijão."
-      },
-      {
-        id: 1006,
-        nome: "Empadão de Frango Cremoso",
-        categoria: "lanches",
-        sub: "Salgados Assados",
-        imagem: "https://static.itdg.com.br/images/1200-675/88b9214692428e29e9e69089e8395bb2/editorial-a-2025-12-19t165642.704.png",
-        preco: 59.90,
-        descricao: "Empadão de massa amanteigada com recheio cremoso de frango. Serve até 8 porções."
-      },
-      {
-        id: 1007,
-        nome: "Misto Quente Especial na Frigideira",
-        categoria: "lanches",
-        sub: "Sanduíches",
-        imagem: "https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/food_pics_v2/medium/misto_quente.jpg",
-        preco: 14.90,
-        descricao: "Pão tostado na frigideira, com presunto e queijo muçarela derretido."
-      },
-      {
-        id: 1008,
-        nome: "Enroladinho de Salsicha Assado",
-        categoria: "lanches",
-        sub: "Salgados Assados",
-        imagem: "https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/food_pics_v2/medium/enroladinho_de_salsicha.jpg",
-        preco: 26.90,
-        descricao: "Massa assada e douradinha envolvendo salsicha. Caixa com 10 unidades."
-      },
-      {
-        id: 1009,
-        nome: "Club Sandwich Tradicional",
-        categoria: "lanches",
-        sub: "Sanduíches",
-        imagem: "https://cdn.shopify.com/s/files/1/0851/3955/4638/files/Classic_triple-decker_Club_Sandwich_sliced_and_served_with_pickles.webp?v=1749719424",
-        preco: 24.90,
-        descricao: "Sanduíche em camadas com pão tostado, peito de peru, queijo, bacon, tomate e alface."
-      },
-      {
-        id: 1010,
-        nome: "Pastel de Feira de Carne Moída",
-        categoria: "lanches",
-        sub: "Salgados Fritos",
-        imagem: "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/BPOP2ZWGIVBLRFA4NJX72UDITQ.jpeg?auth=3974a0e100f4b0296df87b7496ea4473cece3395ab0c617178fb53b229635582&height=1000&width=1500",
-        preco: 39.90,
-        descricao: "Pastéis crocantes recheados com carne moída temperada. Caixa com 10 unidades."
-      },
-      {
-        id: 1011,
-        nome: "Esfiha Aberta de Queijo (Estilo Habib's)",
-        categoria: "lanches",
-        sub: "Salgados Assados",
-        imagem: "https://jpimg.com.br/uploads/2018/08/esfiha-aberta-do-Habib%E2%80%99s-1.jpg",
-        preco: 34.90,
-        descricao: "Esfihas abertas com massa macia e recheio de queijo temperado. Caixa com 12 unidades."
-      },
-      {
-        id: 1012,
-        nome: "Panqueca Americana com Mel e Frutas",
-        categoria: "lanches",
-        sub: "Doces",
-        imagem: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=600",
-        preco: 22.90,
-        descricao: "Panquecas americanas fofinhas, servidas com mel e frutas. Porção com 4 unidades."
-      },
-      {
-        id: 1013,
-        nome: "Muffin Salgado de Legumes e Queijo",
-        categoria: "lanches",
-        sub: "Fitness",
-        imagem: "https://cucinaricetta.com/assets/images/1770237543134-vduvkmbh.jpg",
-        preco: 21.90,
-        descricao: "Muffins salgados assados com legumes e queijo. Caixa com 6 unidades."
-      },
-      {
-        id: 1014,
-        nome: "Croissant de Presunto e Queijo",
-        categoria: "lanches",
-        sub: "Salgados Assados",
-        imagem: "https://p2.trrsf.com/image/fget/cf/1200/900/middle/images.terra.com/2023/11/07/553376496-croissant-tradicional-de-presunto-e-queijo.jpg",
-        preco: 36.90,
-        descricao: "Croissants folhados e dourados, recheados com presunto e queijo. Caixa com 8 unidades."
-      },
-      {
-        id: 1015,
-        nome: "Bruschetta Clássica de Tomate e Manjericão",
-        categoria: "lanches",
-        sub: "Leves",
-        imagem: "https://www.amando.it/media/2025/07/bruschette-veloci.jpg",
-        preco: 22.90,
-        descricao: "Fatias de pão italiano tostado com tomate temperado, azeite e manjericão. Porção com 4 unidades."
-      },
-      {
-        id: 1016,
-        nome: "Guacamole com Nachos de Tortilla",
-        categoria: "lanches",
-        sub: "Petiscos",
-        imagem: "https://uploads.leouve.com.br/2024/10/4pQ2cjqY-Firefly-Guacamole-com-alguns-Nachos-57375-jpg.webp",
-        preco: 28.90,
-        descricao: "Guacamole cremoso de abacate acompanhado de nachos de tortilla. Porção para compartilhar."
-      },
-      {
-        id: 1017,
-        nome: "Biscoito de Polvilho Assado",
-        categoria: "lanches",
-        sub: "Crocantes",
-        imagem: "https://images.cooknenjoy.com/uploads/2017/01/biscoito-de-polvilho-02.jpg",
-        preco: 17.90,
-        descricao: "Biscoitos de polvilho leves e crocantes, assados. Pacote com 30 unidades."
-      },
-      {
-        id: 1018,
-        nome: "Sanduíche Natural de Frango com Cenoura",
-        categoria: "lanches",
-        sub: "Sanduíches Frios",
-        imagem: "https://www.arise-app.com/images/dishes/pt/sanduiche-de-pao-integral-com-frango-e-salada-yawc2k.webp",
-        preco: 19.90,
-        descricao: "Sanduíche frio de pão integral com frango desfiado, cenoura e folhas de alface."
-      },
-      {
-        id: 1019,
-        nome: "Bolinho de Chuva com Açúcar e Canela",
-        categoria: "lanches",
-        sub: "Doces",
-        imagem: "https://p2.trrsf.com/image/fget/cf/1200/900/middle/images.terra.com/2025/03/02/2023512577-bolinhodechuvatradicional.jpg",
-        preco: 18.90,
-        descricao: "Bolinho de chuva fofinho, finalizado com açúcar e canela. Porção com 4 unidades."
-      },
-      {
-        id: 1020,
-        nome: "Hambúrguer Artesanal com Queijo Cheddar",
-        categoria: "lanches",
-        sub: "Sanduíches",
-        imagem: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600",
-        preco: 27.90,
-        descricao: "Hambúrguer artesanal com queijo cheddar, servido em pão tipo brioche."
-      }
-    ];
+    let timerRedirecionamento = null;
+    let destinoAposModal = 'cardapio.html';
 
-    const formatarPreco = (preco) =>
-      preco.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-      });
-
-    let produtos = [];
-    let favoritos = JSON.parse(localStorage.getItem('favoritos_db')) || [];
-    let categoriaAtual = 'todos';
-
-    function obterChaveCarrinhoUsuario() {
-      const usuarioAtivo = JSON.parse(localStorage.getItem('usuario_ativo')) || {};
-      const email = usuarioAtivo.email || localStorage.getItem('ultimo_email_logado') || 'convidado';
-      return `carrinho_usuario_${email}`;
-    }
-
-    let carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
-
-    function atualizarIconeTema(tema) {
-      const icone = document.getElementById('iconeTemaIndex');
-      if (!icone) return;
-      if (tema === 'escuro') {
-        icone.classList.remove('fa-moon');
-        icone.classList.add('fa-sun');
-      } else {
-        icone.classList.remove('fa-sun');
-        icone.classList.add('fa-moon');
-      }
-    }
-
-    function aplicarTemaSalvo() {
-      const temaSalvo = localStorage.getItem('tema_preferido') || localStorage.getItem('tema_usuario') || 'claro';
-      document.documentElement.setAttribute('data-theme', temaSalvo);
-      atualizarIconeTema(temaSalvo);
-    }
-
-    function alternarTema() {
-      const atual = document.documentElement.getAttribute('data-theme') || 'claro';
-      const proximo = atual === 'claro' ? 'escuro' : 'claro';
-      document.documentElement.setAttribute('data-theme', proximo);
-      localStorage.setItem('tema_preferido', proximo);
-      localStorage.setItem('tema_usuario', proximo);
-      atualizarIconeTema(proximo);
-    }
-
-    function atualizarFotoPerfilHeader() {
-      const perfilSalvo = JSON.parse(localStorage.getItem('perfil_usuario'));
-      const imgHeader = document.getElementById('imgPerfilHeader');
-      if (imgHeader && perfilSalvo && perfilSalvo.foto) {
-        imgHeader.src = perfilSalvo.foto;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      aplicarTemaSalvo();
-      sincronizarDadosGlobais();
-      atualizarFotoPerfilHeader();
-      carregarProdutos();
-      filtrarProdutos();
-      atualizarBadgeSacolaIndex();
-    });
-
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'tema_preferido' || e.key === 'tema_usuario') {
-        aplicarTemaSalvo();
-      }
-      if (
-        ['config_restaurante', 'nomeEstabelecimento', 'lojaNome', 'produtos_db', 'perfil_usuario', 'favoritos_db'].includes(e.key) ||
-        (e.key && e.key.startsWith('carrinho_usuario_'))
-      ) {
-        favoritos = JSON.parse(localStorage.getItem('favoritos_db')) || [];
-        sincronizarDadosGlobais();
-        atualizarFotoPerfilHeader();
-        carregarProdutos();
-        filtrarProdutos();
-        atualizarBadgeSacolaIndex();
-      }
-    });
-
-    function sincronizarDadosGlobais() {
+    function obterNomeEstabelecimento() {
       const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
-      const nomeLoja = localStorage.getItem('nomeEstabelecimento') || localStorage.getItem('lojaNome') || cfg.nome || 'Sabor & Brasa';
-
-      const elHeader = document.getElementById('headerNomeLoja');
-      if (elHeader) elHeader.innerText = nomeLoja;
-
-      const elTitulo = document.getElementById('paginaTitulo');
-      if (elTitulo) elTitulo.innerText = `${nomeLoja} - Cardápio Digital`;
+      return (
+        localStorage.getItem('nomeEstabelecimento') ||
+        localStorage.getItem('lojaNome') ||
+        cfg.nome ||
+        'Sabor & Brasa'
+      ).trim() || 'Sabor & Brasa';
     }
 
-    function exibirMensagemToast(mensagem) {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = 'toast-item';
-      toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${mensagem}</span>`;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 2450);
+    function aplicarNomeEstabelecimento() {
+      const nomeCompleto = obterNomeEstabelecimento();
+      const logoEl = document.getElementById('logoNomeEstabelecimento');
+      const tituloEl = document.getElementById('tituloPagina');
+
+      if (tituloEl) {
+        tituloEl.innerText = `${nomeCompleto} - Entrar ou Criar Conta`;
+      }
+
+      if (logoEl) {
+        const palavras = nomeCompleto.split(/\s+/).filter(Boolean);
+        if (palavras.length > 1) {
+          const ultima = palavras.pop();
+          const inicio = palavras.join(' ');
+          logoEl.innerHTML = `${inicio}<span class="destaque-amarelo">${ultima}</span>`;
+        } else {
+          logoEl.innerHTML = `<span class="destaque-amarelo">${nomeCompleto}</span>`;
+        }
+      }
     }
 
-    function atualizarBadgeSacolaIndex() {
-      carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
-      let totalQtd = 0;
-      carrinho.forEach(item => { totalQtd += (item.qtd || 1); });
-      const badge = document.getElementById('badgeSacola');
-      if (badge) badge.innerText = totalQtd;
+    function mostrarSecao(qual) {
+      document.getElementById('secaoLogin').classList.remove('ativa');
+      document.getElementById('secaoCadastro').classList.remove('ativa');
+      document.getElementById('secaoRecuperar').classList.remove('ativa');
+      document.getElementById('secaoAdmin').classList.remove('ativa');
+
+      document.getElementById('avisoLogin').style.display = 'none';
+      document.getElementById('avisoCadastro').style.display = 'none';
+      document.getElementById('avisoRecuperar').style.display = 'none';
+      document.getElementById('avisoAdmin').style.display = 'none';
+
+      if (qual === 'login') document.getElementById('secaoLogin').classList.add('ativa');
+      if (qual === 'cadastro') document.getElementById('secaoCadastro').classList.add('ativa');
+      if (qual === 'recuperar') document.getElementById('secaoRecuperar').classList.add('ativa');
+      if (qual === 'admin') document.getElementById('secaoAdmin').classList.add('ativa');
     }
 
-    document.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('dropdownNotificacoes');
-      const btnNotif = document.getElementById('btnNotificacao');
-      if (dropdown && btnNotif && !dropdown.contains(e.target) && !btnNotif.contains(e.target)) {
-        dropdown.classList.remove('active');
+    function mostrarAviso(idElemento, texto, sucesso = false) {
+      const el = document.getElementById(idElemento);
+      el.innerText = texto;
+      el.classList.toggle('sucesso', Boolean(sucesso));
+      el.style.display = 'block';
+    }
+
+    function alternarVisibilidadeSenha(idInput, btn) {
+      const input = document.getElementById(idInput);
+      const icone = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icone.classList.remove('fa-eye-slash');
+        icone.classList.add('fa-eye');
+      } else {
+        input.type = 'password';
+        icone.classList.remove('fa-eye');
+        icone.classList.add('fa-eye-slash');
+      }
+    }
+
+    async function chamarApiAuth(payload) {
+      if (window.location.protocol === 'file:') {
+        return null;
+      }
+      try {
+        const resp = await fetch('api_auth.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!resp.ok) return null;
+        return await resp.json();
+      } catch (e) {
+        return null;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      aplicarNomeEstabelecimento();
+
+      const emailLembrado = localStorage.getItem('lembrar_email');
+      const senhaLembrada = localStorage.getItem('lembrar_senha');
+      if (emailLembrado) {
+        document.getElementById('loginEmail').value = emailLembrado;
+        if (senhaLembrada) {
+          document.getElementById('loginSenha').value = senhaLembrada;
+        }
+        document.getElementById('chkLembrar').checked = true;
       }
     });
 
-    function carregarProdutos() {
-      const produtosSalvos = JSON.parse(localStorage.getItem('produtos_db')) || [];
-      const mapaProdutos = new Map();
-
-      bancoDeProdutos.forEach((item, idx) => {
-        mapaProdutos.set(item.id, {
-          ...item,
-          tag: item.tag || (idx % 2 === 0 ? "Mais Pedido" : "Artesanal"),
-          estoque: item.estoque ?? 20
-        });
-      });
-
-      produtosSalvos.forEach(item => {
-        mapaProdutos.set(item.id, {
-          ...item,
-          tag: item.tag || item.sub || "Destaque",
-          estoque: item.estoque ?? 20
-        });
-      });
-
-      produtos = Array.from(mapaProdutos.values());
-      localStorage.setItem('produtos_db', JSON.stringify(produtos));
-    }
-
-    function eProdutoFavorito(id) { return favoritos.includes(id); }
-
-    function alternarFavorito(id, event) {
-      if (event) event.stopPropagation();
-      const prod = produtos.find(p => p.id === id);
-      let msg = "";
-      if (eProdutoFavorito(id)) {
-        favoritos = favoritos.filter(favId => favId !== id);
-        msg = `Removido dos favoritos${prod ? `: <b>${prod.nome}</b>` : ""}`;
-      } else {
-        favoritos.push(id);
-        msg = `Favoritado${prod ? `: <b>${prod.nome}</b>` : ""}`;
+    window.addEventListener('storage', (e) => {
+      if (['nomeEstabelecimento', 'lojaNome', 'config_restaurante'].includes(e.key)) {
+        aplicarNomeEstabelecimento();
       }
-      localStorage.setItem('favoritos_db', JSON.stringify(favoritos));
-      filtrarProdutos();
-      exibirMensagemToast(msg);
+    });
+
+    function abrirQuadradoBoasVindas(nomeCliente, tituloCustom, textoCustom, destino = 'cardapio.html') {
+      destinoAposModal = destino;
+      const nomeLoja = obterNomeEstabelecimento();
+      const primeiroNome = nomeCliente ? nomeCliente.split(' ')[0] : '';
+      const saudacaoEl = document.getElementById('modalSaudacaoNome');
+      const tituloEl = document.getElementById('modalTituloBoasVindas');
+      const textoEl = document.getElementById('modalTextoBoasVindas');
+
+      if (tituloEl) {
+        tituloEl.innerText = tituloCustom || 'Login realizado!';
+      }
+
+      if (primeiroNome) {
+        saudacaoEl.innerHTML = `Que bom ter você por aqui, <span>${primeiroNome}</span>!`;
+      } else {
+        saudacaoEl.innerText = `Que bom ter você no ${nomeLoja}!`;
+      }
+
+      if (textoEl) {
+        textoEl.innerText = textoCustom || 'Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!';
+      }
+
+      document.getElementById('modalWelcome').classList.add('ativo');
+
+      timerRedirecionamento = setTimeout(() => {
+        redirecionarParaCardapio();
+      }, 4500);
     }
 
-    function renderizarProdutos(lista) {
-      const grid = document.getElementById('gridProdutos');
-      grid.innerHTML = '';
+    function redirecionarParaCardapio() {
+      if (timerRedirecionamento) clearTimeout(timerRedirecionamento);
+      window.location.href = destinoAposModal;
+    }
 
-      if (lista.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--texto-suave); padding: 40px 0;">Nenhum item encontrado.</p>`;
+    function entrarComoVisitante() {
+      const visitante = {
+        nome: 'Visitante',
+        email: 'convidado',
+        visitante: true
+      };
+
+      localStorage.setItem('usuario_ativo', JSON.stringify(visitante));
+      localStorage.setItem('ultimo_email_logado', 'convidado');
+
+      abrirQuadradoBoasVindas(
+        'Visitante',
+        'Modo visitante ativado!',
+        'Você entrou como visitante. Explore o cardápio e monte sua sacola à vontade!',
+        'cardapio.html'
+      );
+    }
+
+    function salvarSessaoLocal(usuario, endereco = '') {
+      const perfilAtual = JSON.parse(localStorage.getItem('perfil_usuario')) || {};
+      const perfilMesclado = {
+        ...perfilAtual,
+        ...usuario,
+        telefone: usuario.telefone || perfilAtual.telefone || '',
+        endereco: endereco || usuario.endereco || perfilAtual.endereco || ''
+      };
+
+      localStorage.setItem('usuario_ativo', JSON.stringify(usuario));
+      localStorage.setItem('perfil_usuario', JSON.stringify(perfilMesclado));
+      localStorage.setItem('ultimo_email_logado', usuario.email);
+
+      if (perfilMesclado.endereco) {
+        localStorage.setItem('enderecoLoja', perfilMesclado.endereco);
+        const chaveEnderecos = `enderecos_usuario_${usuario.email}`;
+        if (!localStorage.getItem(chaveEnderecos)) {
+          localStorage.setItem(chaveEnderecos, JSON.stringify([{
+            id: Date.now(),
+            rua: perfilMesclado.endereco,
+            numero: '',
+            bairro: '',
+            principal: true
+          }]));
+        }
+      }
+    }
+
+    let cepValidado = false;
+
+    function mascaraCep(input) {
+      let v = input.value.replace(/\D/g, '').slice(0, 8);
+      if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
+      input.value = v;
+      cepValidado = false;
+    }
+
+    function validarEmailFormato(email) {
+      return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email);
+    }
+
+    function validarTelefoneReal(tel) {
+      const nums = tel.replace(/\D/g, '');
+      if (nums.length !== 10 && nums.length !== 11) return false;
+      if (/^(\d)\1+$/.test(nums)) return false;
+      const ddd = parseInt(nums.slice(0, 2), 10);
+      if (ddd < 11 || ddd > 99) return false;
+      if (nums.length === 11 && nums[2] !== '9') return false;
+      return true;
+    }
+
+    async function consultarCepExistente() {
+      const cepInput = document.getElementById('cadCep');
+      const endInput = document.getElementById('cadEndereco');
+      const cepLimpo = (cepInput?.value || '').replace(/\D/g, '');
+
+      if (!cepLimpo) return true;
+
+      if (cepLimpo.length !== 8) {
+        mostrarAviso('avisoCadastro', 'CEP incompleto! Digite os 8 números do CEP.');
+        cepValidado = false;
+        return false;
+      }
+
+      try {
+        const resp = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+        const dados = await resp.json();
+
+        if (dados.erro) {
+          mostrarAviso('avisoCadastro', 'CEP não encontrado! Verifique se o CEP existe.');
+          cepValidado = false;
+          return false;
+        }
+
+        cepValidado = true;
+        document.getElementById('avisoCadastro').style.display = 'none';
+
+        const baseEndereco = [dados.logradouro, dados.bairro, `${dados.localidade}/${dados.uf}`]
+          .filter(Boolean)
+          .join(', ');
+
+        if (baseEndereco && (!endInput.value.trim() || !endInput.value.includes(dados.localidade))) {
+          endInput.value = `${baseEndereco} - Nº `;
+          endInput.focus();
+        }
+        return true;
+      } catch (e) {
+        return true;
+      }
+    }
+
+    async function verificarEnderecoExistente(enderecoTexto) {
+      if (cepValidado) return true;
+      if (enderecoTexto.length < 8 || !/\d/.test(enderecoTexto)) return false;
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=br&limit=1&q=${encodeURIComponent(enderecoTexto)}`;
+        const resp = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } });
+        const lista = await resp.json();
+        return Array.isArray(lista) && lista.length > 0;
+      } catch (e) {
+        return true;
+      }
+    }
+
+    async function executarCadastro(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById('cadNome').value.trim();
+      const email = document.getElementById('cadEmail').value.trim().toLowerCase();
+      const telefone = document.getElementById('cadTelefone').value.trim();
+      const idade = document.getElementById('cadIdade').value.trim();
+      const senha = document.getElementById('cadSenha').value.trim();
+      const endereco = document.getElementById('cadEndereco').value.trim();
+
+      if (!validarEmailFormato(email)) {
+        mostrarAviso('avisoCadastro', 'E-mail inválido! Digite um e-mail existente (ex: nome@gmail.com).');
         return;
       }
 
-      lista.forEach(prod => {
-        const eFav = eProdutoFavorito(prod.id);
-        const precoNum = typeof prod.preco === 'number' ? prod.preco : parseFloat(String(prod.preco).replace(',', '.')) || 0;
-        const tagTexto = prod.tag || prod.sub || 'Destaque';
-
-        grid.innerHTML += `
-          <div class="card-produto">
-            <div class="produto-img-box">
-              <span class="badge-tag"><i class="fa-solid fa-fire"></i> ${tagTexto}</span>
-              <button type="button" class="btn-favorito ${eFav ? 'ativo' : ''}" onclick="alternarFavorito(${prod.id}, event)">
-                <i class="${eFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-              </button>
-              <img src="${prod.imagem}" alt="${prod.nome}" loading="lazy">
-            </div>
-            <div class="produto-detalhes">
-              <div class="produto-info">
-                <h4>${prod.nome}</h4>
-                <p>${prod.descricao || ''}</p>
-              </div>
-              <div class="produto-footer">
-                <span class="produto-preco">${formatarPreco(precoNum)}</span>
-                <button type="button" class="btn-add-item" onclick="adicionarAoCarrinho(${prod.id})">+</button>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function filtrarCategoria(cat, btn) {
-      categoriaAtual = cat;
-      document.querySelectorAll('.btn-categoria').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      filtrarProdutos();
-    }
-
-    function filtrarProdutos() {
-      const termo = document.getElementById('inputBusca').value.toLowerCase();
-      const filtrados = produtos.filter(p => {
-        const okCat = (categoriaAtual === 'todos')
-          ? true
-          : (categoriaAtual === 'favoritos' ? eProdutoFavorito(p.id) : p.categoria === categoriaAtual);
-        const okTexto =
-          p.nome.toLowerCase().includes(termo) ||
-          (p.descricao && p.descricao.toLowerCase().includes(termo)) ||
-          (p.sub && p.sub.toLowerCase().includes(termo));
-        return okCat && okTexto;
-      });
-      renderizarProdutos(filtrados);
-    }
-
-    function adicionarAoCarrinho(id) {
-      const prod = produtos.find(p => p.id === id);
-      if (!prod) return;
-
-      carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
-      const item = carrinho.find(c => c.id === id);
-      if (item) {
-        item.qtd++;
-      } else {
-        carrinho.push({ ...prod, qtd: 1 });
+      if (!validarTelefoneReal(telefone)) {
+        mostrarAviso('avisoCadastro', 'Número de telefone inexistente! Informe DDD + número válido (ex: 67 99999-9999).');
+        return;
       }
 
-      localStorage.setItem(obterChaveCarrinhoUsuario(), JSON.stringify(carrinho));
-      atualizarBadgeSacolaIndex();
-      exibirMensagemToast(`Na sacola: <b>${prod.nome}</b>`);
+      const cepOk = await consultarCepExistente();
+      if (!cepOk) return;
+
+      const enderecoExiste = await verificarEnderecoExistente(endereco);
+      if (!enderecoExiste) {
+        mostrarAviso('avisoCadastro', 'Endereço não encontrado! Informe o CEP ou digite Rua, Número e Bairro existentes.');
+        return;
+      }
+
+      if (typeof cadastrarUsuarioSupabase === 'function') {
+        const supaRes = await cadastrarUsuarioSupabase({
+          nome,
+          email,
+          telefone,
+          idade,
+          endereco,
+          senha,
+          tipo: 'cliente'
+        });
+
+        if (!supaRes.ok) {
+          mostrarAviso('avisoCadastro', supaRes.mensagem || 'Não foi possível salvar o cadastro.');
+          return;
+        }
+
+        const usuarioSupa = { ...(supaRes.usuario || { nome, email, tipo: 'cliente' }), telefone, idade, endereco, senha };
+        salvarSessaoLocal(usuarioSupa, endereco);
+        if (typeof salvarTudoDaContaSupabase === 'function') {
+          await salvarTudoDaContaSupabase();
+        }
+        abrirQuadradoBoasVindas(nome, 'Cadastro concluído!', 'Sua conta foi criada no banco de dados!', 'cardapio.html');
+        return;
+      }
+
+      const apiRes = await chamarApiAuth({
+        acao: 'cadastrar',
+        nome,
+        email,
+        telefone,
+        idade,
+        endereco,
+        senha,
+        tipo: 'cliente'
+      });
+
+      if (apiRes) {
+        if (!apiRes.ok) {
+          mostrarAviso('avisoCadastro', apiRes.mensagem);
+          return;
+        }
+        const usuarioApi = { ...(apiRes.usuario || { nome, email, tipo: 'cliente' }), telefone, idade, endereco, senha };
+        salvarSessaoLocal(usuarioApi, endereco);
+        abrirQuadradoBoasVindas(nome, 'Cadastro concluído!', apiRes.mensagem || 'Sua conta foi criada no banco de dados!', 'cardapio.html');
+        return;
+      }
+
+      let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      if (usuariosCadastrados.some(u => u.email === email)) {
+        mostrarAviso('avisoCadastro', 'Este e-mail já está cadastrado! Volte para o login.');
+        return;
+      }
+      if (usuariosCadastrados.some(u => (u.telefone || '').replace(/\D/g, '') === telefone.replace(/\D/g, ''))) {
+        mostrarAviso('avisoCadastro', 'Este telefone já está cadastrado em outra conta!');
+        return;
+      }
+
+      const novoUsuario = { nome, email, telefone, idade, senha, endereco };
+      usuariosCadastrados.push(novoUsuario);
+      localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
+      localStorage.setItem('lembrar_email', email);
+      localStorage.setItem('lembrar_senha', senha);
+      salvarSessaoLocal(novoUsuario, endereco);
+      abrirQuadradoBoasVindas(nome);
     }
 
-    function rolarParaCardapio() {
-      const grid = document.getElementById('gridProdutos');
-      if (grid) grid.scrollIntoView({ behavior: 'smooth' });
+    async function executarLogin(event) {
+      event.preventDefault();
+
+      const entradaBruta = document.getElementById('loginEmail').value.trim();
+      const entrada = entradaBruta.toLowerCase();
+      const senha = document.getElementById('loginSenha').value.trim();
+      const lembrar = document.getElementById('chkLembrar').checked;
+
+      if (typeof loginUsuarioSupabase === 'function') {
+        const supaRes = await loginUsuarioSupabase(entradaBruta, senha);
+        if (supaRes.ok && supaRes.usuario) {
+          if (lembrar) {
+            localStorage.setItem('lembrar_email', entradaBruta);
+            localStorage.setItem('lembrar_senha', senha);
+          } else {
+            localStorage.removeItem('lembrar_email');
+            localStorage.removeItem('lembrar_senha');
+          }
+          salvarSessaoLocal(supaRes.usuario);
+          abrirQuadradoBoasVindas(
+            supaRes.usuario.nome,
+            'Login realizado!',
+            'Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!',
+            supaRes.usuario.tipo === 'admin' ? 'admin.html' : 'cardapio.html'
+          );
+          return;
+        }
+      }
+
+      const apiRes = await chamarApiAuth({
+        acao: 'login',
+        email: entrada,
+        senha
+      });
+
+      if (apiRes) {
+        if (!apiRes.ok) {
+          mostrarAviso('avisoLogin', apiRes.mensagem);
+          return;
+        }
+        if (lembrar) {
+          localStorage.setItem('lembrar_email', entradaBruta);
+          localStorage.setItem('lembrar_senha', senha);
+        } else {
+          localStorage.removeItem('lembrar_email');
+          localStorage.removeItem('lembrar_senha');
+        }
+        const usuario = apiRes.usuario || { nome: entradaBruta, email: entrada };
+        salvarSessaoLocal(usuario);
+        abrirQuadradoBoasVindas(usuario.nome, 'Login realizado!', resMensagem(apiRes), usuario.tipo === 'admin' ? 'admin.html' : 'cardapio.html');
+        return;
+      }
+
+      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      const usuarioEncontrado = usuariosCadastrados.find(u => 
+        (u.email === entrada || u.nome.toLowerCase() === entrada) && u.senha === senha
+      );
+
+      if (usuarioEncontrado) {
+        if (lembrar) {
+          localStorage.setItem('lembrar_email', entradaBruta);
+          localStorage.setItem('lembrar_senha', senha);
+        } else {
+          localStorage.removeItem('lembrar_email');
+          localStorage.removeItem('lembrar_senha');
+        }
+
+        salvarSessaoLocal(usuarioEncontrado);
+        abrirQuadradoBoasVindas(usuarioEncontrado.nome);
+      } else {
+        mostrarAviso('avisoLogin', 'E-mail/usuário ou senha incorretos! Clique em "Criar conta" se ainda não tiver cadastro.');
+      }
     }
 
-    function alternarNotificacoes(event) {
-      event.stopPropagation();
-      document.getElementById('dropdownNotificacoes').classList.toggle('active');
+    function resMensagem(apiRes) {
+      return apiRes && apiRes.mensagem
+        ? apiRes.mensagem
+        : 'Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!';
     }
 
-    function limparNotificacoes() {
-      document.getElementById('listaNotificacoes').innerHTML = '<p style="padding: 12px; font-size: 10px; color: var(--texto-suave); text-align: center;">Nenhuma notificação.</p>';
-      document.getElementById('badgeNotificacao').innerText = '0';
+    function recuperarSenha() {
+      const entradaAtual = document.getElementById('loginEmail').value.trim();
+      if (entradaAtual.includes('@')) {
+        document.getElementById('recEmail').value = entradaAtual;
+      }
+      mostrarSecao('recuperar');
+    }
+
+    async function solicitarCodigoEmail(event) {
+      event.preventDefault();
+      const email = document.getElementById('recEmail').value.trim().toLowerCase();
+
+      if (typeof gerarCodigoRecuperacaoSupabase === 'function') {
+        const supaRes = await gerarCodigoRecuperacaoSupabase(email);
+        if (supaRes.ok) {
+          mostrarAviso('avisoRecuperar', `Código gerado: ${supaRes.codigo}`, true);
+          return;
+        }
+      }
+
+      const apiRes = await chamarApiAuth({
+        acao: 'enviar_codigo',
+        email
+      });
+
+      if (apiRes) {
+        const extra = apiRes.codigo_teste ? ` [Código para teste local: ${apiRes.codigo_teste}]` : '';
+        mostrarAviso('avisoRecuperar', (apiRes.mensagem || 'Código enviado!') + extra, apiRes.ok);
+        return;
+      }
+
+      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      const idx = usuariosCadastrados.findIndex(u => u.email === email);
+      if (idx === -1) {
+        mostrarAviso('avisoRecuperar', 'Nenhum cadastro encontrado com esse e-mail.');
+        return;
+      }
+      const codigoLocal = String(Math.floor(100000 + Math.random() * 900000));
+      usuariosCadastrados[idx].codigo_recuperacao = codigoLocal;
+      localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
+      mostrarAviso('avisoRecuperar', `Código gerado para teste local: ${codigoLocal}`, true);
+    }
+
+    async function confirmarRedefinicaoSenha(event) {
+      event.preventDefault();
+      const email = document.getElementById('recEmail').value.trim().toLowerCase();
+      const codigo = document.getElementById('recCodigo').value.trim();
+      const novaSenha = document.getElementById('recNovaSenha').value.trim();
+
+      if (typeof redefinirSenhaSupabase === 'function') {
+        const supaRes = await redefinirSenhaSupabase(email, codigo, novaSenha);
+        if (supaRes.ok) {
+          mostrarAviso('avisoRecuperar', supaRes.mensagem || 'Senha redefinida com sucesso!', true);
+          document.getElementById('loginEmail').value = email;
+          setTimeout(() => mostrarSecao('login'), 1400);
+          return;
+        }
+      }
+
+      const apiRes = await chamarApiAuth({
+        acao: 'redefinir_senha',
+        email,
+        codigo,
+        nova_senha: novaSenha
+      });
+
+      if (apiRes) {
+        mostrarAviso('avisoRecuperar', apiRes.mensagem, apiRes.ok);
+        if (apiRes.ok) {
+          document.getElementById('loginEmail').value = email;
+          setTimeout(() => mostrarSecao('login'), 1400);
+        }
+        return;
+      }
+
+      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      const idx = usuariosCadastrados.findIndex(u => u.email === email);
+      if (idx === -1 || usuariosCadastrados[idx].codigo_recuperacao !== codigo) {
+        mostrarAviso('avisoRecuperar', 'Código inválido ou e-mail não encontrado.');
+        return;
+      }
+      usuariosCadastrados[idx].senha = novaSenha;
+      delete usuariosCadastrados[idx].codigo_recuperacao;
+      localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
+      mostrarAviso('avisoRecuperar', 'Senha alterada com sucesso! Voltando para o login...', true);
+      document.getElementById('loginEmail').value = email;
+      setTimeout(() => mostrarSecao('login'), 1400);
+    }
+
+    async function executarLoginAdmin(event) {
+      event.preventDefault();
+      const usuario = document.getElementById('admUsuario').value.trim();
+      const senha = document.getElementById('admSenha').value.trim();
+
+      if (typeof loginUsuarioSupabase === 'function') {
+        const supaRes = await loginUsuarioSupabase(usuario, senha);
+        if (supaRes.ok && supaRes.usuario && supaRes.usuario.tipo === 'admin') {
+          localStorage.setItem('admin_nome', supaRes.usuario.nome || usuario);
+          localStorage.setItem('usuario_ativo', JSON.stringify(supaRes.usuario));
+          window.location.href = 'admin.html';
+          return;
+        }
+      }
+
+      const apiRes = await chamarApiAuth({
+        acao: 'login',
+        email: usuario.toLowerCase(),
+        senha
+      });
+
+      if (apiRes && apiRes.ok && apiRes.usuario && apiRes.usuario.tipo === 'admin') {
+        localStorage.setItem('admin_nome', apiRes.usuario.nome || usuario);
+        localStorage.setItem('usuario_ativo', JSON.stringify(apiRes.usuario));
+        window.location.href = 'admin.html';
+        return;
+      }
+
+      const senhaGerente = localStorage.getItem('senha_gerente') || '1234';
+      if (senha === senhaGerente) {
+        localStorage.setItem('admin_nome', usuario);
+        window.location.href = 'admin.html';
+      } else {
+        mostrarAviso('avisoAdmin', apiRes && !apiRes.ok ? apiRes.mensagem : 'Senha administrativa incorreta! (Senha padrão inicial: 1234)');
+      }
     }
   </script>
+  <script src="supabase-conta.js"></script>
 </body>
 </html>
