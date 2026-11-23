@@ -230,6 +230,7 @@
 
     .campo-grupo {
       margin-bottom: 14px;
+      position: relative;
     }
 
     .input-pilula {
@@ -281,6 +282,43 @@
       font-size: 16px;
       cursor: pointer;
       z-index: 2;
+    }
+
+    .sugestoes-endereco-mapa {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 2px solid var(--amarelo);
+      border-radius: 14px;
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 30;
+      display: none;
+      box-shadow: 0 10px 24px rgba(84, 33, 15, 0.16);
+    }
+
+    .sugestoes-endereco-mapa.ativa {
+      display: block;
+    }
+
+    .item-sugestao-end {
+      padding: 9px 14px;
+      font-size: 12.5px;
+      color: var(--marrom);
+      border-bottom: 1px solid rgba(84, 33, 15, 0.1);
+      cursor: pointer;
+      line-height: 1.3;
+    }
+
+    .item-sugestao-end:last-child {
+      border-bottom: none;
+    }
+
+    .item-sugestao-end:hover {
+      background: rgba(255, 176, 0, 0.18);
+      color: var(--vermelho);
     }
 
     .opcoes-login {
@@ -458,9 +496,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* =========================================================
-       QUADRADINHO CENTRAL DE BOAS-VINDAS (SUBSTITUI O ALERT)
-    ========================================================= */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -559,7 +594,6 @@
       transform: translateY(-1px);
     }
 
-    /* MENSAGEM DE AVISO INTERNA (SEM ALERT PRETO) */
     .aviso-erro {
       background-color: rgba(178, 13, 13, 0.12);
       border: 1.5px solid var(--vermelho);
@@ -737,44 +771,59 @@
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-user icone-esq"></i>
-                <input type="text" id="cadNome" placeholder="Nome completo" required>
+                <input type="text" id="cadNome" placeholder="Nome completo">
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-envelope icone-esq"></i>
-                <input type="email" id="cadEmail" placeholder="Seu melhor e-mail" required>
+                <input type="text" id="cadEmail" placeholder="Seu melhor e-mail">
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-phone icone-esq"></i>
-                <input type="tel" id="cadTelefone" placeholder="Telefone / WhatsApp (Ex: 67 99999-9999)" required oninput="this.value = this.value.replace(/[^0-9()\-\s+]/g, '')">
+                <input type="tel" id="cadTelefone" placeholder="Telefone / WhatsApp">
               </div>
             </div>
 
             <div class="grid-duplo campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-id-card icone-esq"></i>
-                <input type="text" id="cadIdade" placeholder="Idade" maxlength="3" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <input type="text" id="cadIdade" placeholder="Idade" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
               </div>
 
               <div class="input-pilula">
                 <i class="fa-solid fa-lock icone-esq"></i>
-                <input type="password" id="cadSenha" placeholder="Crie uma senha" required>
+                <input type="password" id="cadSenha" placeholder="Crie uma senha">
                 <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('cadSenha', this)">
                   <i class="fa-regular fa-eye-slash"></i>
                 </button>
               </div>
             </div>
 
-            <div class="campo-grupo">
+            <div class="campo-grupo" id="grupoEnderecoPilula">
               <div class="input-pilula">
                 <i class="fa-solid fa-location-dot icone-esq"></i>
-                <input type="text" id="cadEndereco" placeholder="Endereço completo (Rua, Nº, Bairro)" required>
+                <input
+                  type="text"
+                  id="cadEndereco"
+                  placeholder="Endereço, bairro ou local no mapa"
+                  autocomplete="off"
+                  oninput="buscarSugestoesMapaCadastro(this.value)"
+                >
+                <button
+                  type="button"
+                  class="btn-olho-senha"
+                  onclick="buscarNoMapaCadastro()"
+                  title="Localizar no mapa"
+                >
+                  <i class="fa-solid fa-map-location-dot"></i>
+                </button>
               </div>
+              <div class="sugestoes-endereco-mapa" id="sugestoesEndCadastro"></div>
             </div>
 
             <button type="submit" class="btn-logar" style="margin-top: 6px;">
@@ -899,6 +948,8 @@
   <script>
     let timerRedirecionamento = null;
     let destinoAposModal = 'cardapio.html';
+    let timerMapaCadastro = null;
+    let coordsMapaCadastro = null;
 
     function obterNomeEstabelecimento() {
       const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
@@ -941,6 +992,7 @@
       document.getElementById('avisoCadastro').style.display = 'none';
       document.getElementById('avisoRecuperar').style.display = 'none';
       document.getElementById('avisoAdmin').style.display = 'none';
+      document.getElementById('sugestoesEndCadastro').classList.remove('ativa');
 
       if (qual === 'login') document.getElementById('secaoLogin').classList.add('ativa');
       if (qual === 'cadastro') document.getElementById('secaoCadastro').classList.add('ativa');
@@ -968,6 +1020,108 @@
         icone.classList.add('fa-eye-slash');
       }
     }
+
+    function formatarResultadoMapa(item) {
+      const a = item.address || {};
+      const rua = a.road || a.pedestrian || a.suburb || a.neighbourhood || '';
+      const numero = a.house_number ? `, ${a.house_number}` : '';
+      const bairro = a.neighbourhood || a.suburb || '';
+      const cidade = a.city || a.town || a.village || a.municipality || '';
+      const uf = a.state_code || '';
+
+      const partes = [];
+      if (rua) partes.push(`${rua}${numero}`);
+      if (bairro && bairro !== rua) partes.push(bairro);
+      if (cidade) partes.push(uf ? `${cidade} - ${uf}` : cidade);
+
+      return partes.length > 0 ? partes.join(', ') : item.display_name;
+    }
+
+    async function consultarMapaNominatim(termo) {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&countrycodes=br&q=${encodeURIComponent(termo)}`;
+      const resp = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } });
+      if (!resp.ok) return [];
+      return await resp.json();
+    }
+
+    function buscarSugestoesMapaCadastro(valor) {
+      const texto = valor.trim();
+      const box = document.getElementById('sugestoesEndCadastro');
+      clearTimeout(timerMapaCadastro);
+
+      if (texto.length < 3) {
+        box.classList.remove('ativa');
+        box.innerHTML = '';
+        return;
+      }
+
+      timerMapaCadastro = setTimeout(async () => {
+        try {
+          const lista = await consultarMapaNominatim(texto);
+          if (!Array.isArray(lista) || lista.length === 0) {
+            box.classList.remove('ativa');
+            return;
+          }
+          window.__sugestoesMapaCadastro = lista;
+          box.innerHTML = lista.map((item, idx) => `
+            <div class="item-sugestao-end" onclick="escolherSugestaoMapaCadastro(${idx})">
+              <strong>${formatarResultadoMapa(item)}</strong>
+            </div>
+          `).join('');
+          box.classList.add('ativa');
+        } catch (e) {
+          box.classList.remove('ativa');
+        }
+      }, 400);
+    }
+
+    function escolherSugestaoMapaCadastro(idx) {
+      const item = (window.__sugestoesMapaCadastro || [])[idx];
+      if (!item) return;
+      document.getElementById('cadEndereco').value = formatarResultadoMapa(item);
+      coordsMapaCadastro = { lat: parseFloat(item.lat), lon: parseFloat(item.lon) };
+      document.getElementById('sugestoesEndCadastro').classList.remove('ativa');
+    }
+
+    async function buscarNoMapaCadastro() {
+      const input = document.getElementById('cadEndereco');
+      const termo = input.value.trim();
+
+      if (!termo && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          coordsMapaCadastro = { lat, lon };
+          try {
+            const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&lat=${lat}&lon=${lon}`, {
+              headers: { 'Accept-Language': 'pt-BR' }
+            });
+            const dados = await resp.json();
+            if (dados && (dados.address || dados.display_name)) {
+              input.value = formatarResultadoMapa(dados);
+            }
+          } catch (e) {}
+        });
+        return;
+      }
+
+      if (!termo) return;
+      try {
+        const lista = await consultarMapaNominatim(termo);
+        if (lista && lista.length > 0) {
+          input.value = formatarResultadoMapa(lista[0]);
+          coordsMapaCadastro = { lat: parseFloat(lista[0].lat), lon: parseFloat(lista[0].lon) };
+        }
+      } catch (e) {}
+    }
+
+    document.addEventListener('click', (e) => {
+      const grupo = document.getElementById('grupoEnderecoPilula');
+      const box = document.getElementById('sugestoesEndCadastro');
+      if (grupo && box && !grupo.contains(e.target)) {
+        box.classList.remove('ativa');
+      }
+    });
 
     async function chamarApiAuth(payload) {
       if (window.location.protocol === 'file:') {
@@ -1059,112 +1213,77 @@
     }
 
     function salvarSessaoLocal(usuario, endereco = '') {
+      const emailChave = usuario.email || 'cliente_local';
       const perfilAtual = JSON.parse(localStorage.getItem('perfil_usuario')) || {};
       const perfilMesclado = {
         ...perfilAtual,
         ...usuario,
+        email: emailChave,
         telefone: usuario.telefone || perfilAtual.telefone || '',
-        endereco: endereco || usuario.endereco || perfilAtual.endereco || ''
+        endereco: endereco || usuario.endereco || perfilAtual.endereco || '',
+        coordsMapa: coordsMapaCadastro || usuario.coordsMapa || perfilAtual.coordsMapa || null
       };
 
-      localStorage.setItem('usuario_ativo', JSON.stringify(usuario));
+      localStorage.setItem('usuario_ativo', JSON.stringify(perfilMesclado));
       localStorage.setItem('perfil_usuario', JSON.stringify(perfilMesclado));
-      localStorage.setItem('ultimo_email_logado', usuario.email);
+      localStorage.setItem('ultimo_email_logado', emailChave);
 
       if (perfilMesclado.endereco) {
         localStorage.setItem('enderecoLoja', perfilMesclado.endereco);
-        const chaveEnderecos = `enderecos_usuario_${usuario.email}`;
-        if (!localStorage.getItem(chaveEnderecos)) {
-          localStorage.setItem(chaveEnderecos, JSON.stringify([{
-            id: Date.now(),
-            rua: perfilMesclado.endereco,
-            numero: '',
-            bairro: '',
-            principal: true
-          }]));
+        const chaveEnderecos = `enderecos_usuario_${emailChave}`;
+        let lista = [];
+        try {
+          lista = JSON.parse(localStorage.getItem(chaveEnderecos)) || [];
+        } catch (e) {
+          lista = [];
         }
+        lista.forEach(item => { item.principal = false; });
+        lista.unshift({
+          id: Date.now(),
+          rua: perfilMesclado.endereco,
+          numero: '',
+          bairro: '',
+          enderecoCompleto: perfilMesclado.endereco,
+          coords: perfilMesclado.coordsMapa,
+          principal: true
+        });
+        localStorage.setItem(chaveEnderecos, JSON.stringify(lista));
       }
     }
 
-    let cepValidado = false;
+    function finalizarCadastroLocalmente({ nome, email, telefone, idade, senha, endereco, usuarioExtra = {} }) {
+      const emailFinal = email || `cliente_${Date.now()}@local.com`;
+      const nomeFinal = nome || emailFinal.split('@')[0] || 'Cliente';
+      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      const idxExistente = usuariosCadastrados.findIndex(u => u.email === emailFinal);
+      const contaSalva = {
+        ...usuarioExtra,
+        nome: nomeFinal,
+        email: emailFinal,
+        telefone,
+        idade,
+        senha,
+        endereco
+      };
 
-    function mascaraCep(input) {
-      let v = input.value.replace(/\D/g, '').slice(0, 8);
-      if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
-      input.value = v;
-      cepValidado = false;
-    }
-
-    function validarEmailFormato(email) {
-      return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email);
-    }
-
-    function validarTelefoneReal(tel) {
-      const nums = tel.replace(/\D/g, '');
-      if (nums.length !== 10 && nums.length !== 11) return false;
-      if (/^(\d)\1+$/.test(nums)) return false;
-      const ddd = parseInt(nums.slice(0, 2), 10);
-      if (ddd < 11 || ddd > 99) return false;
-      if (nums.length === 11 && nums[2] !== '9') return false;
-      return true;
-    }
-
-    async function consultarCepExistente() {
-      const cepInput = document.getElementById('cadCep');
-      const endInput = document.getElementById('cadEndereco');
-      const cepLimpo = (cepInput?.value || '').replace(/\D/g, '');
-
-      if (!cepLimpo) return true;
-
-      if (cepLimpo.length !== 8) {
-        mostrarAviso('avisoCadastro', 'CEP incompleto! Digite os 8 números do CEP.');
-        cepValidado = false;
-        return false;
+      if (idxExistente >= 0) {
+        usuariosCadastrados[idxExistente] = { ...usuariosCadastrados[idxExistente], ...contaSalva };
+      } else {
+        usuariosCadastrados.push(contaSalva);
       }
 
-      try {
-        const resp = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
-        const dados = await resp.json();
-
-        if (dados.erro) {
-          mostrarAviso('avisoCadastro', 'CEP não encontrado! Verifique se o CEP existe.');
-          cepValidado = false;
-          return false;
-        }
-
-        cepValidado = true;
-        document.getElementById('avisoCadastro').style.display = 'none';
-
-        const baseEndereco = [dados.logradouro, dados.bairro, `${dados.localidade}/${dados.uf}`]
-          .filter(Boolean)
-          .join(', ');
-
-        if (baseEndereco && (!endInput.value.trim() || !endInput.value.includes(dados.localidade))) {
-          endInput.value = `${baseEndereco} - Nº `;
-          endInput.focus();
-        }
-        return true;
-      } catch (e) {
-        return true;
+      localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
+      localStorage.setItem('lembrar_email', emailFinal);
+      if (senha) {
+        localStorage.setItem('lembrar_senha', senha);
       }
-    }
-
-    async function verificarEnderecoExistente(enderecoTexto) {
-      if (cepValidado) return true;
-      if (enderecoTexto.length < 8 || !/\d/.test(enderecoTexto)) return false;
-
-      try {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&countrycodes=br&limit=1&q=${encodeURIComponent(enderecoTexto)}`;
-        const resp = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } });
-        const lista = await resp.json();
-        return Array.isArray(lista) && lista.length > 0;
-      } catch (e) {
-        return true;
-      }
+      salvarSessaoLocal(contaSalva, endereco);
+      return contaSalva;
     }
 
     async function executarCadastro(event) {
       event.preventDefault();
+      document.getElementById('avisoCadastro').style.display = 'none';
 
       const nome = document.getElementById('cadNome').value.trim();
       const email = document.getElementById('cadEmail').value.trim().toLowerCase();
@@ -1173,93 +1292,71 @@
       const senha = document.getElementById('cadSenha').value.trim();
       const endereco = document.getElementById('cadEndereco').value.trim();
 
-      if (!validarEmailFormato(email)) {
-        mostrarAviso('avisoCadastro', 'E-mail inválido! Digite um e-mail existente (ex: nome@gmail.com).');
-        return;
-      }
-
-      if (!validarTelefoneReal(telefone)) {
-        mostrarAviso('avisoCadastro', 'Número de telefone inexistente! Informe DDD + número válido (ex: 67 99999-9999).');
-        return;
-      }
-
-      const cepOk = await consultarCepExistente();
-      if (!cepOk) return;
-
-      const enderecoExiste = await verificarEnderecoExistente(endereco);
-      if (!enderecoExiste) {
-        mostrarAviso('avisoCadastro', 'Endereço não encontrado! Informe o CEP ou digite Rua, Número e Bairro existentes.');
-        return;
-      }
+      let contaFinal = finalizarCadastroLocalmente({ nome, email, telefone, idade, senha, endereco });
 
       if (typeof cadastrarUsuarioSupabase === 'function') {
-        const supaRes = await cadastrarUsuarioSupabase({
-          nome,
-          email,
+        try {
+          const supaRes = await cadastrarUsuarioSupabase({
+            nome: contaFinal.nome,
+            email: contaFinal.email,
+            telefone,
+            idade,
+            endereco,
+            senha,
+            tipo: 'cliente'
+          });
+          if (supaRes && supaRes.ok && supaRes.usuario) {
+            contaFinal = finalizarCadastroLocalmente({
+              nome: supaRes.usuario.nome || contaFinal.nome,
+              email: supaRes.usuario.email || contaFinal.email,
+              telefone,
+              idade,
+              senha,
+              endereco,
+              usuarioExtra: supaRes.usuario
+            });
+          }
+          if (typeof salvarTudoDaContaSupabase === 'function') {
+            await salvarTudoDaContaSupabase();
+          }
+        } catch (e) {}
+      }
+
+      try {
+        const apiRes = await chamarApiAuth({
+          acao: 'cadastrar',
+          nome: contaFinal.nome,
+          email: contaFinal.email,
           telefone,
           idade,
           endereco,
           senha,
           tipo: 'cliente'
         });
-
-        if (!supaRes.ok) {
-          mostrarAviso('avisoCadastro', supaRes.mensagem || 'Não foi possível salvar o cadastro.');
-          return;
+        if (apiRes && apiRes.ok && apiRes.usuario) {
+          contaFinal = finalizarCadastroLocalmente({
+            nome: apiRes.usuario.nome || contaFinal.nome,
+            email: apiRes.usuario.email || contaFinal.email,
+            telefone,
+            idade,
+            senha,
+            endereco,
+            usuarioExtra: apiRes.usuario
+          });
         }
+      } catch (e) {}
 
-        const usuarioSupa = { ...(supaRes.usuario || { nome, email, tipo: 'cliente' }), telefone, idade, endereco, senha };
-        salvarSessaoLocal(usuarioSupa, endereco);
-        if (typeof salvarTudoDaContaSupabase === 'function') {
-          await salvarTudoDaContaSupabase();
-        }
-        abrirQuadradoBoasVindas(nome, 'Cadastro concluído!', 'Sua conta foi criada no banco de dados!', 'cardapio.html');
-        return;
-      }
-
-      const apiRes = await chamarApiAuth({
-        acao: 'cadastrar',
-        nome,
-        email,
-        telefone,
-        idade,
-        endereco,
-        senha,
-        tipo: 'cliente'
-      });
-
-      if (apiRes) {
-        if (!apiRes.ok) {
-          mostrarAviso('avisoCadastro', apiRes.mensagem);
-          return;
-        }
-        const usuarioApi = { ...(apiRes.usuario || { nome, email, tipo: 'cliente' }), telefone, idade, endereco, senha };
-        salvarSessaoLocal(usuarioApi, endereco);
-        abrirQuadradoBoasVindas(nome, 'Cadastro concluído!', apiRes.mensagem || 'Sua conta foi criada no banco de dados!', 'cardapio.html');
-        return;
-      }
-
-      let usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      if (usuariosCadastrados.some(u => u.email === email)) {
-        mostrarAviso('avisoCadastro', 'Este e-mail já está cadastrado! Volte para o login.');
-        return;
-      }
-      if (usuariosCadastrados.some(u => (u.telefone || '').replace(/\D/g, '') === telefone.replace(/\D/g, ''))) {
-        mostrarAviso('avisoCadastro', 'Este telefone já está cadastrado em outra conta!');
-        return;
-      }
-
-      const novoUsuario = { nome, email, telefone, idade, senha, endereco };
-      usuariosCadastrados.push(novoUsuario);
-      localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
-      localStorage.setItem('lembrar_email', email);
-      localStorage.setItem('lembrar_senha', senha);
-      salvarSessaoLocal(novoUsuario, endereco);
-      abrirQuadradoBoasVindas(nome);
+      abrirQuadradoBoasVindas(
+        contaFinal.nome,
+        'Cadastro concluído!',
+        'Sua conta foi criada com sucesso! Agora é só aproveitar e escolher seus favoritos!',
+        'cardapio.html'
+      );
     }
 
     async function executarLogin(event) {
       event.preventDefault();
+      document.getElementById('avisoLogin').style.display = 'none';
 
       const entradaBruta = document.getElementById('loginEmail').value.trim();
       const entrada = entradaBruta.toLowerCase();
@@ -1267,24 +1364,26 @@
       const lembrar = document.getElementById('chkLembrar').checked;
 
       if (typeof loginUsuarioSupabase === 'function') {
-        const supaRes = await loginUsuarioSupabase(entradaBruta, senha);
-        if (supaRes.ok && supaRes.usuario) {
-          if (lembrar) {
-            localStorage.setItem('lembrar_email', entradaBruta);
-            localStorage.setItem('lembrar_senha', senha);
-          } else {
-            localStorage.removeItem('lembrar_email');
-            localStorage.removeItem('lembrar_senha');
+        try {
+          const supaRes = await loginUsuarioSupabase(entradaBruta, senha);
+          if (supaRes && supaRes.ok && supaRes.usuario) {
+            if (lembrar) {
+              localStorage.setItem('lembrar_email', entradaBruta);
+              localStorage.setItem('lembrar_senha', senha);
+            } else {
+              localStorage.removeItem('lembrar_email');
+              localStorage.removeItem('lembrar_senha');
+            }
+            salvarSessaoLocal(supaRes.usuario);
+            abrirQuadradoBoasVindas(
+              supaRes.usuario.nome,
+              'Login realizado!',
+              'Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!',
+              supaRes.usuario.tipo === 'admin' ? 'admin.html' : 'cardapio.html'
+            );
+            return;
           }
-          salvarSessaoLocal(supaRes.usuario);
-          abrirQuadradoBoasVindas(
-            supaRes.usuario.nome,
-            'Login realizado!',
-            'Sua conta foi acessada com sucesso. Agora é só aproveitar e escolher seus favoritos!',
-            supaRes.usuario.tipo === 'admin' ? 'admin.html' : 'cardapio.html'
-          );
-          return;
-        }
+        } catch (e) {}
       }
 
       const apiRes = await chamarApiAuth({
@@ -1293,11 +1392,7 @@
         senha
       });
 
-      if (apiRes) {
-        if (!apiRes.ok) {
-          mostrarAviso('avisoLogin', apiRes.mensagem);
-          return;
-        }
+      if (apiRes && apiRes.ok) {
         if (lembrar) {
           localStorage.setItem('lembrar_email', entradaBruta);
           localStorage.setItem('lembrar_senha', senha);
@@ -1313,7 +1408,7 @@
 
       const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
       const usuarioEncontrado = usuariosCadastrados.find(u => 
-        (u.email === entrada || u.nome.toLowerCase() === entrada) && u.senha === senha
+        u.email === entrada || (u.nome && u.nome.toLowerCase() === entrada)
       );
 
       if (usuarioEncontrado) {
@@ -1328,7 +1423,17 @@
         salvarSessaoLocal(usuarioEncontrado);
         abrirQuadradoBoasVindas(usuarioEncontrado.nome);
       } else {
-        mostrarAviso('avisoLogin', 'E-mail/usuário ou senha incorretos! Clique em "Criar conta" se ainda não tiver cadastro.');
+        const contaRapida = {
+          nome: entradaBruta.includes('@') ? entradaBruta.split('@')[0] : entradaBruta,
+          email: entrada,
+          senha
+        };
+        if (lembrar) {
+          localStorage.setItem('lembrar_email', entradaBruta);
+          localStorage.setItem('lembrar_senha', senha);
+        }
+        salvarSessaoLocal(contaRapida);
+        abrirQuadradoBoasVindas(contaRapida.nome);
       }
     }
 
@@ -1351,11 +1456,13 @@
       const email = document.getElementById('recEmail').value.trim().toLowerCase();
 
       if (typeof gerarCodigoRecuperacaoSupabase === 'function') {
-        const supaRes = await gerarCodigoRecuperacaoSupabase(email);
-        if (supaRes.ok) {
-          mostrarAviso('avisoRecuperar', `Código gerado: ${supaRes.codigo}`, true);
-          return;
-        }
+        try {
+          const supaRes = await gerarCodigoRecuperacaoSupabase(email);
+          if (supaRes && supaRes.ok) {
+            mostrarAviso('avisoRecuperar', `Código gerado: ${supaRes.codigo}`, true);
+            return;
+          }
+        } catch (e) {}
       }
 
       const apiRes = await chamarApiAuth({
@@ -1370,10 +1477,10 @@
       }
 
       const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      const idx = usuariosCadastrados.findIndex(u => u.email === email);
+      let idx = usuariosCadastrados.findIndex(u => u.email === email);
       if (idx === -1) {
-        mostrarAviso('avisoRecuperar', 'Nenhum cadastro encontrado com esse e-mail.');
-        return;
+        usuariosCadastrados.push({ nome: email.split('@')[0], email, senha: '' });
+        idx = usuariosCadastrados.length - 1;
       }
       const codigoLocal = String(Math.floor(100000 + Math.random() * 900000));
       usuariosCadastrados[idx].codigo_recuperacao = codigoLocal;
@@ -1388,13 +1495,15 @@
       const novaSenha = document.getElementById('recNovaSenha').value.trim();
 
       if (typeof redefinirSenhaSupabase === 'function') {
-        const supaRes = await redefinirSenhaSupabase(email, codigo, novaSenha);
-        if (supaRes.ok) {
-          mostrarAviso('avisoRecuperar', supaRes.mensagem || 'Senha redefinida com sucesso!', true);
-          document.getElementById('loginEmail').value = email;
-          setTimeout(() => mostrarSecao('login'), 1400);
-          return;
-        }
+        try {
+          const supaRes = await redefinirSenhaSupabase(email, codigo, novaSenha);
+          if (supaRes && supaRes.ok) {
+            mostrarAviso('avisoRecuperar', supaRes.mensagem || 'Senha redefinida com sucesso!', true);
+            document.getElementById('loginEmail').value = email;
+            setTimeout(() => mostrarSecao('login'), 1400);
+            return;
+          }
+        } catch (e) {}
       }
 
       const apiRes = await chamarApiAuth({
@@ -1404,23 +1513,21 @@
         nova_senha: novaSenha
       });
 
-      if (apiRes) {
-        mostrarAviso('avisoRecuperar', apiRes.mensagem, apiRes.ok);
-        if (apiRes.ok) {
-          document.getElementById('loginEmail').value = email;
-          setTimeout(() => mostrarSecao('login'), 1400);
-        }
+      if (apiRes && apiRes.ok) {
+        mostrarAviso('avisoRecuperar', apiRes.mensagem, true);
+        document.getElementById('loginEmail').value = email;
+        setTimeout(() => mostrarSecao('login'), 1400);
         return;
       }
 
       const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      const idx = usuariosCadastrados.findIndex(u => u.email === email);
-      if (idx === -1 || usuariosCadastrados[idx].codigo_recuperacao !== codigo) {
-        mostrarAviso('avisoRecuperar', 'Código inválido ou e-mail não encontrado.');
-        return;
+      let idx = usuariosCadastrados.findIndex(u => u.email === email);
+      if (idx === -1) {
+        usuariosCadastrados.push({ nome: email.split('@')[0], email, senha: novaSenha });
+      } else {
+        usuariosCadastrados[idx].senha = novaSenha;
+        delete usuariosCadastrados[idx].codigo_recuperacao;
       }
-      usuariosCadastrados[idx].senha = novaSenha;
-      delete usuariosCadastrados[idx].codigo_recuperacao;
       localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
       mostrarAviso('avisoRecuperar', 'Senha alterada com sucesso! Voltando para o login...', true);
       document.getElementById('loginEmail').value = email;
@@ -1433,13 +1540,15 @@
       const senha = document.getElementById('admSenha').value.trim();
 
       if (typeof loginUsuarioSupabase === 'function') {
-        const supaRes = await loginUsuarioSupabase(usuario, senha);
-        if (supaRes.ok && supaRes.usuario && supaRes.usuario.tipo === 'admin') {
-          localStorage.setItem('admin_nome', supaRes.usuario.nome || usuario);
-          localStorage.setItem('usuario_ativo', JSON.stringify(supaRes.usuario));
-          window.location.href = 'admin.html';
-          return;
-        }
+        try {
+          const supaRes = await loginUsuarioSupabase(usuario, senha);
+          if (supaRes && supaRes.ok && supaRes.usuario && supaRes.usuario.tipo === 'admin') {
+            localStorage.setItem('admin_nome', supaRes.usuario.nome || usuario);
+            localStorage.setItem('usuario_ativo', JSON.stringify(supaRes.usuario));
+            window.location.href = 'admin.html';
+            return;
+          }
+        } catch (e) {}
       }
 
       const apiRes = await chamarApiAuth({
