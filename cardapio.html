@@ -981,7 +981,6 @@
         line-height: 1.25;
         margin-bottom: 6px;
         display: -webkit-box;
-        
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -1142,12 +1141,16 @@
   </main>
 
   <script>
-    const bancoDeProdutos = [
+    const CHAVE_PRODUTOS_DIRETA = 'produtos_db';
+    
+    const produtosPadraoDiretos = [
       {
         id: 1001,
         nome: "Pão de Queijo Mineiro Tradicional",
         categoria: "lanches",
         sub: "Salgados",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://cdn1.matadornetwork.com/blogs/1/2014/07/Pao-de-queijo-traditional-snack-from-Brazil-560x420.jpg",
         preco: 24.90,
         descricao: "Pão de queijo mineiro tradicional, com queijo meia-cura e casquinha dourada. Pacote com 20 unidades."
@@ -1157,6 +1160,8 @@
         nome: "Bauru Clássico no Pão Francês",
         categoria: "lanches",
         sub: "Sanduíches",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://cdn.tasteatlas.com/images/dishrestaurants/69a13a35d2404f998b246dc2d605ef33.jpg?height=513&width=800",
         preco: 19.90,
         descricao: "Pão francês recheado com roast beef, combinação de queijos, tomate e pepino em conserva."
@@ -1166,6 +1171,8 @@
         nome: "Tapioca com Queijo Coalho e Presunto",
         categoria: "lanches",
         sub: "Tapiocas",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://www.arise-app.com/images/dishes/pt/tapioca-com-queijo-e-presunto-122vce.webp",
         preco: 14.90,
         descricao: "Tapioca preparada na hora, recheada com queijo coalho e presunto."
@@ -1173,8 +1180,10 @@
       {
         id: 1004,
         nome: "Coxinha de Frango com Catupiry",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Salgados Fritos",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/J3DMTSMSVVN77DQQO2JIATOHPU.jpg?auth=bd523a36b8d23958edb9e2d5a4d57e9cde5a2eaf53122e93152f9ee4b91ebf18&height=667&width=1000",
         preco: 42.90,
         descricao: "Coxinhas douradas, com recheio de frango temperado e catupiry. Caixa com 15 unidades."
@@ -1184,6 +1193,8 @@
         nome: "Crepioca de Frango Desfiado",
         categoria: "lanches",
         sub: "Fitness",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://www.arise-app.com/images/dishes/pt/crepioca-de-frango-com-chia-5722sg.webp",
         preco: 16.90,
         descricao: "Crepioca macia recheada com frango desfiado e requeijão."
@@ -1191,8 +1202,10 @@
       {
         id: 1006,
         nome: "Empadão de Frango Cremoso",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Salgados Assados",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://static.itdg.com.br/images/1200-675/88b9214692428e29e9e69089e8395bb2/editorial-a-2025-12-19t165642.704.png",
         preco: 59.90,
         descricao: "Empadão de massa amanteigada com recheio cremoso de frango. Serve até 8 porções."
@@ -1202,6 +1215,8 @@
         nome: "Misto Quente Especial na Frigideira",
         categoria: "lanches",
         sub: "Sanduíches",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/food_pics_v2/medium/misto_quente.jpg",
         preco: 14.90,
         descricao: "Pão tostado na frigideira, com presunto e queijo muçarela derretido."
@@ -1209,8 +1224,10 @@
       {
         id: 1008,
         nome: "Enroladinho de Salsicha Assado",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Salgados Assados",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/food_pics_v2/medium/enroladinho_de_salsicha.jpg",
         preco: 26.90,
         descricao: "Massa assada e douradinha envolvendo salsicha. Caixa com 10 unidades."
@@ -1220,6 +1237,8 @@
         nome: "Club Sandwich Tradicional",
         categoria: "lanches",
         sub: "Sanduíches",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://cdn.shopify.com/s/files/1/0851/3955/4638/files/Classic_triple-decker_Club_Sandwich_sliced_and_served_with_pickles.webp?v=1749719424",
         preco: 24.90,
         descricao: "Sanduíche em camadas com pão tostado, peito de peru, queijo, bacon, tomate e alface."
@@ -1227,8 +1246,10 @@
       {
         id: 1010,
         nome: "Pastel de Feira de Carne Moída",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Salgados Fritos",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://newr7-r7-prod.web.arc-cdn.net/resizer/v2/BPOP2ZWGIVBLRFA4NJX72UDITQ.jpeg?auth=3974a0e100f4b0296df87b7496ea4473cece3395ab0c617178fb53b229635582&height=1000&width=1500",
         preco: 39.90,
         descricao: "Pastéis crocantes recheados com carne moída temperada. Caixa com 10 unidades."
@@ -1236,8 +1257,10 @@
       {
         id: 1011,
         nome: "Esfiha Aberta de Queijo (Estilo Habib's)",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Salgados Assados",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://img.saborosos.com.br/imagens/esfiha-aberta-de-queijo-848x477.jpg",
         preco: 34.90,
         descricao: "Esfihas abertas com massa macia e recheio de queijo temperado. Caixa com 12 unidades."
@@ -1245,8 +1268,10 @@
       {
         id: 1012,
         nome: "Panqueca Americana com Mel e Frutas",
-        categoria: "lanches",
+        categoria: "sobremesas",
         sub: "Doces",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=600",
         preco: 22.90,
         descricao: "Panquecas americanas fofinhas, servidas com mel e frutas. Porção com 4 unidades."
@@ -1256,6 +1281,8 @@
         nome: "Muffin Salgado de Legumes e Queijo",
         categoria: "lanches",
         sub: "Fitness",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://cucinaricetta.com/assets/images/1770237543134-vduvkmbh.jpg",
         preco: 21.90,
         descricao: "Muffins salgados assados com legumes e queijo. Caixa com 6 unidades."
@@ -1265,6 +1292,8 @@
         nome: "Croissant de Presunto e Queijo",
         categoria: "lanches",
         sub: "Salgados Assados",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://p2.trrsf.com/image/fget/cf/1200/900/middle/images.terra.com/2023/11/07/553376496-croissant-tradicional-de-presunto-e-queijo.jpg",
         preco: 36.90,
         descricao: "Croissants folhados e dourados, recheados com presunto e queijo. Caixa com 8 unidades."
@@ -1272,8 +1301,10 @@
       {
         id: 1015,
         nome: "Bruschetta Clássica de Tomate e Manjericão",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Leves",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://www.amando.it/media/2025/07/bruschette-veloci.jpg",
         preco: 22.90,
         descricao: "Fatias de pão italiano tostado com tomate temperado, azeite e manjericão. Porção com 4 unidades."
@@ -1281,8 +1312,10 @@
       {
         id: 1016,
         nome: "Guacamole com Nachos de Tortilla",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Petiscos",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://uploads.leouve.com.br/2024/10/4pQ2cjqY-Firefly-Guacamole-com-alguns-Nachos-57375-jpg.webp",
         preco: 28.90,
         descricao: "Guacamole cremoso de abacate acompanhado de nachos de tortilla. Porção para compartilhar."
@@ -1290,8 +1323,10 @@
       {
         id: 1017,
         nome: "Biscoito de Polvilho Assado",
-        categoria: "lanches",
+        categoria: "entradas",
         sub: "Crocantes",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://images.cooknenjoy.com/uploads/2017/01/biscoito-de-polvilho-02.jpg",
         preco: 17.90,
         descricao: "Biscoitos de polvilho leves e crocantes, assados. Pacote com 30 unidades."
@@ -1301,6 +1336,8 @@
         nome: "Sanduíche Natural de Frango com Cenoura",
         categoria: "lanches",
         sub: "Sanduíches Frios",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://www.arise-app.com/images/dishes/pt/sanduiche-de-pao-integral-com-frango-e-salada-yawc2k.webp",
         preco: 19.90,
         descricao: "Sanduíche frio de pão integral com frango desfiado, cenoura e folhas de alface."
@@ -1308,8 +1345,10 @@
       {
         id: 1019,
         nome: "Bolinho de Chuva com Açúcar e Canela",
-        categoria: "lanches",
+        categoria: "sobremesas",
         sub: "Doces",
+        tag: "Mais Pedido",
+        estoque: 20,
         imagem: "https://p2.trrsf.com/image/fget/cf/1200/900/middle/images.terra.com/2025/03/02/2023512577-bolinhodechuvatradicional.jpg",
         preco: 18.90,
         descricao: "Bolinho de chuva fofinho, finalizado com açúcar e canela. Porção com 4 unidades."
@@ -1319,6 +1358,8 @@
         nome: "Hambúrguer Artesanal com Queijo Cheddar",
         categoria: "lanches",
         sub: "Sanduíches",
+        tag: "Artesanal",
+        estoque: 20,
         imagem: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600",
         preco: 27.90,
         descricao: "Hambúrguer artesanal com queijo cheddar, servido em pão tipo brioche."
@@ -1326,7 +1367,7 @@
     ];
 
     const formatarPreco = (preco) =>
-      preco.toLocaleString("pt-BR", {
+      Number(preco || 0).toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
       });
@@ -1342,6 +1383,12 @@
     }
 
     let carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
+
+    function notificarNuvemSeDisponivel() {
+      if (typeof salvarTudoDaContaSupabase === 'function') {
+        salvarTudoDaContaSupabase();
+      }
+    }
 
     function atualizarIconeTema(tema) {
       const icone = document.getElementById('iconeTemaIndex');
@@ -1378,32 +1425,6 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      aplicarTemaSalvo();
-      sincronizarDadosGlobais();
-      atualizarFotoPerfilHeader();
-      carregarProdutos();
-      filtrarProdutos();
-      atualizarBadgeSacolaIndex();
-    });
-
-    window.addEventListener('storage', function(e) {
-      if (e.key === 'tema_preferido' || e.key === 'tema_usuario') {
-        aplicarTemaSalvo();
-      }
-      if (
-        ['config_restaurante', 'nomeEstabelecimento', 'lojaNome', 'produtos_db', 'perfil_usuario', 'favoritos_db'].includes(e.key) ||
-        (e.key && e.key.startsWith('carrinho_usuario_'))
-      ) {
-        favoritos = JSON.parse(localStorage.getItem('favoritos_db')) || [];
-        sincronizarDadosGlobais();
-        atualizarFotoPerfilHeader();
-        carregarProdutos();
-        filtrarProdutos();
-        atualizarBadgeSacolaIndex();
-      }
-    });
-
     function sincronizarDadosGlobais() {
       const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
       const nomeLoja = localStorage.getItem('nomeEstabelecimento') || localStorage.getItem('lojaNome') || cfg.nome || 'Sabor & Brasa';
@@ -1432,52 +1453,45 @@
       if (badge) badge.innerText = totalQtd;
     }
 
-    document.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('dropdownNotificacoes');
-      const btnNotif = document.getElementById('btnNotificacao');
-      if (dropdown && btnNotif && !dropdown.contains(e.target) && !btnNotif.contains(e.target)) {
-        dropdown.classList.remove('active');
-      }
-    });
-
     function carregarProdutos() {
-      const produtosSalvos = JSON.parse(localStorage.getItem('produtos_db')) || [];
-      const mapaProdutos = new Map();
+      let lista = null;
+      try {
+        lista = JSON.parse(localStorage.getItem(CHAVE_PRODUTOS_DIRETA) || 'null');
+      } catch (e) {
+        lista = null;
+      }
 
-      bancoDeProdutos.forEach((item, idx) => {
-        mapaProdutos.set(item.id, {
+      if (!Array.isArray(lista) || lista.length === 0) {
+        const inicial = produtosPadraoDiretos.map((item, idx) => ({
           ...item,
           tag: item.tag || (idx % 2 === 0 ? "Mais Pedido" : "Artesanal"),
           estoque: item.estoque ?? 20
-        });
-      });
+        }));
+        localStorage.setItem(CHAVE_PRODUTOS_DIRETA, JSON.stringify(inicial));
+        produtos = inicial;
+        return;
+      }
 
-      produtosSalvos.forEach(item => {
-        mapaProdutos.set(item.id, {
-          ...item,
-          tag: item.tag || item.sub || "Destaque",
-          estoque: item.estoque ?? 20
-        });
-      });
-
-      produtos = Array.from(mapaProdutos.values());
-      localStorage.setItem('produtos_db', JSON.stringify(produtos));
+      produtos = lista;
     }
 
-    function eProdutoFavorito(id) { return favoritos.includes(id); }
+    function eProdutoFavorito(id) {
+      return favoritos.includes(Number(id));
+    }
 
     function alternarFavorito(id, event) {
       if (event) event.stopPropagation();
-      const prod = produtos.find(p => p.id === id);
+      const prod = produtos.find(p => Number(p.id) === Number(id));
       let msg = "";
       if (eProdutoFavorito(id)) {
-        favoritos = favoritos.filter(favId => favId !== id);
+        favoritos = favoritos.filter(favId => Number(favId) !== Number(id));
         msg = `Removido dos favoritos${prod ? `: <b>${prod.nome}</b>` : ""}`;
       } else {
-        favoritos.push(id);
+        favoritos.push(Number(id));
         msg = `Favoritado${prod ? `: <b>${prod.nome}</b>` : ""}`;
       }
       localStorage.setItem('favoritos_db', JSON.stringify(favoritos));
+      notificarNuvemSeDisponivel();
       filtrarProdutos();
       exibirMensagemToast(msg);
     }
@@ -1543,18 +1557,19 @@
     }
 
     function adicionarAoCarrinho(id) {
-      const prod = produtos.find(p => p.id === id);
+      const prod = produtos.find(p => Number(p.id) === Number(id));
       if (!prod) return;
 
       carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
-      const item = carrinho.find(c => c.id === id);
+      const item = carrinho.find(c => Number(c.id) === Number(id));
       if (item) {
-        item.qtd++;
+        item.qtd = (item.qtd || 1) + 1;
       } else {
         carrinho.push({ ...prod, qtd: 1 });
       }
 
       localStorage.setItem(obterChaveCarrinhoUsuario(), JSON.stringify(carrinho));
+      notificarNuvemSeDisponivel();
       atualizarBadgeSacolaIndex();
       exibirMensagemToast(`Na sacola: <b>${prod.nome}</b>`);
     }
@@ -1573,7 +1588,42 @@
       document.getElementById('listaNotificacoes').innerHTML = '<p style="padding: 12px; font-size: 10px; color: var(--texto-suave); text-align: center;">Nenhuma notificação.</p>';
       document.getElementById('badgeNotificacao').innerText = '0';
     }
+
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('dropdownNotificacoes');
+      const btnNotif = document.getElementById('btnNotificacao');
+      if (dropdown && btnNotif && !dropdown.contains(e.target) && !btnNotif.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'tema_preferido' || e.key === 'tema_usuario') {
+        aplicarTemaSalvo();
+      }
+      if (
+        ['config_restaurante', 'nomeEstabelecimento', 'lojaNome', CHAVE_PRODUTOS_DIRETA, 'perfil_usuario', 'favoritos_db'].includes(e.key) ||
+        (e.key && e.key.startsWith('carrinho_usuario_'))
+      ) {
+        favoritos = JSON.parse(localStorage.getItem('favoritos_db')) || [];
+        sincronizarDadosGlobais();
+        atualizarFotoPerfilHeader();
+        carregarProdutos();
+        filtrarProdutos();
+        atualizarBadgeSacolaIndex();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      aplicarTemaSalvo();
+      sincronizarDadosGlobais();
+      atualizarFotoPerfilHeader();
+      carregarProdutos();
+      filtrarProdutos();
+      atualizarBadgeSacolaIndex();
+    });
   </script>
   <script src="supabase-conta.js"></script>
+
 </body>
 </html>
