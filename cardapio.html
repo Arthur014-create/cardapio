@@ -197,7 +197,6 @@
       position: relative;
     }
 
-    .btn-tema-toggle,
     .btn-notificacao,
     .btn-sacola-header {
       background: none;
@@ -209,21 +208,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       transition: all 0.2s ease;
       text-decoration: none;
     }
 
-    .btn-tema-toggle {
-      border-color: var(--chip-borda);
-      color: var(--cor-amarelo);
-      font-size: 15px;
-      box-shadow: var(--neon-glow);
-    }
-
-    .btn-tema-toggle:hover,
     .btn-notificacao:hover,
     .btn-sacola-header:hover {
       color: var(--cor-laranja);
@@ -239,8 +230,8 @@
       color: #ffffff;
       font-size: 10px;
       font-weight: 700;
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -249,8 +240,8 @@
     }
 
     .perfil-avatar {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       object-fit: cover;
       cursor: pointer;
@@ -756,37 +747,45 @@
 
     /* =========================================================
        LAYOUT EXCLUSIVO PARA CELULAR — cardapio.html (Até 768px)
+       (Menu de cima maior, em uma fileira só, sem botão de tema)
     ========================================================= */
     @media (max-width: 768px) {
       .container {
-        padding: 0 10px;
+        padding: 0 12px;
       }
 
       header {
-        padding: 8px 0;
+        padding: 12px 0;
       }
 
       .header-content {
+        display: flex;
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
+        gap: 10px;
       }
 
       .logo-area {
         order: 1;
         flex: 1 1 auto;
         min-width: 0;
+        gap: 10px;
       }
 
       .logo-icon {
-        width: 34px;
-        height: 34px;
-        font-size: 16px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+
+      .logo-info {
+        min-width: 0;
       }
 
       .logo-info h1 {
-        font-size: 15px;
+        font-size: 17px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -798,26 +797,40 @@
 
       .header-actions {
         order: 2;
-        gap: 6px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 10px;
         flex-shrink: 0;
       }
 
-      .perfil-avatar {
-        width: 30px;
-        height: 30px;
-      }
-
-      .btn-tema-toggle,
       .btn-notificacao,
       .btn-sacola-header {
-        width: 28px;
-        height: 28px;
-        font-size: 12px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .badge-notificacao,
+      .badge-sacola {
+        top: -2px;
+        right: -2px;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+      }
+
+      .perfil-avatar {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
       }
 
       /* Notificação de promoção menor no celular */
       .dropdown-notificacoes {
-        top: 38px;
+        top: 48px;
         right: 0;
         width: 225px;
         border-radius: 10px;
@@ -866,8 +879,8 @@
       }
 
       .header-search input {
-        padding: 8px 12px 8px 34px;
-        font-size: 12px;
+        padding: 10px 16px 10px 38px;
+        font-size: 13px;
       }
 
       /* Banner compacto */
@@ -987,7 +1000,7 @@
 
       .produto-footer {
         padding-top: 5px;
-        gap: 4px;
+        gap: 6px;
       }
 
       .produto-preco {
@@ -995,15 +1008,16 @@
       }
 
       .btn-add-item {
-        width: 24px;
-        height: 24px;
-        font-size: 11px;
-        border-radius: 7px;
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+        border-radius: 50%;
+        flex-shrink: 0;
       }
 
       /* Mensagem toast ainda mais discreta no celular */
       .toast-container {
-        top: 64px;
+        top: 76px;
         right: 10px;
       }
 
@@ -1038,10 +1052,6 @@
       </div>
 
       <div class="header-actions">
-        <button type="button" class="btn-tema-toggle" id="btnTemaIndex" title="Alternar Tema Claro / Escuro" onclick="alternarTema()">
-          <i class="fa-solid fa-moon" id="iconeTemaIndex"></i>
-        </button>
-
         <button type="button" class="btn-notificacao" id="btnNotificacao" title="Notificações" onclick="alternarNotificacoes(event)">
           <i class="fa-regular fa-bell"></i>
           <span class="badge-notificacao" id="badgeNotificacao">3</span>
@@ -1140,6 +1150,7 @@
     <div class="grid-produtos" id="gridProdutos"></div>
   </main>
 
+  <script src="supabase-loja.js"></script>
   <script>
     const CHAVE_PRODUTOS_DIRETA = 'produtos_db';
     
@@ -1390,31 +1401,9 @@
       }
     }
 
-    function atualizarIconeTema(tema) {
-      const icone = document.getElementById('iconeTemaIndex');
-      if (!icone) return;
-      if (tema === 'escuro') {
-        icone.classList.remove('fa-moon');
-        icone.classList.add('fa-sun');
-      } else {
-        icone.classList.remove('fa-sun');
-        icone.classList.add('fa-moon');
-      }
-    }
-
     function aplicarTemaSalvo() {
       const temaSalvo = localStorage.getItem('tema_preferido') || localStorage.getItem('tema_usuario') || 'claro';
       document.documentElement.setAttribute('data-theme', temaSalvo);
-      atualizarIconeTema(temaSalvo);
-    }
-
-    function alternarTema() {
-      const atual = document.documentElement.getAttribute('data-theme') || 'claro';
-      const proximo = atual === 'claro' ? 'escuro' : 'claro';
-      document.documentElement.setAttribute('data-theme', proximo);
-      localStorage.setItem('tema_preferido', proximo);
-      localStorage.setItem('tema_usuario', proximo);
-      atualizarIconeTema(proximo);
     }
 
     function atualizarFotoPerfilHeader() {
@@ -1614,8 +1603,11 @@
       }
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       aplicarTemaSalvo();
+      if (typeof carregarGlobaisDoSupabase === 'function') {
+        await carregarGlobaisDoSupabase();
+      }
       sincronizarDadosGlobais();
       atualizarFotoPerfilHeader();
       carregarProdutos();

@@ -614,11 +614,11 @@
     }
 
     /* =========================================================
-       AJUSTE COMPACTO APENAS NO CELULAR (<= 768px)
+       AJUSTE NO CELULAR (<= 768px)
     ========================================================= */
     @media (max-width: 768px) {
       body {
-        font-size: 11px;
+        font-size: 15px;
       }
 
       .onda-topo-dir {
@@ -638,259 +638,262 @@
 
       .container {
         max-width: 680px;
-        padding: 0 10px;
+        padding: 0 12px;
       }
 
       header.topo-sacola {
-        padding: 7px 0;
+        padding: 10px 0;
       }
 
       .logo-area {
-        gap: 7px;
+        gap: 9px;
       }
 
       .logo-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 13px;
+        width: 38px;
+        height: 38px;
+        font-size: 15px;
       }
 
       .logo-info h1 {
-        font-size: 12.5px;
+        font-size: 15.5px;
       }
 
       .logo-info span {
-        font-size: 9.5px;
+        font-size: 12px;
       }
 
       .btn-continuar-comprando {
-        padding: 5px 10px;
-        border-radius: 16px;
-        font-size: 10px;
-        gap: 4px;
+        padding: 8px 12px;
+        border-radius: 18px;
+        font-size: 12.5px;
+        gap: 6px;
       }
 
       .sacola-topo {
-        margin-top: 12px;
-        margin-bottom: 10px;
+        margin-top: 16px;
+        margin-bottom: 14px;
       }
 
       .sacola-titulo-box {
-        gap: 7px;
-        margin-bottom: 2px;
-      }
-
-      .sacola-titulo-box i {
-        font-size: 16px;
-      }
-
-      .sacola-titulo-box h2 {
-        font-size: 18px;
-      }
-
-      .sacola-sub {
-        font-size: 10.5px;
-      }
-
-      .abas-internas-sacola {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 7px;
-        margin-bottom: 10px;
-      }
-
-      .tab-btn {
-        padding: 7px 8px;
-        border-radius: 12px;
-        font-size: 10.5px;
-        justify-content: center;
-        gap: 5px;
-      }
-
-      .tab-badge {
-        font-size: 9px;
-        min-width: 16px;
-        height: 16px;
-        padding: 0 4px;
-      }
-
-      .tab-conteudo {
-        margin-bottom: 28px;
-      }
-
-      .barra-instrucao {
-        padding: 9px 11px;
-        border-radius: 12px;
-        margin-bottom: 10px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-        font-size: 10.5px;
-      }
-
-      .label-selecionar-todos {
-        font-size: 10.5px;
-        gap: 6px;
-      }
-
-      .label-selecionar-todos input {
-        width: 13px;
-        height: 13px;
-      }
-
-      .card-item-salvo {
-        padding: 9px 10px;
-        border-radius: 14px;
-        margin-bottom: 10px;
-        gap: 8px;
-      }
-
-      .check-indicador {
-        width: 15px;
-        height: 15px;
-        border-radius: 4px;
-        font-size: 9px;
-      }
-
-      .item-img {
-        width: 58px;
-        height: 58px;
-        border-radius: 10px;
-      }
-
-      .item-info h4 {
-        font-size: 12px;
-        margin-bottom: 2px;
-      }
-
-      .tag-estado {
-        font-size: 9px;
-        padding: 1px 6px;
-        margin-bottom: 3px;
-      }
-
-      .item-info p {
-        font-size: 9.5px;
-        margin-bottom: 3px;
-      }
-
-      .item-preco {
-        font-size: 12.5px;
-      }
-
-      .item-controles {
-        gap: 5px;
-      }
-
-      .qtd-caixa {
-        padding: 2px 6px;
-        gap: 6px;
-        border-radius: 14px;
-      }
-
-      .btn-qtd-acao {
-        font-size: 9.5px;
-      }
-
-      .qtd-numero {
-        font-size: 10.5px;
-        min-width: 10px;
-      }
-
-      .btn-lixeira {
-        font-size: 12px;
-        padding: 2px;
-      }
-
-      .rodape-aba-salvos {
-        margin-top: 8px;
-      }
-
-      .btn-avancar-compra {
-        padding: 8px 14px;
-        border-radius: 12px;
-        font-size: 10.5px;
-        gap: 6px;
-      }
-
-      /* FINALIZAR COMPRA COMPACTO NO CELULAR */
-      .layout-finalizar {
-        gap: 8px;
-      }
-
-      .box-checkout {
-        padding: 9px 11px;
-        border-radius: 12px;
-        margin-bottom: 8px;
-      }
-
-      .box-checkout-titulo {
-        font-size: 11px;
-        margin-bottom: 6px;
-        gap: 5px;
-      }
-
-      .item-resumo-checkout {
-        gap: 8px;
-        padding: 5px 0;
-      }
-
-      .item-resumo-checkout img {
-        width: 34px;
-        height: 34px;
-        border-radius: 7px;
-      }
-
-      .item-resumo-titulo {
-        font-size: 10.5px;
-      }
-
-      .item-resumo-preco {
-        font-size: 10.5px;
-      }
-
-      .btn-desmarcar-item {
-        font-size: 9.5px;
-      }
-
-      .cupom-box {
-        gap: 6px;
-      }
-
-      .cupom-box input {
-        padding: 6px 8px;
-        font-size: 10px;
-        border-radius: 8px;
-      }
-
-      .btn-aplicar-cupom {
-        padding: 0 10px;
-        font-size: 10px;
-        border-radius: 8px;
-      }
-
-      .msg-cupom-texto {
-        font-size: 10px;
-        margin-top: 5px;
-      }
-
-      .resumo-linha {
-        font-size: 10px;
+        gap: 9px;
         margin-bottom: 4px;
       }
 
-      .resumo-linha-total {
+      .sacola-titulo-box i {
+        font-size: 20px;
+      }
+
+      .sacola-titulo-box h2 {
+        font-size: 22px;
+      }
+
+      .sacola-sub {
+        font-size: 13.5px;
+      }
+
+      .abas-internas-sacola {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin-bottom: 14px;
+      }
+
+      .tab-btn {
+        width: 100%;
+        padding: 11px 14px;
+        border-radius: 14px;
+        font-size: 14px;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .tab-badge {
+        font-size: 12px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+      }
+
+      .tab-conteudo {
+        margin-bottom: 36px;
+      }
+
+      .barra-instrucao {
+        padding: 12px 14px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 13.5px;
+      }
+
+      .label-selecionar-todos {
+        font-size: 13.5px;
+        gap: 8px;
+      }
+
+      .label-selecionar-todos input {
+        width: 16px;
+        height: 16px;
+      }
+
+      .card-item-salvo {
+        padding: 12px;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        gap: 10px;
+      }
+
+      .check-indicador {
+        width: 19px;
+        height: 19px;
+        border-radius: 5px;
+        font-size: 11px;
+      }
+
+      .item-img {
+        width: 72px;
+        height: 72px;
+        border-radius: 11px;
+      }
+
+      .item-info h4 {
+        font-size: 15px;
+        margin-bottom: 3px;
+      }
+
+      .tag-estado {
+        font-size: 11px;
+        padding: 2px 8px;
+        margin-bottom: 5px;
+      }
+
+      .item-info p {
+        font-size: 12.5px;
+        margin-bottom: 6px;
+      }
+
+      .item-preco {
+        font-size: 15.5px;
+      }
+
+      .item-controles {
+        gap: 8px;
+      }
+
+      .qtd-caixa {
+        padding: 4px 9px;
+        gap: 9px;
+        border-radius: 18px;
+      }
+
+      .btn-qtd-acao {
+        font-size: 12.5px;
+      }
+
+      .qtd-numero {
+        font-size: 13.5px;
+        min-width: 14px;
+      }
+
+      .btn-lixeira {
+        font-size: 15.5px;
+        padding: 4px;
+      }
+
+      .rodape-aba-salvos {
+        margin-top: 12px;
+      }
+
+      .btn-avancar-compra {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-size: 14px;
+        gap: 8px;
+      }
+
+      /* FINALIZAR COMPRA COM LETRAS MAIORES NO CELULAR */
+      .layout-finalizar {
+        gap: 12px;
+      }
+
+      .box-checkout {
+        padding: 14px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+      }
+
+      .box-checkout-titulo {
+        font-size: 14.5px;
+        margin-bottom: 10px;
+        gap: 7px;
+      }
+
+      .item-resumo-checkout {
+        gap: 10px;
+        padding: 8px 0;
+      }
+
+      .item-resumo-checkout img {
+        width: 48px;
+        height: 48px;
+        border-radius: 9px;
+      }
+
+      .item-resumo-titulo {
+        font-size: 13.5px;
+      }
+
+      .item-resumo-preco {
+        font-size: 13px;
+      }
+
+      .btn-desmarcar-item {
+        font-size: 12px;
+      }
+
+      .cupom-box {
+        gap: 8px;
+      }
+
+      .cupom-box input {
+        padding: 9px 11px;
+        font-size: 13px;
+        border-radius: 10px;
+      }
+
+      .btn-aplicar-cupom {
+        padding: 0 14px;
+        font-size: 13px;
+        border-radius: 10px;
+      }
+
+      .msg-cupom-texto {
         font-size: 12.5px;
         margin-top: 6px;
-        padding-top: 6px;
+      }
+
+      .resumo-linha {
+        font-size: 13.5px;
+        margin-bottom: 7px;
+      }
+
+      .resumo-linha-total {
+        font-size: 16.5px;
+        margin-top: 10px;
+        padding-top: 10px;
       }
 
       .btn-comprar-na-hora {
-        padding: 8px 12px;
-        border-radius: 10px;
-        font-size: 10.5px;
-        margin-top: 8px;
-        gap: 6px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        margin-top: 12px;
+        gap: 8px;
       }
     }
 
@@ -902,7 +905,7 @@
       .item-controles {
         width: 100%;
         justify-content: flex-end;
-        padding-top: 3px;
+        padding-top: 4px;
       }
     }
   </style>
@@ -942,18 +945,14 @@
       <p class="sacola-sub">Gerencie seus itens guardados e escolha o que deseja finalizar agora.</p>
     </div>
 
-    <!-- DUAS ABAS SEPARADAS DENTRO DA SACOLA -->
+    <!-- ABA SUPERIOR: APENAS GUARDADOS NA SACOLA -->
     <div class="abas-internas-sacola">
       <button type="button" class="tab-btn active" id="btnAbaGuardados" onclick="alternarAbaSacola('guardados')">
-        <i class="fa-solid fa-heart"></i>
-        <span>Guardados na Sacola</span>
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-heart"></i>
+          <span>Guardados na Sacola</span>
+        </span>
         <span class="tab-badge" id="badgeAbaGuardados">0</span>
-      </button>
-
-      <button type="button" class="tab-btn" id="btnAbaFinalizar" onclick="alternarAbaSacola('finalizar')">
-        <i class="fa-solid fa-bolt"></i>
-        <span>Finalizar Compra</span>
-        <span class="tab-badge" id="badgeAbaFinalizar">0</span>
       </button>
     </div>
 
@@ -1089,8 +1088,10 @@
     }
 
     function alternarAbaSacola(aba) {
-      document.getElementById('btnAbaGuardados').classList.toggle('active', aba === 'guardados');
-      document.getElementById('btnAbaFinalizar').classList.toggle('active', aba === 'finalizar');
+      const btnGuardados = document.getElementById('btnAbaGuardados');
+      if (btnGuardados) {
+        btnGuardados.classList.toggle('active', aba === 'guardados');
+      }
 
       document.getElementById('abaGuardados').classList.toggle('active', aba === 'guardados');
       document.getElementById('abaFinalizar').classList.toggle('active', aba === 'finalizar');
@@ -1127,7 +1128,6 @@
       });
 
       document.getElementById('badgeAbaGuardados').innerText = totalGuardadosQtd;
-      document.getElementById('badgeAbaFinalizar').innerText = totalSelecionadosQtd;
       document.getElementById('btnTextoQtdSel').innerText = totalSelecionadosQtd;
       document.getElementById('checkSelecionarTodos').checked = todosSelecionados;
 
