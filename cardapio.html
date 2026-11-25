@@ -1152,6 +1152,15 @@
 
   <script src="supabase-loja.js"></script>
   <script>
+    // Bloqueia o acesso ao cardápio sem login válido ou modo visitante
+    (function () {
+      let ativo = null;
+      try { ativo = JSON.parse(localStorage.getItem('usuario_ativo') || 'null'); } catch (e) { ativo = null; }
+      if (!ativo || !ativo.email) {
+        window.location.replace('index.html');
+      }
+    })();
+
     const CHAVE_PRODUTOS_DIRETA = 'produtos_db';
     
     const produtosPadraoDiretos = [
@@ -1374,6 +1383,72 @@
         imagem: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=600",
         preco: 27.90,
         descricao: "Hambúrguer artesanal com queijo cheddar, servido em pão tipo brioche."
+      },
+      {
+            "id": 1021,
+            "nome": "Refrigerante Cola Lata 350ml",
+            "categoria": "bebidas",
+            "sub": "Refrigerantes",
+            "tag": "Mais Pedido",
+            "estoque": 30,
+            "imagem": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=600",
+            "preco": 6.5,
+            "descricao": "Refrigerante cola bem gelado em lata de 350ml, ideal para acompanhar seu lanche."
+      },
+      {
+            "id": 1022,
+            "nome": "Guaraná Natural Gelado 350ml",
+            "categoria": "bebidas",
+            "sub": "Refrigerantes",
+            "tag": "Artesanal",
+            "estoque": 30,
+            "imagem": "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?q=80&w=600",
+            "preco": 6.0,
+            "descricao": "Refrigerante de guaraná servido bem gelado, refrescante e equilibrado."
+      },
+      {
+            "id": 1023,
+            "nome": "Suco Natural de Laranja 400ml",
+            "categoria": "bebidas",
+            "sub": "Sucos Naturais",
+            "tag": "Mais Pedido",
+            "estoque": 25,
+            "imagem": "https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=600",
+            "preco": 11.9,
+            "descricao": "Suco de laranja espremido na hora, sem conservantes e com gelo a gosto."
+      },
+      {
+            "id": 1024,
+            "nome": "Suco Natural de Maracujá 400ml",
+            "categoria": "bebidas",
+            "sub": "Sucos Naturais",
+            "tag": "Artesanal",
+            "estoque": 25,
+            "imagem": "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=600",
+            "preco": 12.5,
+            "descricao": "Suco natural de maracujá fresco, cremoso e refrescante."
+      },
+      {
+            "id": 1025,
+            "nome": "Água Mineral sem Gás 500ml",
+            "categoria": "bebidas",
+            "sub": "Águas",
+            "tag": "Essencial",
+            "estoque": 40,
+            "imagem": "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=600",
+            "preco": 4.5,
+            "descricao": "Água mineral pura e gelada em garrafa de 500ml."
+      },
+      {
+            "id": 1026,
+            "nome": "Água Mineral com Gás 500ml",
+            "categoria": "bebidas",
+            "sub": "Águas",
+            "tag": "Refrescante",
+            "estoque": 40,
+            "imagem": "https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=600",
+            "preco": 5.0,
+            "descricao": "Água mineral gaseificada gelada, perfeita para acompanhar entradas e porções."
       }
     ];
 
@@ -1384,16 +1459,61 @@
       });
 
     let produtos = [];
-    let favoritos = JSON.parse(localStorage.getItem('favoritos_db')) || [];
+    let favoritos = lerFavoritosUsuario();
     let categoriaAtual = 'todos';
 
-    function obterChaveCarrinhoUsuario() {
-      const usuarioAtivo = JSON.parse(localStorage.getItem('usuario_ativo')) || {};
-      const email = usuarioAtivo.email || localStorage.getItem('ultimo_email_logado') || 'convidado';
-      return `carrinho_usuario_${email}`;
+function padronizarPrecoCardapio(valor) {
+      if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+      let str = String(valor ?? '0').replace(/R\$/gi, '').replace(/\s+/g, '').trim();
+      if (!str) return 0;
+      if (str.includes(',') && str.includes('.')) {
+        str = str.replace(/\./g, '').replace(',', '.');
+      } else if (str.includes(',')) {
+        str = str.replace(',', '.');
+      }
+      const num = parseFloat(str);
+      return Number.isFinite(num) ? num : 0;
     }
 
-    let carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
+    function obterEmailSessaoCardapio() {
+      let ativo = null;
+      try { ativo = JSON.parse(localStorage.getItem('usuario_ativo') || 'null'); } catch (e) { ativo = null; }
+      if (!ativo || ativo.visitante === true) return 'convidado';
+      const email = String(ativo.email || '').trim().toLowerCase();
+      return email || 'convidado';
+    }
+
+    // Chave única da sacola: carrinho_usuario_<email normalizado> (a mesma da sacola e do supabase-conta.js)
+    function obterChaveCarrinhoUsuario() {
+      return `carrinho_usuario_${obterEmailSessaoCardapio()}`;
+    }
+
+    function obterChaveFavoritosUsuario() {
+      return `favoritos_${obterEmailSessaoCardapio()}`;
+    }
+
+    function lerFavoritosUsuario() {
+      try {
+        const bruto = JSON.parse(localStorage.getItem(obterChaveFavoritosUsuario())) || [];
+        if (!Array.isArray(bruto)) return [];
+        return bruto
+          .map(f => (f && typeof f === 'object') ? Number(f.id) : Number(f))
+          .filter(n => Number.isFinite(n));
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function lerCarrinhoUsuario() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
+        return Array.isArray(lista) ? lista : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    let carrinho = lerCarrinhoUsuario();
 
     function notificarNuvemSeDisponivel() {
       if (typeof salvarTudoDaContaSupabase === 'function') {
@@ -1407,9 +1527,15 @@
     }
 
     function atualizarFotoPerfilHeader() {
-      const perfilSalvo = JSON.parse(localStorage.getItem('perfil_usuario'));
+      const ativo = JSON.parse(localStorage.getItem('usuario_ativo') || 'null');
       const imgHeader = document.getElementById('imgPerfilHeader');
-      if (imgHeader && perfilSalvo && perfilSalvo.foto) {
+      if (!imgHeader) return;
+      if (!ativo || ativo.visitante === true || ativo.email === 'convidado') {
+        imgHeader.src = 'https://i.pinimg.com/736x/3b/94/6e/3b946eb954f03a7eb2bbe6bfa02a22be.jpg';
+        return;
+      }
+      const perfilSalvo = JSON.parse(localStorage.getItem('perfil_usuario') || 'null');
+      if (perfilSalvo && perfilSalvo.email && perfilSalvo.email.toLowerCase() === String(ativo.email).toLowerCase() && perfilSalvo.foto) {
         imgHeader.src = perfilSalvo.foto;
       }
     }
@@ -1435,9 +1561,9 @@
     }
 
     function atualizarBadgeSacolaIndex() {
-      carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
+      carrinho = lerCarrinhoUsuario();
       let totalQtd = 0;
-      carrinho.forEach(item => { totalQtd += (item.qtd || 1); });
+      carrinho.forEach(item => { totalQtd += (Number(item.qtd) || 1); });
       const badge = document.getElementById('badgeSacola');
       if (badge) badge.innerText = totalQtd;
     }
@@ -1461,7 +1587,27 @@
         return;
       }
 
-      produtos = lista;
+      let alterou = false;
+      produtos = lista.map(item => {
+        const precoNum = padronizarPrecoCardapio(item.preco);
+        const catNorm = String(item.categoria || '').trim().toLowerCase();
+        if (item.preco !== precoNum || item.categoria !== catNorm) alterou = true;
+        return { ...item, preco: precoNum, categoria: catNorm };
+      });
+
+      // Garante a aba Bebidas preenchida (refrigerantes, sucos e água)
+      if (!produtos.some(p => p.categoria === 'bebidas') && localStorage.getItem('bebidas_padrao_semeadas') !== '1') {
+        localStorage.setItem('bebidas_padrao_semeadas', '1');
+        const idsExistentes = new Set(produtos.map(p => Number(p.id)));
+        produtosPadraoDiretos
+          .filter(p => p.categoria === 'bebidas' && !idsExistentes.has(Number(p.id)))
+          .forEach(p => produtos.push({ ...p, preco: padronizarPrecoCardapio(p.preco) }));
+        alterou = true;
+      }
+
+      if (alterou) {
+        try { localStorage.setItem(CHAVE_PRODUTOS_DIRETA, JSON.stringify(produtos)); } catch (e) {}
+      }
     }
 
     function eProdutoFavorito(id) {
@@ -1479,7 +1625,7 @@
         favoritos.push(Number(id));
         msg = `Favoritado${prod ? `: <b>${prod.nome}</b>` : ""}`;
       }
-      localStorage.setItem('favoritos_db', JSON.stringify(favoritos));
+      localStorage.setItem(obterChaveFavoritosUsuario(), JSON.stringify(favoritos));
       notificarNuvemSeDisponivel();
       filtrarProdutos();
       exibirMensagemToast(msg);
@@ -1496,7 +1642,7 @@
 
       lista.forEach(prod => {
         const eFav = eProdutoFavorito(prod.id);
-        const precoNum = typeof prod.preco === 'number' ? prod.preco : parseFloat(String(prod.preco).replace(',', '.')) || 0;
+        const precoNum = padronizarPrecoCardapio(prod.preco);
         const tagTexto = prod.tag || prod.sub || 'Destaque';
 
         grid.innerHTML += `
@@ -1549,12 +1695,23 @@
       const prod = produtos.find(p => Number(p.id) === Number(id));
       if (!prod) return;
 
-      carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
+      const precoPadronizado = padronizarPrecoCardapio(prod.preco);
+      carrinho = lerCarrinhoUsuario();
       const item = carrinho.find(c => Number(c.id) === Number(id));
       if (item) {
-        item.qtd = (item.qtd || 1) + 1;
+        item.preco = precoPadronizado;
+        item.qtd = (Number(item.qtd) || 1) + 1;
+        if (typeof item.selecionado !== 'boolean') {
+          item.selecionado = true;
+        }
       } else {
-        carrinho.push({ ...prod, qtd: 1 });
+        carrinho.push({
+          ...prod,
+          id: Number(prod.id),
+          preco: precoPadronizado,
+          qtd: 1,
+          selecionado: true
+        });
       }
 
       localStorage.setItem(obterChaveCarrinhoUsuario(), JSON.stringify(carrinho));
@@ -1591,10 +1748,10 @@
         aplicarTemaSalvo();
       }
       if (
-        ['config_restaurante', 'nomeEstabelecimento', 'lojaNome', CHAVE_PRODUTOS_DIRETA, 'perfil_usuario', 'favoritos_db'].includes(e.key) ||
-        (e.key && e.key.startsWith('carrinho_usuario_'))
+        ['config_restaurante', 'nomeEstabelecimento', 'lojaNome', CHAVE_PRODUTOS_DIRETA, 'perfil_usuario', 'usuario_ativo'].includes(e.key) ||
+        (e.key && (e.key.startsWith('carrinho_usuario_') || e.key.startsWith('favoritos_')))
       ) {
-        favoritos = JSON.parse(localStorage.getItem('favoritos_db')) || [];
+        favoritos = lerFavoritosUsuario();
         sincronizarDadosGlobais();
         atualizarFotoPerfilHeader();
         carregarProdutos();
@@ -1605,6 +1762,10 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       aplicarTemaSalvo();
+      if (typeof migrarSacolaLegada === 'function') {
+        migrarSacolaLegada(obterEmailSessaoCardapio());
+      }
+      favoritos = lerFavoritosUsuario();
       if (typeof carregarGlobaisDoSupabase === 'function') {
         await carregarGlobaisDoSupabase();
       }

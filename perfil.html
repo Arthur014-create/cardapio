@@ -54,7 +54,6 @@
       transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
     }
 
-    /* TAMANHO GRANDE NO COMPUTADOR */
     body {
       background-color: var(--bg-escuro);
       color: var(--texto-claro);
@@ -471,8 +470,9 @@
       border-color: var(--cor-primaria);
     }
 
-    .form-control:disabled {
-      opacity: 0.7;
+    .form-control:disabled,
+    .form-control[readonly] {
+      opacity: 0.72;
       cursor: not-allowed;
     }
 
@@ -671,9 +671,6 @@
       to { transform: scale(1); opacity: 1; }
     }
 
-    /* =========================================================
-       LETRAS MAIORES E LEGÍVEIS NO CELULAR (<= 768px)
-    ========================================================= */
     @media (max-width: 768px) {
       body {
         font-size: 15px;
@@ -995,7 +992,6 @@
 
     <div class="side-drawer-footer">
       <a href="cardapio.html" class="nav-item"><i class="fa-solid fa-burger"></i> Cardápio</a>
-    
     </div>
   </aside>
 
@@ -1040,7 +1036,7 @@
         </div>
         <div class="user-details">
           <h1 id="lblNomeHeader">nome</h1>
-          <p><i class="fa-regular fa-envelope"></i> <span id="lblEmailHeader">emailS</span></p>
+          <p><i class="fa-regular fa-envelope"></i> <span id="lblEmailHeader">email</span></p>
         </div>
         <div class="banner-slogan">
           O melhor sabor está nos detalhes!
@@ -1080,8 +1076,8 @@
                 <input type="text" id="txtNome" class="form-control" disabled required>
               </div>
               <div class="form-group">
-                <label>E-mail</label>
-                <input type="email" id="txtEmail" class="form-control" disabled required>
+                <label>E-mail (vinculado à conta)</label>
+                <input type="email" id="txtEmail" class="form-control" disabled readonly required>
               </div>
               <div class="form-group">
                 <label>Telefone / WhatsApp</label>
@@ -1089,11 +1085,11 @@
               </div>
               <div class="form-group">
                 <label>Idade</label>
-                <input type="number" id="txtIdade" class="form-control" disabled placeholder="Ex: 24">
+                <input type="number" id="txtIdade" class="form-control" disabled min="13" max="120" placeholder="Ex: 24">
               </div>
               <div class="form-group" style="grid-column: 1 / -1;">
-                <label>Endereço Atual de Entrega</label>
-                <input type="text" id="txtEndereco" class="form-control" disabled placeholder="Nenhum endereço definido">
+                <label>Endereço Principal de Entrega</label>
+                <input type="text" id="txtEndereco" class="form-control" disabled placeholder="Ex: Rua das Flores, 123 - Centro">
               </div>
             </div>
             <div id="containerSalvar" class="container-salvar">
@@ -1147,7 +1143,7 @@
 
           <div class="endereco-list" id="listaEnderecos"></div>
 
-          <!-- FORMULÁRIO DE CADASTRO DE NOVO ENDEREÇO (SEM CIDADE) -->
+          <!-- FORMULÁRIO DE CADASTRO DE NOVO ENDEREÇO -->
           <div class="form-novo-endereco" id="boxFormEndereco">
             <h3 style="margin-bottom: 12px; font-size: 14px; color: var(--cor-primaria);">Cadastrar Novo Endereço</h3>
             <form onsubmit="salvarNovoEndereco(event)">
@@ -1183,7 +1179,34 @@
   </div>
 
   <script>
+    // Sem sessão (nem visitante) volta para a tela de login
+    (function () {
+      let ativo = null;
+      try { ativo = JSON.parse(localStorage.getItem('usuario_ativo') || 'null'); } catch (e) { ativo = null; }
+      if (!ativo || !ativo.email) {
+        window.location.replace('index.html');
+      }
+    })();
+
     let timerMensagemCentral = null;
+    let modoEdicao = false;
+
+    const PERFIL_PADRAO = {
+      nome: "Visitante",
+      email: "convidado",
+      telefone: "",
+      idade: "",
+      endereco: "",
+      visitante: true,
+      foto: "https://i.pinimg.com/736x/3b/94/6e/3b946eb954f03a7eb2bbe6bfa02a22be.jpg"
+    };
+
+    function normalizarPreco(valor) {
+      if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+      const limpo = String(valor ?? '0').replace(/[^0-9,.-]/g, '').replace(',', '.');
+      const num = parseFloat(limpo);
+      return Number.isFinite(num) ? num : 0;
+    }
 
     function exibirMensagemCentral(titulo, texto, iconeClasse = 'fa-circle-check') {
       const modal = document.getElementById('modalFeedbackCentral');
@@ -1254,39 +1277,156 @@
       );
     }
 
-    function obterChaveEnderecosUsuario() {
-      const usuarioAtivo = JSON.parse(localStorage.getItem('usuario_ativo')) || {};
-      const email = usuarioAtivo.email || localStorage.getItem('ultimo_email_logado') || 'convidado';
-      return `enderecos_usuario_${email}`;
+    function formatarTextoEnderecoCard(item) {
+      if (item.enderecoCompleto) return item.enderecoCompleto;
+      const partes = [item.rua, item.numero ? `nº ${item.numero}` : '', item.bairro].filter(Boolean);
+      return partes.join(', ');
     }
 
-    const PERFIL_PADRAO = {
-      nome: "nome",
-      email: "email",
-      telefone: "(00) 00000-0000",
-      idade: "00",
-      endereco: "rua,bairro,numero ",
-      foto: "https://i.pinimg.com/736x/3b/94/6e/3b946eb954f03a7eb2bbe6bfa02a22be.jpg"
-    };
+    function obterEnderecoPrincipalSalvo(email) {
+      if (!email || email === 'convidado') return '';
+      const chave = `enderecos_usuario_${String(email || '').trim().toLowerCase()}`;
+      try {
+        const lista = JSON.parse(localStorage.getItem(chave)) || [];
+        const principal = lista.find(item => item.principal) || lista[0];
+        if (principal) {
+          return formatarTextoEnderecoCard(principal);
+        }
+      } catch (e) {}
 
-    let modoEdicao = false;
+      try {
+        const usuariosDb = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+        const contaDb = usuariosDb.find(u => u.email && u.email.toLowerCase() === String(email).toLowerCase());
+        if (contaDb && contaDb.endereco) {
+          return String(contaDb.endereco).trim();
+        }
+      } catch (e) {}
+
+      return '';
+    }
+
+    function obterUsuarioSessao() {
+      let ativo = {};
+      let perfil = {};
+      try { ativo = JSON.parse(localStorage.getItem('usuario_ativo')) || {}; } catch (e) { ativo = {}; }
+      try { perfil = JSON.parse(localStorage.getItem('perfil_usuario')) || {}; } catch (e) { perfil = {}; }
+      const email = String(ativo.email || 'convidado').trim().toLowerCase() || 'convidado';
+      const isVisitante = ativo.visitante === true || email === 'convidado';
+      // Só usa o perfil salvo se ele for da mesma conta (mesmo e-mail normalizado)
+      if (!isVisitante && perfil.email && String(perfil.email).trim().toLowerCase() !== email) {
+        perfil = {};
+      }
+
+      if (isVisitante) {
+        return { ...PERFIL_PADRAO };
+      }
+
+      const enderecoSalvo = obterEnderecoPrincipalSalvo(email);
+      const enderecoAtual = (ativo.endereco || perfil.endereco || enderecoSalvo || '').trim();
+
+      return {
+        ...PERFIL_PADRAO,
+        ...perfil,
+        ...ativo,
+        email,
+        visitante: false,
+        nome: ativo.nome || perfil.nome || 'Cliente',
+        telefone: ativo.telefone || perfil.telefone || '',
+        idade: ativo.idade || perfil.idade || '',
+        endereco: enderecoAtual
+      };
+    }
+
+    function obterChaveEnderecosUsuario() {
+      const usuario = obterUsuarioSessao();
+      return usuario.visitante ? 'enderecos_usuario_convidado' : `enderecos_usuario_${String(usuario.email || '').trim().toLowerCase()}`;
+    }
+
+    function validarEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email || '').trim());
+    }
+
+    function validarTelefone(tel) {
+      const digitos = String(tel || '').replace(/\D/g, '');
+      if (!digitos) return false;
+      if (digitos.length < 10 || digitos.length > 11) return false;
+      if (/^(\d)\1+$/.test(digitos)) return false;
+      if (digitos.length === 11 && digitos[2] !== '9') return false;
+      return true;
+    }
+
+    function sincronizarEnderecoComLista(textoEndereco, complementoExtra = '') {
+      const limpo = String(textoEndereco || '').trim();
+      const sessao = obterUsuarioSessao();
+      if (sessao.visitante) return;
+
+      const chaveEnderecos = obterChaveEnderecosUsuario();
+      let enderecos = [];
+      try {
+        enderecos = JSON.parse(localStorage.getItem(chaveEnderecos)) || [];
+      } catch (e) {
+        enderecos = [];
+      }
+
+      if (!limpo) {
+        localStorage.removeItem('enderecoLoja');
+        return;
+      }
+
+      enderecos = enderecos.map(item => ({ ...item, principal: false }));
+
+      const idxExistente = enderecos.findIndex(item =>
+        formatarTextoEnderecoCard(item).toLowerCase() === limpo.toLowerCase()
+      );
+
+      if (idxExistente >= 0) {
+        enderecos[idxExistente] = {
+          ...enderecos[idxExistente],
+          rua: enderecos[idxExistente].rua || limpo,
+          enderecoCompleto: limpo,
+          complemento: complementoExtra || enderecos[idxExistente].complemento || '',
+          principal: true
+        };
+      } else {
+        enderecos.unshift({
+          id: Date.now(),
+          rua: limpo,
+          numero: '',
+          bairro: '',
+          enderecoCompleto: limpo,
+          complemento: complementoExtra,
+          principal: true
+        });
+      }
+
+      localStorage.setItem(chaveEnderecos, JSON.stringify(enderecos));
+      localStorage.setItem('enderecoLoja', limpo);
+    }
 
     function inicializarPerfil() {
       sincronizarDadosDoAdmin();
       aplicarTemaSalvo();
 
-      const perfil = JSON.parse(localStorage.getItem('perfil_usuario')) || PERFIL_PADRAO;
+      const sessao = obterUsuarioSessao();
 
-      document.getElementById('txtNome').value = perfil.nome;
-      document.getElementById('txtEmail').value = perfil.email;
-      document.getElementById('txtTelefone').value = perfil.telefone || '';
-      document.getElementById('txtIdade').value = perfil.idade || '';
-      document.getElementById('txtEndereco').value = perfil.endereco || '';
+      if (!sessao.visitante) {
+        localStorage.setItem('perfil_usuario', JSON.stringify(sessao));
+        localStorage.setItem('usuario_ativo', JSON.stringify(sessao));
+        if (sessao.endereco) {
+          localStorage.setItem('enderecoLoja', sessao.endereco);
+        }
+      }
 
-      document.getElementById('lblNomeHeader').innerText = perfil.nome;
-      document.getElementById('lblEmailHeader').innerText = perfil.email;
-      if (perfil.foto) {
-        document.getElementById('avatarPreview').src = perfil.foto;
+      document.getElementById('txtNome').value = sessao.nome;
+      document.getElementById('txtEmail').value = sessao.email;
+      document.getElementById('txtTelefone').value = sessao.telefone || '';
+      document.getElementById('txtIdade').value = sessao.idade || '';
+      document.getElementById('txtEndereco').value = sessao.endereco || '';
+
+      document.getElementById('lblNomeHeader').innerText = sessao.nome;
+      document.getElementById('lblEmailHeader').innerText = sessao.email;
+      if (sessao.foto) {
+        document.getElementById('avatarPreview').src = sessao.foto;
       }
 
       renderizarEnderecos();
@@ -1295,12 +1435,26 @@
     }
 
     function toggleEdicaoDados() {
+      const sessao = obterUsuarioSessao();
+      if (sessao.visitante) {
+        exibirMensagemCentral(
+          'Conta de Visitante',
+          'Crie ou entre em uma conta cadastrada na tela inicial para editar seus dados pessoais.',
+          'fa-user-lock'
+        );
+        return;
+      }
+
       modoEdicao = !modoEdicao;
-      const inputs = document.querySelectorAll('#formPerfil .form-control');
+      const camposEditaveis = ['txtNome', 'txtTelefone', 'txtIdade', 'txtEndereco'];
       const btnEdit = document.getElementById('btnEditDados');
       const containerSalvar = document.getElementById('containerSalvar');
 
-      inputs.forEach(input => input.disabled = !modoEdicao);
+      camposEditaveis.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.disabled = !modoEdicao;
+      });
+      document.getElementById('txtEmail').disabled = true;
 
       if (modoEdicao) {
         btnEdit.innerHTML = `<i class="fa-solid fa-xmark"></i> Cancelar`;
@@ -1318,42 +1472,118 @@
 
     function salvarPerfil(e) {
       e.preventDefault();
-      const perfilAtual = JSON.parse(localStorage.getItem('perfil_usuario')) || PERFIL_PADRAO;
+      const sessao = obterUsuarioSessao();
+
+      if (sessao.visitante) {
+        exibirMensagemCentral('Conta de Visitante', 'Visitantes não podem alterar dados de cadastro.', 'fa-user-lock');
+        return;
+      }
+
+      const nomeLimpo = document.getElementById('txtNome').value.trim();
+      const emailLimpo = document.getElementById('txtEmail').value.trim().toLowerCase();
+      const telefoneLimpo = document.getElementById('txtTelefone').value.trim();
+      const idadeStr = document.getElementById('txtIdade').value.trim();
+      const enderecoLimpo = document.getElementById('txtEndereco').value.trim();
+
+      if (nomeLimpo.length < 2 || !/[A-Za-zÀ-ÿ]{2,}/.test(nomeLimpo)) {
+        exibirMensagemCentral('Nome Inválido', 'Digite um nome válido com pelo menos 2 letras.', 'fa-triangle-exclamation');
+        return;
+      }
+
+      if (!validarEmail(emailLimpo)) {
+        exibirMensagemCentral('E-mail Inválido', 'O e-mail da conta não é válido.', 'fa-triangle-exclamation');
+        return;
+      }
+
+      if (!validarTelefone(telefoneLimpo)) {
+        exibirMensagemCentral('Telefone Inválido', 'Informe um número com DDD (10 ou 11 dígitos) sem repetir o mesmo dígito.', 'fa-triangle-exclamation');
+        return;
+      }
+
+      let idadeValidada = sessao.idade || '';
+      if (idadeStr !== '') {
+        const idadeNum = Number(idadeStr);
+        if (!Number.isInteger(idadeNum) || idadeNum < 13 || idadeNum > 120) {
+          exibirMensagemCentral('Idade Inválida', 'Digite uma idade válida entre 13 e 120 anos.', 'fa-triangle-exclamation');
+          return;
+        }
+        idadeValidada = String(idadeNum);
+      }
+
+      if (!enderecoLimpo) {
+        exibirMensagemCentral('Endereço Obrigatório', 'Informe o endereço principal de entrega antes de salvar.', 'fa-triangle-exclamation');
+        return;
+      }
+
+      if (enderecoLimpo.length < 5) {
+        exibirMensagemCentral('Endereço Inválido', 'Informe o endereço completo (rua, número e bairro).', 'fa-triangle-exclamation');
+        return;
+      }
 
       const novoPerfil = {
-        ...perfilAtual,
-        nome: document.getElementById('txtNome').value,
-        email: document.getElementById('txtEmail').value,
-        telefone: document.getElementById('txtTelefone').value,
-        idade: document.getElementById('txtIdade').value,
-        endereco: document.getElementById('txtEndereco').value
+        ...sessao,
+        nome: nomeLimpo,
+        email: sessao.email,
+        visitante: false,
+        telefone: telefoneLimpo,
+        idade: idadeValidada,
+        endereco: enderecoLimpo
       };
 
       localStorage.setItem('perfil_usuario', JSON.stringify(novoPerfil));
+      localStorage.setItem('usuario_ativo', JSON.stringify(novoPerfil));
 
-      document.getElementById('lblNomeHeader').innerText = novoPerfil.nome;
-      document.getElementById('lblEmailHeader').innerText = novoPerfil.email;
+      const usuariosDb = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+      const idxUsuario = usuariosDb.findIndex(u => u.email && u.email.toLowerCase() === sessao.email.toLowerCase());
+      if (idxUsuario >= 0) {
+        usuariosDb[idxUsuario] = {
+          ...usuariosDb[idxUsuario],
+          nome: nomeLimpo,
+          telefone: telefoneLimpo,
+          idade: idadeValidada,
+          endereco: enderecoLimpo
+        };
+        localStorage.setItem('usuarios_db', JSON.stringify(usuariosDb));
+      }
 
-      toggleEdicaoDados();
-      exibirMensagemCentral('Perfil Salvo!', 'Suas informações pessoais foram atualizadas com sucesso.', 'fa-circle-check');
+      sincronizarEnderecoComLista(enderecoLimpo);
+
+      if (typeof salvarTudoDaContaSupabase === 'function') {
+        try {
+          salvarTudoDaContaSupabase();
+        } catch (err) {}
+      }
+
+      modoEdicao = false;
+      const btnEdit = document.getElementById('btnEditDados');
+      btnEdit.innerHTML = `<i class="fa-solid fa-pen"></i> Editar Informações`;
+      btnEdit.style.backgroundColor = 'var(--cor-primaria)';
+      btnEdit.style.color = '#000';
+      document.getElementById('containerSalvar').style.display = 'none';
+
+      inicializarPerfil();
+      exibirMensagemCentral('Perfil Salvo!', 'Informações atualizadas e sincronizadas com Meus Endereços.', 'fa-circle-check');
     }
 
     function carregarNovaFoto(event) {
       const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const novaFoto = e.target.result;
-          document.getElementById('avatarPreview').src = novaFoto;
+      if (!file) return;
 
-          const perfil = JSON.parse(localStorage.getItem('perfil_usuario')) || PERFIL_PADRAO;
-          perfil.foto = novaFoto;
-          localStorage.setItem('perfil_usuario', JSON.stringify(perfil));
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const novaFoto = e.target.result;
+        document.getElementById('avatarPreview').src = novaFoto;
 
-          exibirMensagemCentral('Foto Atualizada!', 'Sua foto de perfil foi alterada com sucesso.', 'fa-camera');
-        };
-        reader.readAsDataURL(file);
-      }
+        const sessao = obterUsuarioSessao();
+        const atualizado = { ...sessao, foto: novaFoto };
+        localStorage.setItem('perfil_usuario', JSON.stringify(atualizado));
+        if (!sessao.visitante) {
+          localStorage.setItem('usuario_ativo', JSON.stringify(atualizado));
+        }
+
+        exibirMensagemCentral('Foto Atualizada!', 'Sua foto de perfil foi alterada com sucesso.', 'fa-camera');
+      };
+      reader.readAsDataURL(file);
     }
 
     function alternarAba(nomeAba, btn) {
@@ -1373,6 +1603,12 @@
     }
 
     function selecionarEnderecoPrincipal(id, notificar = true) {
+      const sessao = obterUsuarioSessao();
+      if (sessao.visitante) {
+        exibirMensagemCentral('Conta de Visitante', 'Entre em uma conta para gerenciar endereços.', 'fa-user-lock');
+        return;
+      }
+
       const chaveEnderecos = obterChaveEnderecosUsuario();
       let enderecos = JSON.parse(localStorage.getItem(chaveEnderecos)) || [];
 
@@ -1383,13 +1619,26 @@
 
       const enderecoEscolhido = enderecos.find(e => e.id === id);
       if (enderecoEscolhido) {
-        const textoEndereco = `${enderecoEscolhido.rua}, ${enderecoEscolhido.numero} - ${enderecoEscolhido.bairro}`;
+        const textoEndereco = formatarTextoEnderecoCard(enderecoEscolhido);
         document.getElementById('txtEndereco').value = textoEndereco;
 
-        const perfil = JSON.parse(localStorage.getItem('perfil_usuario')) || PERFIL_PADRAO;
-        perfil.endereco = textoEndereco;
-        localStorage.setItem('perfil_usuario', JSON.stringify(perfil));
+        const atualizado = { ...sessao, endereco: textoEndereco };
+        localStorage.setItem('perfil_usuario', JSON.stringify(atualizado));
+        localStorage.setItem('usuario_ativo', JSON.stringify(atualizado));
         localStorage.setItem('enderecoLoja', textoEndereco);
+
+        const usuariosDb = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+        const idxUsuario = usuariosDb.findIndex(u => u.email && u.email.toLowerCase() === sessao.email.toLowerCase());
+        if (idxUsuario >= 0) {
+          usuariosDb[idxUsuario].endereco = textoEndereco;
+          localStorage.setItem('usuarios_db', JSON.stringify(usuariosDb));
+        }
+
+        if (typeof salvarTudoDaContaSupabase === 'function') {
+          try {
+            salvarTudoDaContaSupabase();
+          } catch (err) {}
+        }
 
         if (notificar) {
           exibirMensagemCentral('Endereço Selecionado!', `Definido para entrega: ${textoEndereco}`, 'fa-location-dot');
@@ -1404,6 +1653,12 @@
       const conteiner = document.getElementById('listaEnderecos');
       if (!conteiner) return;
 
+      const sessao = obterUsuarioSessao();
+      if (sessao.visitante) {
+        conteiner.innerHTML = `<p style="color: var(--texto-suave); grid-column: 1/-1;">Faça login em uma conta para ver e salvar seus endereços.</p>`;
+        return;
+      }
+
       const chaveEnderecos = obterChaveEnderecosUsuario();
       const enderecos = JSON.parse(localStorage.getItem(chaveEnderecos)) || [];
 
@@ -1412,41 +1667,62 @@
         return;
       }
 
-      conteiner.innerHTML = enderecos.map(e => `
-        <div class="card-endereco ${e.principal ? 'principal' : ''}" style="cursor: pointer;" onclick="selecionarEnderecoPrincipal(${e.id})">
-          ${e.principal ? '<span class="tag-principal">Selecionado para Entrega</span>' : ''}
-          <div style="display: flex; align-items: center; gap: 10px; margin-top: ${e.principal ? '4px' : '0'};">
-            <input type="radio" name="enderecoEntrega" ${e.principal ? 'checked' : ''} onclick="selecionarEnderecoPrincipal(${e.id})">
-            <div>
-              <strong style="font-size: 13px; display: block;">${e.rua}, ${e.numero}</strong>
-              <p style="font-size: 11.5px; color: var(--texto-suave);">Bairro: ${e.bairro}</p>
-              ${e.complemento ? `<p style="font-size: 11px; color: var(--texto-suave); margin-top:2px;">Comp: ${e.complemento}</p>` : ''}
+      conteiner.innerHTML = enderecos.map(e => {
+        const tituloEnd = formatarTextoEnderecoCard(e);
+        return `
+          <div class="card-endereco ${e.principal ? 'principal' : ''}" style="cursor: pointer;" onclick="selecionarEnderecoPrincipal(${e.id})">
+            ${e.principal ? '<span class="tag-principal">Selecionado para Entrega</span>' : ''}
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: ${e.principal ? '4px' : '0'};">
+              <input type="radio" name="enderecoEntrega" ${e.principal ? 'checked' : ''} onclick="event.stopPropagation(); selecionarEnderecoPrincipal(${e.id})">
+              <div>
+                <strong style="font-size: 13px; display: block;">${tituloEnd}</strong>
+                ${e.bairro && !tituloEnd.includes(e.bairro) ? `<p style="font-size: 11.5px; color: var(--texto-suave);">Bairro: ${e.bairro}</p>` : ''}
+                ${e.complemento ? `<p style="font-size: 11px; color: var(--texto-suave); margin-top:2px;">Comp: ${e.complemento}</p>` : ''}
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function toggleFormEndereco() {
+      const sessao = obterUsuarioSessao();
+      if (sessao.visitante) {
+        exibirMensagemCentral('Conta de Visitante', 'Entre em uma conta para cadastrar novos endereços.', 'fa-user-lock');
+        return;
+      }
       const box = document.getElementById('boxFormEndereco');
       box.classList.toggle('active');
     }
 
     function salvarNovoEndereco(e) {
       e.preventDefault();
+      const sessao = obterUsuarioSessao();
+      if (sessao.visitante) {
+        exibirMensagemCentral('Conta de Visitante', 'Entre em uma conta para salvar endereços.', 'fa-user-lock');
+        return;
+      }
+
       const chaveEnderecos = obterChaveEnderecosUsuario();
       const enderecos = JSON.parse(localStorage.getItem(chaveEnderecos)) || [];
 
-      const rua = document.getElementById('endRua').value;
-      const numero = document.getElementById('endNumero').value;
-      const bairro = document.getElementById('endBairro').value;
-      const complemento = document.getElementById('endComplemento').value;
+      const rua = document.getElementById('endRua').value.trim();
+      const numero = document.getElementById('endNumero').value.trim();
+      const bairro = document.getElementById('endBairro').value.trim();
+      const complemento = document.getElementById('endComplemento').value.trim();
 
+      if (rua.length < 2 || !numero || bairro.length < 2) {
+        exibirMensagemCentral('Campos Obrigatórios', 'Preencha rua, número e bairro válidos para salvar o endereço.', 'fa-triangle-exclamation');
+        return;
+      }
+
+      const enderecoFormatado = `${rua}, ${numero} - ${bairro}`;
       const novo = {
         id: Date.now(),
         rua,
         numero,
         bairro,
+        enderecoCompleto: enderecoFormatado,
         complemento,
         principal: enderecos.length === 0
       };
@@ -1472,45 +1748,58 @@
       const conteiner = document.getElementById('listaHistorico');
       if (!conteiner) return;
 
-      const historico = JSON.parse(localStorage.getItem('historico_pedidos')) || [];
+      const sessao = obterUsuarioSessao();
+      const emailNorm = String(sessao.email || '').trim().toLowerCase();
+      const chavePedidos = sessao.visitante ? 'historico_pedidos_convidado' : `historico_pedidos_${emailNorm}`;
+      let historico = [];
+      try { historico = JSON.parse(localStorage.getItem(chavePedidos)) || []; } catch (e) { historico = []; }
+      if (!Array.isArray(historico)) historico = [];
 
       if (historico.length === 0) {
         conteiner.innerHTML = `<p style="color: var(--texto-suave);">Nenhum pedido realizado recentemente.</p>`;
         return;
       }
 
-      conteiner.innerHTML = historico.map((p, index) => `
-        <div style="background: var(--card-inner); padding: 14px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--borda-dark);">
-          <div>
-            <strong style="font-size: 13.5px;">Pedido #${p.id || (index + 1)}</strong>
-            <p style="font-size: 12px; color: var(--texto-suave); margin-top: 3px;">${p.itens || p.descricao || 'Itens variados'}</p>
-            ${p.data ? `<span style="font-size: 11px; color: var(--texto-suave);">${p.data}</span>` : ''}
+      conteiner.innerHTML = historico.map((p, index) => {
+        const totalNum = normalizarPreco(p.total);
+        return `
+          <div style="background: var(--card-inner); padding: 14px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--borda-dark);">
+            <div>
+              <strong style="font-size: 13.5px;">Pedido #${p.id || (index + 1)}</strong>
+              <p style="font-size: 12px; color: var(--texto-suave); margin-top: 3px;">${p.itens || p.descricao || 'Itens variados'}</p>
+              ${p.data ? `<span style="font-size: 11px; color: var(--texto-suave);">${p.data}</span>` : ''}
+            </div>
+            <span style="color: var(--cor-primaria); font-weight: bold; font-size: 13.5px;">R$ ${totalNum.toFixed(2).replace('.', ',')}</span>
           </div>
-          <span style="color: var(--cor-primaria); font-weight: bold; font-size: 13.5px;">R$ ${p.total}</span>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderizarFavoritos() {
       const conteiner = document.getElementById('listaFavoritos');
       if (!conteiner) return;
 
-      const favsDb = JSON.parse(localStorage.getItem('favoritos_db')) || [];
-      const favsUser = JSON.parse(localStorage.getItem('favoritos_usuario')) || [];
-      const prods = JSON.parse(localStorage.getItem('produtos_db')) || [];
+      const sessao = obterUsuarioSessao();
+      const emailFav = sessao.visitante ? 'convidado' : String(sessao.email || '').trim().toLowerCase();
+      let favsConta = [];
+      let prods = [];
+      try { favsConta = JSON.parse(localStorage.getItem(`favoritos_${emailFav}`)) || []; } catch (e) { favsConta = []; }
+      try { prods = JSON.parse(localStorage.getItem('produtos_db')) || []; } catch (e) { prods = []; }
+      if (!Array.isArray(favsConta)) favsConta = [];
+      if (!Array.isArray(prods)) prods = [];
 
       let listaCompleta = [];
 
-      favsDb.forEach(id => {
-        const prod = prods.find(p => p.id === id);
-        if (prod && !listaCompleta.some(p => p.id === prod.id)) {
-          listaCompleta.push(prod);
-        }
-      });
-
-      favsUser.forEach(f => {
-        if (!listaCompleta.some(p => p.nome === f.nome)) {
-          listaCompleta.push(f);
+      favsConta.forEach(item => {
+        if (typeof item === 'object' && item !== null) {
+          if (!listaCompleta.some(p => p.nome === item.nome)) {
+            listaCompleta.push({ ...item, preco: normalizarPreco(item.preco) });
+          }
+        } else {
+          const prod = prods.find(p => Number(p.id) === Number(item));
+          if (prod && !listaCompleta.some(p => Number(p.id) === Number(prod.id))) {
+            listaCompleta.push({ ...prod, preco: normalizarPreco(prod.preco) });
+          }
         }
       });
 
@@ -1520,7 +1809,7 @@
       }
 
       conteiner.innerHTML = listaCompleta.map(f => {
-        const precoNum = typeof f.preco === 'number' ? f.preco : parseFloat(String(f.preco).replace(',', '.')) || 0;
+        const precoNum = normalizarPreco(f.preco);
         return `
           <div class="card-fav">
             <img src="${f.imagem || f.img || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80'}" alt="${f.nome}">
@@ -1533,8 +1822,35 @@
       }).join('');
     }
 
-    function sairDaConta() {
-      localStorage.removeItem('usuario_ativo');
+    async function sairDaConta() {
+      // Envia os dados da conta atual ao servidor antes de apagar a sessão (com limite de tempo)
+      try {
+        if (typeof salvarTudoDaContaSupabase === 'function') {
+          await Promise.race([
+            salvarTudoDaContaSupabase(),
+            new Promise(resolve => setTimeout(resolve, 2500))
+          ]);
+        }
+      } catch (e) {}
+
+      [
+        'usuario_ativo',
+        'perfil_usuario',
+        'ultimo_email_logado',
+        'enderecoLoja',
+        'currentUser',
+        'usuarioLogado',
+        'admin_nome',
+        'historico_pedidos',
+        'favoritos_db',
+        'favoritos_usuario',
+        'carrinho_usuario_convidado',
+        'favoritos_convidado',
+        'enderecos_usuario_convidado',
+        'historico_pedidos_convidado'
+      ].forEach(chave => {
+        try { localStorage.removeItem(chave); } catch (e) {}
+      });
       window.location.href = 'index.html';
     }
 

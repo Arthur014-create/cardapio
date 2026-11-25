@@ -908,6 +908,113 @@
         padding-top: 4px;
       }
     }
+    .modal-visitante-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 999;
+    }
+
+    .modal-visitante-overlay.ativo {
+      display: flex;
+    }
+
+    .modal-visitante-card {
+      background-color: var(--card-bg);
+      color: var(--texto-principal);
+      border: 1.5px solid var(--borda-card);
+      border-radius: 20px;
+      padding: 24px 22px;
+      width: 100%;
+      max-width: 460px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.65);
+    }
+
+    .btn-fechar-modal-visitante {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-sacola);
+      border: 1px solid var(--borda-card);
+      color: var(--texto-principal);
+      font-size: 15px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-visitante-titulo {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--texto-destaque);
+      margin-bottom: 4px;
+      padding-right: 32px;
+    }
+
+    .modal-visitante-sub {
+      font-size: 12.5px;
+      color: var(--texto-secundario);
+      margin-bottom: 14px;
+    }
+
+    .modal-visitante-form .campo-vis {
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .modal-visitante-form label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--texto-secundario);
+    }
+
+    .modal-visitante-form input {
+      width: 100%;
+      background: var(--bg-sacola);
+      border: 1px solid var(--borda-card);
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: var(--texto-principal);
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .modal-visitante-form input:focus {
+      border-color: var(--laranja-vivo);
+    }
+
+    .modal-visitante-grade {
+      display: grid;
+      grid-template-columns: 1fr 96px;
+      gap: 10px;
+    }
+
+    .aviso-modal-visitante {
+      background: rgba(200, 50, 38, 0.14);
+      border: 1px solid var(--vermelho-badge);
+      color: #ef4444;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -1039,8 +1146,59 @@
 
   </main>
 
+  <div class="modal-visitante-overlay" id="modalCadastroVisitante" onclick="fecharModalVisitante()">
+    <div class="modal-visitante-card" onclick="event.stopPropagation()">
+      <button type="button" class="btn-fechar-modal-visitante" onclick="fecharModalVisitante()" title="Fechar" aria-label="Fechar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-visitante-titulo">Complete seu cadastro para pedir</div>
+      <p class="modal-visitante-sub">Seus itens continuam salvos na sacola. Preencha os dados abaixo para concluir pelo WhatsApp.</p>
+      <div class="aviso-modal-visitante" id="avisoModalVisitante"></div>
+      <form class="modal-visitante-form" onsubmit="confirmarCadastroVisitanteEComprar(event)">
+        <div class="campo-vis">
+          <label for="visNome">Nome completo</label>
+          <input type="text" id="visNome" placeholder="Seu nome completo" required>
+        </div>
+        <div class="campo-vis">
+          <label for="visEmail">E-mail</label>
+          <input type="email" id="visEmail" placeholder="seu@email.com" required>
+        </div>
+        <div class="modal-visitante-grade">
+          <div class="campo-vis">
+            <label for="visTelefone">Telefone / WhatsApp</label>
+            <input type="tel" id="visTelefone" placeholder="(67) 99999-9999" required>
+          </div>
+          <div class="campo-vis">
+            <label for="visIdade">Idade</label>
+            <input type="number" id="visIdade" min="13" max="120" placeholder="20" required>
+          </div>
+        </div>
+        <div class="campo-vis">
+          <label for="visEndereco">Endereço de entrega</label>
+          <input type="text" id="visEndereco" placeholder="Rua, número, bairro" required>
+        </div>
+        <div class="campo-vis">
+          <label for="visSenha">Senha da conta</label>
+          <input type="password" id="visSenha" minlength="6" placeholder="Crie uma senha (mín. 6 caracteres)" required>
+        </div>
+        <button type="submit" class="btn-comprar-na-hora" style="margin-top: 12px;">
+          <i class="fa-brands fa-whatsapp"></i> Cadastrar e comprar na hora
+        </button>
+      </form>
+    </div>
+  </div>
+
   <script src="produtos.js"></script>
   <script>
+    // Sem sessão (nem visitante) volta para a tela de login
+    (function () {
+      let ativo = null;
+      try { ativo = JSON.parse(localStorage.getItem('usuario_ativo') || 'null'); } catch (e) { ativo = null; }
+      if (!ativo || !ativo.email) {
+        window.location.replace('index.html');
+      }
+    })();
+
     let cupomAtivo = null;
 
     // MESMA ORDEM DO PERFIL: lê tema_preferido / tema_usuario e aplica .light-theme quando "claro"
@@ -1053,35 +1211,137 @@
       }
     }
 
+function normalizarPrecoSacola(valor) {
+      if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+      let str = String(valor ?? '0').replace(/R\$/gi, '').replace(/\s+/g, '').trim();
+      if (!str) return 0;
+      if (str.includes(',') && str.includes('.')) {
+        str = str.replace(/\./g, '').replace(',', '.');
+      } else if (str.includes(',')) {
+        str = str.replace(',', '.');
+      }
+      const num = parseFloat(str);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function obterSessaoAtualSacola() {
+      let ativo = null;
+      let perfil = null;
+      try { ativo = JSON.parse(localStorage.getItem('usuario_ativo') || 'null'); } catch (e) { ativo = null; }
+      try { perfil = JSON.parse(localStorage.getItem('perfil_usuario') || 'null'); } catch (e) { perfil = null; }
+
+      const emailAtivo = ativo ? String(ativo.email || '').trim().toLowerCase() : '';
+      const isVisitante = !ativo || ativo.visitante === true || !emailAtivo || emailAtivo === 'convidado';
+
+      // Visitante nunca herda dados (sacola, endereço, pedidos) de uma conta anterior
+      if (isVisitante) {
+        return { nome: 'Visitante', email: 'convidado', telefone: '', idade: '', endereco: '', visitante: true };
+      }
+
+      const perfilMesmaConta = perfil && perfil.email && String(perfil.email).trim().toLowerCase() === emailAtivo ? perfil : {};
+      return {
+        ...perfilMesmaConta,
+        ...ativo,
+        email: emailAtivo,
+        visitante: false
+      };
+    }
+
+    // Chave única da sacola: carrinho_usuario_<email normalizado> (igual ao cardápio e ao supabase-conta.js)
     function obterChaveCarrinhoUsuario() {
-      const usuarioAtivo = JSON.parse(localStorage.getItem('usuario_ativo')) || {};
-      const email = usuarioAtivo.email || localStorage.getItem('ultimo_email_logado') || 'convidado';
-      return `carrinho_usuario_${email}`;
+      const sessao = obterSessaoAtualSacola();
+      return `carrinho_usuario_${sessao.email}`;
     }
 
     function obterChaveEnderecosUsuario() {
-      const usuarioAtivo = JSON.parse(localStorage.getItem('usuario_ativo')) || {};
-      const email = usuarioAtivo.email || localStorage.getItem('ultimo_email_logado') || 'convidado';
-      return `enderecos_usuario_${email}`;
+      const sessao = obterSessaoAtualSacola();
+      return `enderecos_usuario_${sessao.email}`;
+    }
+
+    function obterChaveHistoricoUsuario() {
+      const sessao = obterSessaoAtualSacola();
+      return `historico_pedidos_${sessao.email}`;
+    }
+
+    // Lê a sacola já com id, preço e quantidade numéricos e sem itens repetidos
+    function lerCarrinhoSacola(chave) {
+      const chaveUso = chave || obterChaveCarrinhoUsuario();
+      let lista = [];
+      try { lista = JSON.parse(localStorage.getItem(chaveUso)) || []; } catch (e) { lista = []; }
+      if (!Array.isArray(lista)) return [];
+
+      const mapa = new Map();
+      lista.forEach(item => {
+        if (!item || item.id === undefined || item.id === null) return;
+        const idNum = Number.isFinite(Number(item.id)) ? Number(item.id) : item.id;
+        const qtd = Math.max(1, parseInt(item.qtd, 10) || 1);
+        if (mapa.has(idNum)) {
+          const existente = mapa.get(idNum);
+          existente.qtd += qtd;
+          existente.selecionado = existente.selecionado === true || item.selecionado === true;
+        } else {
+          mapa.set(idNum, { ...item, id: idNum, preco: normalizarPrecoSacola(item.preco), qtd });
+        }
+      });
+      return Array.from(mapa.values());
+    }
+
+    function salvarCarrinhoSacola(lista, chave) {
+      try {
+        localStorage.setItem(chave || obterChaveCarrinhoUsuario(), JSON.stringify(lista));
+      } catch (e) {}
+      if (typeof salvarTudoDaContaSupabase === 'function') {
+        try { salvarTudoDaContaSupabase(); } catch (e) {}
+      }
+    }
+
+    function formatarEnderecoItemSacola(item) {
+      if (!item) return '';
+      if (item.enderecoCompleto && String(item.enderecoCompleto).trim()) {
+        return String(item.enderecoCompleto).trim();
+      }
+      const rua = String(item.rua || '').trim();
+      if (!rua) return '';
+      const numero = item.numero ? `, ${item.numero}` : '';
+      const bairro = item.bairro ? ` - ${item.bairro}` : '';
+      return `${rua}${numero}${bairro}`;
+    }
+
+    // Endereço de entrega: o mesmo de "Meus Endereços" (principal) e do "Meu Perfil", com o e-mail normalizado
+    function obterEnderecoEntregaSacola() {
+      const sessao = obterSessaoAtualSacola();
+      if (sessao.visitante) return '';
+
+      let lista = [];
+      try { lista = JSON.parse(localStorage.getItem(obterChaveEnderecosUsuario())) || []; } catch (e) { lista = []; }
+      if (!Array.isArray(lista)) lista = [];
+
+      const escolhido = lista.find(e => e && e.principal) || lista[0];
+      let texto = formatarEnderecoItemSacola(escolhido);
+      if (!texto) texto = String(sessao.endereco || '').trim();
+      if (texto && escolhido && escolhido.complemento) {
+        texto += ` (Comp: ${escolhido.complemento})`;
+      }
+      return texto;
     }
 
     function obterTaxaEntrega() {
       const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
-      const perfilSalvo = JSON.parse(localStorage.getItem('perfil_usuario')) || {};
-      const enderecoAtual = perfilSalvo.endereco || '';
-      const areasEntrega = JSON.parse(localStorage.getItem('areas_entrega_db')) || [];
+      const enderecoAtual = obterEnderecoEntregaSacola();
+      let areasEntrega = [];
+      try { areasEntrega = JSON.parse(localStorage.getItem('areas_entrega_db')) || []; } catch (e) { areasEntrega = []; }
 
-      if (areasEntrega.length > 0 && enderecoAtual) {
-        const areaEncontrada = areasEntrega.find(a => enderecoAtual.toLowerCase().includes(a.nome.toLowerCase()));
-        if (areaEncontrada) {
-          const taxaArea = parseFloat(String(areaEncontrada.taxa).replace(',', '.'));
-          if (!isNaN(taxaArea)) return taxaArea;
+      if (Array.isArray(areasEntrega) && areasEntrega.length > 0 && enderecoAtual) {
+        const alvo = enderecoAtual.toLowerCase();
+        const areaEncontrada = areasEntrega.find(a => a && a.nome && alvo.includes(String(a.nome).toLowerCase()));
+        if (areaEncontrada && String(areaEncontrada.taxa ?? '').trim() !== '') {
+          return normalizarPrecoSacola(areaEncontrada.taxa);
         }
       }
 
       const taxaSalva = localStorage.getItem('taxaEntrega') || localStorage.getItem('taxaEntregaLoja') || cfg.taxaEntrega;
       if (taxaSalva !== null && taxaSalva !== undefined && taxaSalva !== '') {
-        const taxaNum = parseFloat(String(taxaSalva).replace(',', '.'));
+        const taxaNum = normalizarPrecoSacola(taxaSalva);
         return isNaN(taxaNum) ? 0.00 : taxaNum;
       }
       return 0.00;
@@ -1107,7 +1367,7 @@
       document.getElementById('headerNomeLoja').innerText = nomeLoja;
       document.getElementById('paginaTituloSacola').innerText = `${nomeLoja} - Sua Sacola`;
 
-      const carrinho = JSON.parse(localStorage.getItem(obterChaveCarrinhoUsuario())) || [];
+      const carrinho = lerCarrinhoSacola();
       const listaGuardadosEl = document.getElementById('listaItensGuardados');
       const listaFinalizarEl = document.getElementById('listaItensFinalizar');
 
@@ -1120,7 +1380,7 @@
         totalGuardadosQtd += item.qtd;
         if (item.selecionado === true) {
           totalSelecionadosQtd += item.qtd;
-          const precoNum = typeof item.preco === 'number' ? item.preco : parseFloat(String(item.preco).replace(',', '.')) || 0;
+          const precoNum = normalizarPrecoSacola(item.preco);
           subtotalSelecionados += precoNum * item.qtd;
         } else {
           todosSelecionados = false;
@@ -1135,7 +1395,7 @@
         listaGuardadosEl.innerHTML = `<p style="color: var(--texto-secundario); text-align: center; padding: 32px 0;">Sua sacola está vazia. Volte ao cardápio para guardar seus lanches favoritos!</p>`;
       } else {
         listaGuardadosEl.innerHTML = carrinho.map(item => {
-          const precoNum = typeof item.preco === 'number' ? item.preco : parseFloat(String(item.preco).replace(',', '.')) || 0;
+          const precoNum = normalizarPrecoSacola(item.preco);
           const isSel = item.selecionado === true;
           const imagemSrc = item.imagem || item.img || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=300';
 
@@ -1174,7 +1434,7 @@
         `;
       } else {
         listaFinalizarEl.innerHTML = itensParaCompra.map(item => {
-          const precoNum = typeof item.preco === 'number' ? item.preco : parseFloat(String(item.preco).replace(',', '.')) || 0;
+          const precoNum = normalizarPrecoSacola(item.preco);
           const imagemSrc = item.imagem || item.img || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=300';
           return `
             <div class="item-resumo-checkout">
@@ -1223,42 +1483,41 @@
 
     function alternarSelecaoItem(id) {
       const chave = obterChaveCarrinhoUsuario();
-      let carrinho = JSON.parse(localStorage.getItem(chave)) || [];
-      const item = carrinho.find(c => c.id === id);
+      const carrinho = lerCarrinhoSacola(chave);
+      const item = carrinho.find(c => Number(c.id) === Number(id));
       if (item) {
         item.selecionado = !item.selecionado;
       }
-      localStorage.setItem(chave, JSON.stringify(carrinho));
+      salvarCarrinhoSacola(carrinho, chave);
       atualizarTodaSacola();
     }
 
     function selecionarTodosItens(status) {
       const chave = obterChaveCarrinhoUsuario();
-      let carrinho = JSON.parse(localStorage.getItem(chave)) || [];
+      const carrinho = lerCarrinhoSacola(chave);
       carrinho.forEach(item => item.selecionado = status);
-      localStorage.setItem(chave, JSON.stringify(carrinho));
+      salvarCarrinhoSacola(carrinho, chave);
       atualizarTodaSacola();
     }
 
     function alterarQtdItem(id, delta) {
       const chave = obterChaveCarrinhoUsuario();
-      let carrinho = JSON.parse(localStorage.getItem(chave)) || [];
-      const item = carrinho.find(c => c.id === id);
+      let carrinho = lerCarrinhoSacola(chave);
+      const item = carrinho.find(c => Number(c.id) === Number(id));
       if (item) {
         item.qtd += delta;
         if (item.qtd <= 0) {
-          carrinho = carrinho.filter(c => c.id !== id);
+          carrinho = carrinho.filter(c => Number(c.id) !== Number(id));
         }
       }
-      localStorage.setItem(chave, JSON.stringify(carrinho));
+      salvarCarrinhoSacola(carrinho, chave);
       atualizarTodaSacola();
     }
 
     function removerItemSacola(id) {
       const chave = obterChaveCarrinhoUsuario();
-      let carrinho = JSON.parse(localStorage.getItem(chave)) || [];
-      carrinho = carrinho.filter(c => c.id !== id);
-      localStorage.setItem(chave, JSON.stringify(carrinho));
+      const carrinho = lerCarrinhoSacola(chave).filter(c => Number(c.id) !== Number(id));
+      salvarCarrinhoSacola(carrinho, chave);
       atualizarTodaSacola();
     }
 
@@ -1308,9 +1567,47 @@
       atualizarTodaSacola();
     }
 
+    function validarEmailSacola(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email || '').trim());
+    }
+
+    function validarTelefoneSacola(telefone) {
+      const digitos = String(telefone || '').replace(/\D/g, '');
+      if (digitos.length < 10 || digitos.length > 11) return false;
+      if (/^(\d)\1+$/.test(digitos)) return false;
+      if (digitos.startsWith('0')) return false;
+      if (digitos.length === 11 && digitos[2] !== '9') return false;
+      return true;
+    }
+
+    function abrirModalVisitante() {
+      const aviso = document.getElementById('avisoModalVisitante');
+      if (aviso) {
+        aviso.style.display = 'none';
+        aviso.innerText = '';
+      }
+      const overlay = document.getElementById('modalCadastroVisitante');
+      if (overlay) overlay.classList.add('ativo');
+      const campoNome = document.getElementById('visNome');
+      if (campoNome) setTimeout(() => campoNome.focus(), 60);
+    }
+
+    function fecharModalVisitante() {
+      const overlay = document.getElementById('modalCadastroVisitante');
+      if (overlay) overlay.classList.remove('ativo');
+    }
+
+    function mostrarAvisoModalVisitante(texto) {
+      const aviso = document.getElementById('avisoModalVisitante');
+      if (!aviso) return;
+      aviso.innerText = texto;
+      aviso.style.display = 'block';
+    }
+
+    // Botão "Comprar na hora": visitante abre o modal; conta logada segue direto para o WhatsApp
     function finalizarPedidoWhatsApp() {
       const chave = obterChaveCarrinhoUsuario();
-      let carrinho = JSON.parse(localStorage.getItem(chave)) || [];
+      const carrinho = lerCarrinhoSacola(chave);
       const itensSelecionados = carrinho.filter(item => item.selecionado === true);
 
       if (itensSelecionados.length === 0) {
@@ -1319,52 +1616,77 @@
         return;
       }
 
-      const chaveEnderecos = obterChaveEnderecosUsuario();
-      const enderecosSalvos = JSON.parse(localStorage.getItem(chaveEnderecos)) || [];
-      const perfilSalvo = JSON.parse(localStorage.getItem('perfil_usuario')) || {};
-
-      let enderecoFinal = "";
-      const principal = enderecosSalvos.find(e => e.principal);
-      if (principal && principal.rua) {
-        enderecoFinal = `${principal.rua}, ${principal.numero} - ${principal.bairro}`;
-      } else if (enderecosSalvos.length > 0 && enderecosSalvos[0].rua) {
-        enderecoFinal = `${enderecosSalvos[0].rua}, ${enderecosSalvos[0].numero} - ${enderecosSalvos[0].bairro}`;
-      } else if (perfilSalvo.endereco && perfilSalvo.endereco.trim() !== '') {
-        enderecoFinal = perfilSalvo.endereco;
-      }
-
-      if (!enderecoFinal || enderecoFinal.trim() === '') {
-        alert('Por favor, cadastre seu endereço no seu perfil antes de finalizar o pedido!');
-        window.location.href = 'perfil.html';
+      const sessao = obterSessaoAtualSacola();
+      if (sessao.visitante) {
+        abrirModalVisitante();
         return;
       }
+
+      concluirPedidoWhatsApp(sessao, null);
+    }
+
+    function concluirPedidoWhatsApp(sessao, janelaWhats) {
+      const fecharJanela = () => {
+        try { if (janelaWhats && !janelaWhats.closed) janelaWhats.close(); } catch (e) {}
+      };
+
+      const chave = obterChaveCarrinhoUsuario();
+      const carrinho = lerCarrinhoSacola(chave);
+      const itensSelecionados = carrinho.filter(item => item.selecionado === true);
+
+      if (itensSelecionados.length === 0) {
+        fecharJanela();
+        alert('Nenhum item foi selecionado! Clique nos itens na aba "Guardados na Sacola" para incluí-los na compra.');
+        alternarAbaSacola('guardados');
+        return false;
+      }
+
+      const enderecoFinal = obterEnderecoEntregaSacola();
+      if (!enderecoFinal) {
+        fecharJanela();
+        alert('Por favor, cadastre seu endereço no seu perfil antes de finalizar o pedido!');
+        window.location.href = 'perfil.html';
+        return false;
+      }
+
+      // Garante que o resumo da tela já reflete a sessão e a sacola atuais
+      atualizarTodaSacola();
 
       const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
       const nomeLoja = localStorage.getItem('nomeEstabelecimento') || cfg.nome || 'Sabor & Brasa';
 
       let itensTexto = '';
-      let subtotal = 0;
       itensSelecionados.forEach(item => {
-        const preco = typeof item.preco === 'number' ? item.preco : parseFloat(String(item.preco).replace(',', '.')) || 0;
-        subtotal += preco * item.qtd;
+        const preco = normalizarPrecoSacola(item.preco);
         itensTexto += `• ${item.qtd}x ${item.nome} (R$ ${(preco * item.qtd).toFixed(2).replace('.', ',')})\n`;
       });
 
       const subtotalTexto = document.getElementById('subtotalValor').innerText;
       const totalTexto = document.getElementById('totalValor').innerText;
+      const descontoVisivel = document.getElementById('linhaDesconto').style.display === 'flex';
+      const descontoTexto = document.getElementById('descontoValor').innerText;
       const taxaEntrega = obterTaxaEntrega();
 
       let mensagem = `*NOVO PEDIDO - ${nomeLoja.toUpperCase()}*\n\n`;
+      if (sessao.nome) mensagem += `*Cliente:* ${sessao.nome}\n`;
+      if (sessao.telefone) mensagem += `*Telefone:* ${sessao.telefone}\n`;
       mensagem += `*Endereço de Entrega:* ${enderecoFinal}\n\n`;
       mensagem += itensTexto;
       mensagem += `\n*Subtotal:* ${subtotalTexto}`;
       if (cupomAtivo) {
         mensagem += `\n*Cupom Aplicado:* ${cupomAtivo.codigo}`;
       }
+      if (descontoVisivel) {
+        mensagem += `\n*Desconto:* ${descontoTexto}`;
+      }
       mensagem += `\n*Taxa de Entrega:* R$ ${taxaEntrega.toFixed(2).replace('.', ',')}`;
       mensagem += `\n*Total:* ${totalTexto}`;
 
-      const historicoPedidos = JSON.parse(localStorage.getItem('historico_pedidos')) || [];
+      // Histórico gravado só na conta que fez o pedido
+      const chaveHistorico = obterChaveHistoricoUsuario();
+      let historicoPedidos = [];
+      try { historicoPedidos = JSON.parse(localStorage.getItem(chaveHistorico)) || []; } catch (e) { historicoPedidos = []; }
+      if (!Array.isArray(historicoPedidos)) historicoPedidos = [];
       historicoPedidos.unshift({
         id: Date.now(),
         data: new Date().toLocaleDateString('pt-BR') + ' às ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
@@ -1372,18 +1694,260 @@
         total: totalTexto.replace('R$ ', ''),
         status: 'Concluído'
       });
-      localStorage.setItem('historico_pedidos', JSON.stringify(historicoPedidos));
+      try { localStorage.setItem(chaveHistorico, JSON.stringify(historicoPedidos)); } catch (e) {}
 
       const itensRestantes = carrinho.filter(item => item.selecionado !== true);
-      localStorage.setItem(chave, JSON.stringify(itensRestantes));
+      salvarCarrinhoSacola(itensRestantes, chave);
       atualizarTodaSacola();
 
-      const fone = localStorage.getItem('telefoneEstabelecimento') || localStorage.getItem('whatsappLoja') || cfg.whatsapp || '5567998036713';
-      window.open(`https://wa.me/${fone}?text=${encodeURIComponent(mensagem)}`, '_blank');
+      const foneBruto = localStorage.getItem('telefoneEstabelecimento') || localStorage.getItem('whatsappLoja') || cfg.whatsapp || '5567998036713';
+      const fone = String(foneBruto).replace(/\D/g, '') || '5567998036713';
+      const urlWhats = `https://wa.me/${fone}?text=${encodeURIComponent(mensagem)}`;
+
+      if (janelaWhats && !janelaWhats.closed) {
+        janelaWhats.location.href = urlWhats;
+      } else {
+        const aberta = window.open(urlWhats, '_blank');
+        if (!aberta) window.location.href = urlWhats;
+      }
+      return true;
+    }
+
+    // Troca a sessão de visitante pela conta recém-criada/vinculada, levando a sacola junto
+    function iniciarSessaoContaPeloModal(conta, sacolaVisitante, favoritosVisitante) {
+      const email = String(conta.email || '').trim().toLowerCase();
+
+      [
+        'usuario_ativo',
+        'perfil_usuario',
+        'ultimo_email_logado',
+        'enderecoLoja',
+        'currentUser',
+        'usuarioLogado',
+        'admin_nome',
+        'historico_pedidos',
+        'favoritos_db',
+        'favoritos_usuario'
+      ].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+
+      const perfil = {
+        ...conta,
+        email,
+        telefone: conta.telefone || '',
+        idade: conta.idade || '',
+        endereco: conta.endereco || '',
+        contaVerificada: true,
+        visitante: false
+      };
+      localStorage.setItem('usuario_ativo', JSON.stringify(perfil));
+      localStorage.setItem('perfil_usuario', JSON.stringify(perfil));
+      localStorage.setItem('ultimo_email_logado', email);
+
+      // Mantém a conta também no cadastro local (mesmo comportamento da tela de login)
+      try {
+        const usuariosDb = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+        const idx = usuariosDb.findIndex(u => u && u.email && String(u.email).trim().toLowerCase() === email);
+        if (idx >= 0) {
+          usuariosDb[idx] = { ...usuariosDb[idx], ...perfil };
+        } else {
+          usuariosDb.push(perfil);
+        }
+        localStorage.setItem('usuarios_db', JSON.stringify(usuariosDb));
+      } catch (e) {}
+
+      // Endereço digitado vira o principal em "Meus Endereços" e no "Meu Perfil"
+      if (typeof gravarEnderecoLocalConta === 'function') {
+        gravarEnderecoLocalConta(email, perfil.endereco);
+      } else {
+        try {
+          const chaveEnd = `enderecos_usuario_${email}`;
+          let listaEnd = JSON.parse(localStorage.getItem(chaveEnd)) || [];
+          listaEnd = listaEnd.map(e => ({ ...e, principal: false }));
+          listaEnd.unshift({
+            id: Date.now(),
+            rua: perfil.endereco,
+            numero: '',
+            bairro: '',
+            enderecoCompleto: perfil.endereco,
+            principal: true
+          });
+          localStorage.setItem(chaveEnd, JSON.stringify(listaEnd));
+          localStorage.setItem('enderecoLoja', perfil.endereco);
+        } catch (e) {}
+      }
+
+      // Sacola do visitante entra na sacola da conta; só o que o visitante marcou vai para o pedido
+      const chaveConta = `carrinho_usuario_${email}`;
+      const sacolaConta = lerCarrinhoSacola(chaveConta);
+      sacolaConta.forEach(item => { item.selecionado = false; });
+      sacolaVisitante.forEach(itemVis => {
+        const existente = sacolaConta.find(x => Number(x.id) === Number(itemVis.id));
+        if (existente) {
+          existente.qtd += itemVis.qtd;
+          existente.selecionado = itemVis.selecionado === true;
+        } else {
+          sacolaConta.push({ ...itemVis });
+        }
+      });
+      try { localStorage.setItem(chaveConta, JSON.stringify(sacolaConta)); } catch (e) {}
+
+      // Favoritos do visitante também passam para a conta
+      try {
+        const chaveFav = `favoritos_${email}`;
+        const favsConta = JSON.parse(localStorage.getItem(chaveFav)) || [];
+        const uniao = Array.from(new Set([...favsConta, ...favoritosVisitante].map(f => (f && typeof f === 'object') ? Number(f.id) : Number(f)).filter(n => Number.isFinite(n))));
+        localStorage.setItem(chaveFav, JSON.stringify(uniao));
+      } catch (e) {}
+
+      // Limpa o que era do visitante
+      [
+        'carrinho_usuario_convidado',
+        'favoritos_convidado',
+        'enderecos_usuario_convidado',
+        'historico_pedidos_convidado'
+      ].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+    }
+
+    async function confirmarCadastroVisitanteEComprar(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const botao = form.querySelector('button[type="submit"]');
+      const valor = id => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+
+      const aviso = document.getElementById('avisoModalVisitante');
+      if (aviso) {
+        aviso.style.display = 'none';
+        aviso.innerText = '';
+      }
+
+      const nome = valor('visNome');
+      const email = valor('visEmail').toLowerCase();
+      const telefone = valor('visTelefone');
+      const idadeStr = valor('visIdade');
+      const endereco = valor('visEndereco');
+      const senha = valor('visSenha');
+
+      if (nome.length < 2 || !/[A-Za-zÀ-ÿ]{2,}/.test(nome)) {
+        mostrarAvisoModalVisitante('Digite seu nome completo.');
+        return;
+      }
+      if (!validarEmailSacola(email)) {
+        mostrarAvisoModalVisitante('Digite um e-mail válido (ex: nome@gmail.com).');
+        return;
+      }
+      if (!validarTelefoneSacola(telefone)) {
+        mostrarAvisoModalVisitante('Digite um telefone/WhatsApp verdadeiro com DDD (10 ou 11 dígitos).');
+        return;
+      }
+      const idadeNum = Number(idadeStr);
+      if (!Number.isInteger(idadeNum) || idadeNum < 13 || idadeNum > 120) {
+        mostrarAvisoModalVisitante('Digite uma idade válida entre 13 e 120 anos.');
+        return;
+      }
+      if (endereco.length < 5) {
+        mostrarAvisoModalVisitante('Informe o endereço completo de entrega (rua, número e bairro).');
+        return;
+      }
+      if (senha.length < 6) {
+        mostrarAvisoModalVisitante('Crie uma senha com pelo menos 6 caracteres.');
+        return;
+      }
+
+      // Guarda a sacola e os favoritos do visitante antes de trocar a sessão
+      const sacolaVisitante = lerCarrinhoSacola('carrinho_usuario_convidado');
+      let favoritosVisitante = [];
+      try { favoritosVisitante = JSON.parse(localStorage.getItem('favoritos_convidado')) || []; } catch (e) { favoritosVisitante = []; }
+      if (!Array.isArray(favoritosVisitante)) favoritosVisitante = [];
+
+      // Abre a aba do WhatsApp já no clique, para o navegador não bloquear depois da espera do cadastro
+      let janelaWhats = null;
+      try { janelaWhats = window.open('', '_blank'); } catch (e) { janelaWhats = null; }
+      const fecharJanela = () => {
+        try { if (janelaWhats && !janelaWhats.closed) janelaWhats.close(); } catch (e) {}
+      };
+
+      if (botao) {
+        botao.disabled = true;
+        botao.style.opacity = '0.7';
+      }
+
+      try {
+        let usuarioConta = null;
+
+        if (typeof cadastrarUsuarioSupabase === 'function') {
+          const resCad = await cadastrarUsuarioSupabase({
+            nome, email, telefone, idade: String(idadeNum), endereco, senha, tipo: 'cliente'
+          });
+
+          if (resCad && resCad.ok && resCad.usuario) {
+            usuarioConta = resCad.usuario;
+          } else if (resCad && resCad.jaCadastrado && typeof loginUsuarioSupabase === 'function') {
+            // E-mail já existe: só vincula se a senha digitada for a da conta
+            const resLogin = await loginUsuarioSupabase(email, senha);
+            if (resLogin && resLogin.ok && resLogin.usuario) {
+              usuarioConta = resLogin.usuario;
+            } else {
+              mostrarAvisoModalVisitante(
+                resLogin && resLogin.rede
+                  ? resLogin.mensagem
+                  : 'Este e-mail já tem cadastro. Digite a senha correta da conta para vincular o pedido.'
+              );
+              fecharJanela();
+              return;
+            }
+          } else {
+            mostrarAvisoModalVisitante((resCad && resCad.mensagem) || 'Não foi possível concluir o cadastro. Tente novamente.');
+            fecharJanela();
+            return;
+          }
+        } else {
+          // Sem o script da conta carregado: cadastro local, sem sobrescrever conta existente com outra senha
+          let usuariosDb = [];
+          try { usuariosDb = JSON.parse(localStorage.getItem('usuarios_db')) || []; } catch (e) { usuariosDb = []; }
+          const existente = usuariosDb.find(u => u && u.email && String(u.email).trim().toLowerCase() === email);
+          if (existente && String(existente.senha || '') !== senha) {
+            mostrarAvisoModalVisitante('Este e-mail já tem cadastro. Digite a senha correta da conta para vincular o pedido.');
+            fecharJanela();
+            return;
+          }
+          usuarioConta = existente || { nome, email, telefone, idade: String(idadeNum), endereco, senha, tipo: 'cliente' };
+        }
+
+        const conta = {
+          ...usuarioConta,
+          nome: usuarioConta.nome || nome,
+          email,
+          telefone: validarTelefoneSacola(usuarioConta.telefone) ? usuarioConta.telefone : telefone,
+          idade: usuarioConta.idade || String(idadeNum),
+          endereco,
+          senha,
+          tipo: usuarioConta.tipo || 'cliente'
+        };
+
+        iniciarSessaoContaPeloModal(conta, sacolaVisitante, favoritosVisitante);
+        fecharModalVisitante();
+        form.reset();
+        atualizarTodaSacola();
+
+        concluirPedidoWhatsApp(obterSessaoAtualSacola(), janelaWhats);
+      } catch (err) {
+        console.warn('Erro ao cadastrar visitante e comprar:', err);
+        mostrarAvisoModalVisitante('Não foi possível concluir agora. Verifique sua conexão e tente novamente.');
+        fecharJanela();
+      } finally {
+        if (botao) {
+          botao.disabled = false;
+          botao.style.opacity = '';
+        }
+      }
     }
 
     window.addEventListener('storage', function(e) {
-      if (e.key && e.key.startsWith('carrinho_usuario_')) {
+      if (e.key && (e.key.startsWith('carrinho_usuario_') || e.key.startsWith('enderecos_usuario_') || e.key === 'usuario_ativo')) {
         atualizarTodaSacola();
       }
       if (e.key === 'tema_preferido' || e.key === 'tema_usuario') {
@@ -1391,7 +1955,12 @@
       }
     });
 
-    document.addEventListener('DOMContentLoaded', atualizarTodaSacola);
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof migrarSacolaLegada === 'function') {
+        migrarSacolaLegada(obterSessaoAtualSacola().email);
+      }
+      atualizarTodaSacola();
+    });
   </script>
   <script src="supabase-conta.js"></script>
 </body>

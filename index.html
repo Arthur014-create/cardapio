@@ -763,14 +763,14 @@
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-user icone-esq"></i>
-                <input type="text" id="loginEmail" placeholder="E-mail ou usuário" required>
+                <input type="text" id="loginEmail" placeholder="E-mail ou usuário" autocomplete="off" required>
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-lock icone-esq"></i>
-                <input type="password" id="loginSenha" placeholder="Senha" required>
+                <input type="password" id="loginSenha" placeholder="Senha" autocomplete="new-password" required>
                 <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('loginSenha', this)">
                   <i class="fa-regular fa-eye-slash"></i>
                 </button>
@@ -824,33 +824,33 @@
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-user icone-esq"></i>
-                <input type="text" id="cadNome" placeholder="Nome completo">
+                <input type="text" id="cadNome" placeholder="Nome completo" autocomplete="off" required>
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-envelope icone-esq"></i>
-                <input type="text" id="cadEmail" placeholder="Seu melhor e-mail">
+                <input type="email" id="cadEmail" placeholder="Seu melhor e-mail" autocomplete="off" required>
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-phone icone-esq"></i>
-                <input type="tel" id="cadTelefone" placeholder="Telefone / WhatsApp">
+                <input type="tel" id="cadTelefone" placeholder="Telefone / WhatsApp com DDD" autocomplete="off" required>
               </div>
             </div>
 
             <div class="grid-duplo campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-id-card icone-esq"></i>
-                <input type="text" id="cadIdade" placeholder="Idade" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <input type="text" id="cadIdade" placeholder="Idade" maxlength="3" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
               </div>
 
               <div class="input-pilula">
                 <i class="fa-solid fa-lock icone-esq"></i>
-                <input type="password" id="cadSenha" placeholder="Crie uma senha">
+                <input type="password" id="cadSenha" placeholder="Crie uma senha" autocomplete="new-password" required>
                 <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('cadSenha', this)">
                   <i class="fa-regular fa-eye-slash"></i>
                 </button>
@@ -909,7 +909,7 @@
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-regular fa-envelope icone-esq"></i>
-                <input type="email" id="recEmail" placeholder="Digite seu e-mail cadastrado" required>
+                <input type="email" id="recEmail" placeholder="Digite seu e-mail cadastrado" autocomplete="off" required>
               </div>
             </div>
 
@@ -922,14 +922,14 @@
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-hashtag icone-esq"></i>
-                <input type="text" id="recCodigo" placeholder="Código de 6 dígitos" maxlength="6" required>
+                <input type="text" id="recCodigo" placeholder="Código de 6 dígitos" maxlength="6" autocomplete="off" required>
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-lock icone-esq"></i>
-                <input type="password" id="recNovaSenha" placeholder="Nova senha" required>
+                <input type="password" id="recNovaSenha" placeholder="Nova senha" autocomplete="new-password" required>
                 <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('recNovaSenha', this)">
                   <i class="fa-regular fa-eye-slash"></i>
                 </button>
@@ -966,14 +966,14 @@
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-user-tie icone-esq"></i>
-                <input type="text" id="admUsuario" placeholder="E-mail ou usuário admin" required>
+                <input type="text" id="admUsuario" placeholder="E-mail ou usuário admin" autocomplete="off" required>
               </div>
             </div>
 
             <div class="campo-grupo">
               <div class="input-pilula">
                 <i class="fa-solid fa-key icone-esq"></i>
-                <input type="password" id="admSenha" placeholder="Senha administrativa" required>
+                <input type="password" id="admSenha" placeholder="Senha administrativa" autocomplete="new-password" required>
                 <button type="button" class="btn-olho-senha" onclick="alternarVisibilidadeSenha('admSenha', this)">
                   <i class="fa-regular fa-eye-slash"></i>
                 </button>
@@ -999,10 +999,148 @@
 
   <script src="supabase-conta.js"></script>
   <script>
+    const EMAILS_ADM_AUTORIZADOS = [
+      "arthurcasanovas11@gmail.com",
+      "vitoriarafaela240024@gmail.com"
+    ];
+
+    const CONTAS_ADM_PADRAO = [
+      {
+        nome: "Arthur Casanovas",
+        email: "arthurcasanovas11@gmail.com",
+        telefone: "67999999991",
+        idade: "",
+        endereco: "",
+        senha: localStorage.getItem('senha_gerente') || '1234',
+        tipo: 'admin',
+        contaVerificada: true,
+        visitante: false
+      },
+      {
+        nome: "Vitória Rafaela",
+        email: "vitoriarafaela240024@gmail.com",
+        telefone: "67999999992",
+        idade: "",
+        endereco: "",
+        senha: localStorage.getItem('senha_gerente') || '1234',
+        tipo: 'admin',
+        contaVerificada: true,
+        visitante: false
+      }
+    ];
+
+    function garantirContasAdminCadastradas() {
+      let usuariosCadastrados = [];
+      try {
+        usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db') || '[]') || [];
+      } catch (e) {
+        usuariosCadastrados = [];
+      }
+
+      let alterou = false;
+      CONTAS_ADM_PADRAO.forEach(contaPadrao => {
+        const idx = usuariosCadastrados.findIndex(u =>
+          u && u.email && String(u.email).trim().toLowerCase() === contaPadrao.email.toLowerCase()
+        );
+        if (idx === -1) {
+          usuariosCadastrados.push({ ...contaPadrao });
+          alterou = true;
+        } else {
+          const existente = usuariosCadastrados[idx];
+          const atualizada = {
+            ...existente,
+            nome: existente.nome || contaPadrao.nome,
+            email: contaPadrao.email,
+            telefone: existente.telefone || contaPadrao.telefone,
+            senha: existente.senha || contaPadrao.senha,
+            tipo: 'admin',
+            contaVerificada: true,
+            visitante: false
+          };
+          if (JSON.stringify(existente) !== JSON.stringify(atualizada)) {
+            usuariosCadastrados[idx] = atualizada;
+            alterou = true;
+          }
+        }
+      });
+
+      if (alterou) {
+        localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
+      }
+      return usuariosCadastrados;
+    }
+
+    function emailAdmAutorizado(emailDigitado) {
+      const emailLimpo = String(emailDigitado || "").trim().toLowerCase();
+      return EMAILS_ADM_AUTORIZADOS.includes(emailLimpo);
+    }
+
     let timerRedirecionamento = null;
     let destinoAposModal = 'cardapio.html';
     let timerMapaCadastro = null;
     let coordsMapaCadastro = null;
+
+    function limparCamposFormularioIndex() {
+      [
+        'loginEmail',
+        'loginSenha',
+        'cadNome',
+        'cadEmail',
+        'cadTelefone',
+        'cadIdade',
+        'cadSenha',
+        'cadEndereco',
+        'recEmail',
+        'recCodigo',
+        'recNovaSenha',
+        'admUsuario',
+        'admSenha'
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+
+      const chkLembrar = document.getElementById('chkLembrar');
+      if (chkLembrar) chkLembrar.checked = false;
+
+      coordsMapaCadastro = null;
+      const boxSugestoes = document.getElementById('sugestoesEndCadastro');
+      if (boxSugestoes) {
+        boxSugestoes.classList.remove('ativa');
+        boxSugestoes.innerHTML = '';
+      }
+    }
+
+    function limparSessaoAtivaCompleta() {
+      [
+        'usuario_ativo',
+        'perfil_usuario',
+        'ultimo_email_logado',
+        'enderecoLoja',
+        'currentUser',
+        'usuarioLogado',
+        'admin_nome',
+        'historico_pedidos',
+        'favoritos_db',
+        'favoritos_usuario',
+        'lembrar_email',
+        'lembrar_senha'
+      ].forEach(chave => {
+        try { localStorage.removeItem(chave); } catch (e) {}
+      });
+      limparCamposFormularioIndex();
+    }
+
+    function limparDadosVisitanteAnterior() {
+      [
+        'carrinho_usuario_convidado',
+        'favoritos_convidado',
+        'enderecos_usuario_convidado',
+        'historico_pedidos_convidado'
+      ].forEach(chave => {
+        try { localStorage.removeItem(chave); } catch (e) {}
+      });
+    }
 
     function obterNomeEstabelecimento() {
       const cfg = JSON.parse(localStorage.getItem('config_restaurante')) || {};
@@ -1033,6 +1171,20 @@
           logoEl.innerHTML = `<span class="destaque-amarelo">${nomeCompleto}</span>`;
         }
       }
+    }
+
+    function validarEmailReal(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    }
+
+    function validarTelefoneReal(telefone) {
+      const digitos = String(telefone || '').replace(/\D/g, '');
+      if (digitos.length < 10 || digitos.length > 11) return false;
+      if (/^(\d)\1+$/.test(digitos)) return false;
+      const ddd = digitos.slice(0, 2);
+      if (ddd === '00' || ddd.startsWith('0')) return false;
+      if (digitos.length === 11 && digitos[2] !== '9') return false;
+      return true;
     }
 
     function mostrarSecao(qual) {
@@ -1194,17 +1346,15 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      limparSessaoAtivaCompleta();
+      garantirContasAdminCadastradas();
       aplicarNomeEstabelecimento();
+    });
 
-      const emailLembrado = localStorage.getItem('lembrar_email');
-      const senhaLembrada = localStorage.getItem('lembrar_senha');
-      if (emailLembrado) {
-        document.getElementById('loginEmail').value = emailLembrado;
-        if (senhaLembrada) {
-          document.getElementById('loginSenha').value = senhaLembrada;
-        }
-        document.getElementById('chkLembrar').checked = true;
-      }
+    window.addEventListener('pageshow', () => {
+      limparSessaoAtivaCompleta();
+      garantirContasAdminCadastradas();
+      aplicarNomeEstabelecimento();
     });
 
     window.addEventListener('storage', (e) => {
@@ -1248,9 +1398,15 @@
     }
 
     function entrarComoVisitante() {
+      limparSessaoAtivaCompleta();
+      limparDadosVisitanteAnterior();
+
       const visitante = {
         nome: 'Visitante',
         email: 'convidado',
+        telefone: '',
+        idade: '',
+        endereco: '',
         visitante: true
       };
 
@@ -1265,24 +1421,58 @@
       );
     }
 
+    function resolverEnderecoDaConta(usuario = {}, enderecoInformado = '') {
+      if (enderecoInformado && String(enderecoInformado).trim()) {
+        return String(enderecoInformado).trim();
+      }
+      if (usuario.endereco && String(usuario.endereco).trim()) {
+        return String(usuario.endereco).trim();
+      }
+
+      const emailChave = String(usuario.email || '').trim().toLowerCase();
+      if (!emailChave || emailChave === 'convidado') return '';
+
+      try {
+        const listaEnd = JSON.parse(localStorage.getItem(`enderecos_usuario_${emailChave}`)) || [];
+        const principal = listaEnd.find(item => item.principal) || listaEnd[0];
+        if (principal) {
+          const texto = principal.enderecoCompleto ||
+            [principal.rua, principal.numero ? `nº ${principal.numero}` : '', principal.bairro].filter(Boolean).join(', ');
+          if (texto) return texto;
+        }
+      } catch (e) {}
+
+      try {
+        const usuariosDb = JSON.parse(localStorage.getItem('usuarios_db')) || [];
+        const contaDb = usuariosDb.find(u => u.email && u.email.toLowerCase() === String(emailChave).toLowerCase());
+        if (contaDb && contaDb.endereco && String(contaDb.endereco).trim()) {
+          return String(contaDb.endereco).trim();
+        }
+      } catch (e) {}
+
+      return '';
+    }
+
     function salvarSessaoLocal(usuario, endereco = '') {
-      const emailChave = usuario.email || 'cliente_local';
-      const perfilAtual = JSON.parse(localStorage.getItem('perfil_usuario')) || {};
+      const emailChave = String(usuario.email || '').trim().toLowerCase();
+      const enderecoFinal = resolverEnderecoDaConta(usuario, endereco);
+
       const perfilMesclado = {
-        ...perfilAtual,
         ...usuario,
         email: emailChave,
-        telefone: usuario.telefone || perfilAtual.telefone || '',
-        endereco: endereco || usuario.endereco || perfilAtual.endereco || '',
-        coordsMapa: coordsMapaCadastro || usuario.coordsMapa || perfilAtual.coordsMapa || null
+        visitante: Boolean(usuario.visitante),
+        telefone: usuario.telefone || '',
+        idade: usuario.idade || '',
+        endereco: enderecoFinal,
+        coordsMapa: coordsMapaCadastro || usuario.coordsMapa || null
       };
 
       localStorage.setItem('usuario_ativo', JSON.stringify(perfilMesclado));
       localStorage.setItem('perfil_usuario', JSON.stringify(perfilMesclado));
       localStorage.setItem('ultimo_email_logado', emailChave);
 
-      if (perfilMesclado.endereco) {
-        localStorage.setItem('enderecoLoja', perfilMesclado.endereco);
+      if (enderecoFinal) {
+        localStorage.setItem('enderecoLoja', enderecoFinal);
         const chaveEnderecos = `enderecos_usuario_${emailChave}`;
         let lista = [];
         try {
@@ -1291,32 +1481,43 @@
           lista = [];
         }
         lista.forEach(item => { item.principal = false; });
-        lista.unshift({
-          id: Date.now(),
-          rua: perfilMesclado.endereco,
-          numero: '',
-          bairro: '',
-          enderecoCompleto: perfilMesclado.endereco,
-          coords: perfilMesclado.coordsMapa,
-          principal: true
-        });
+        const jaExiste = lista.some(item =>
+          (item.enderecoCompleto || item.rua || '').toLowerCase() === enderecoFinal.toLowerCase()
+        );
+        if (!jaExiste) {
+          lista.unshift({
+            id: Date.now(),
+            rua: enderecoFinal,
+            numero: '',
+            bairro: '',
+            enderecoCompleto: enderecoFinal,
+            coords: perfilMesclado.coordsMapa,
+            principal: true
+          });
+        } else {
+          lista.forEach(item => {
+            if ((item.enderecoCompleto || item.rua || '').toLowerCase() === enderecoFinal.toLowerCase()) {
+              item.principal = true;
+            }
+          });
+        }
         localStorage.setItem(chaveEnderecos, JSON.stringify(lista));
       }
     }
 
     function finalizarCadastroLocalmente({ nome, email, telefone, idade, senha, endereco, usuarioExtra = {} }) {
-      const emailFinal = email || `cliente_${Date.now()}@local.com`;
-      const nomeFinal = nome || emailFinal.split('@')[0] || 'Cliente';
       const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      const idxExistente = usuariosCadastrados.findIndex(u => u.email === emailFinal);
+      const idxExistente = usuariosCadastrados.findIndex(u => u.email && u.email.toLowerCase() === email.toLowerCase());
       const contaSalva = {
         ...usuarioExtra,
-        nome: nomeFinal,
-        email: emailFinal,
+        nome,
+        email,
         telefone,
         idade,
         senha,
-        endereco
+        endereco,
+        contaVerificada: true,
+        visitante: false
       };
 
       if (idxExistente >= 0) {
@@ -1326,10 +1527,6 @@
       }
 
       localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
-      localStorage.setItem('lembrar_email', emailFinal);
-      if (senha) {
-        localStorage.setItem('lembrar_senha', senha);
-      }
       salvarSessaoLocal(contaSalva, endereco);
       return contaSalva;
     }
@@ -1345,32 +1542,57 @@
       const senha = document.getElementById('cadSenha').value.trim();
       const endereco = document.getElementById('cadEndereco').value.trim();
 
+      if (nome.length < 2) {
+        mostrarAviso('avisoCadastro', 'Digite seu nome completo para criar a conta.');
+        return;
+      }
+
+      if (!validarEmailReal(email)) {
+        mostrarAviso('avisoCadastro', 'Digite um e-mail válido (ex: nome@gmail.com).');
+        return;
+      }
+
+      if (!validarTelefoneReal(telefone)) {
+        mostrarAviso('avisoCadastro', 'Digite um número de telefone/WhatsApp verdadeiro com DDD (10 ou 11 dígitos).');
+        return;
+      }
+
+      if (senha.length < 6) {
+        mostrarAviso('avisoCadastro', 'Crie uma senha com pelo menos 6 caracteres.');
+        return;
+      }
+
       let contaFinal = finalizarCadastroLocalmente({ nome, email, telefone, idade, senha, endereco });
 
       if (typeof cadastrarUsuarioSupabase === 'function') {
         try {
           const supaRes = await cadastrarUsuarioSupabase({
-            nome: contaFinal.nome,
-            email: contaFinal.email,
+            nome,
+            email,
             telefone,
             idade,
             endereco,
             senha,
             tipo: 'cliente'
           });
+
           if (supaRes && supaRes.ok && supaRes.usuario) {
             contaFinal = finalizarCadastroLocalmente({
-              nome: supaRes.usuario.nome || contaFinal.nome,
-              email: supaRes.usuario.email || contaFinal.email,
-              telefone,
+              nome: supaRes.usuario.nome || nome,
+              email: supaRes.usuario.email || email,
+              telefone: validarTelefoneReal(supaRes.usuario.telefone) ? supaRes.usuario.telefone : telefone,
               idade,
               senha,
               endereco,
               usuarioExtra: supaRes.usuario
             });
+          } else if (supaRes && supaRes.ok === false && supaRes.mensagem && supaRes.mensagem.includes('já está cadastrado')) {
+            mostrarAviso('avisoCadastro', supaRes.mensagem);
+            return;
           }
+
           if (typeof salvarTudoDaContaSupabase === 'function') {
-            await salvarTudoDaContaSupabase();
+            try { await salvarTudoDaContaSupabase(); } catch (e) {}
           }
         } catch (e) {}
       }
@@ -1390,7 +1612,7 @@
           contaFinal = finalizarCadastroLocalmente({
             nome: apiRes.usuario.nome || contaFinal.nome,
             email: apiRes.usuario.email || contaFinal.email,
-            telefone,
+            telefone: validarTelefoneReal(apiRes.usuario.telefone) ? apiRes.usuario.telefone : telefone,
             idade,
             senha,
             endereco,
@@ -1398,6 +1620,8 @@
           });
         }
       } catch (e) {}
+
+      limparCamposFormularioIndex();
 
       abrirQuadradoBoasVindas(
         contaFinal.nome,
@@ -1407,27 +1631,71 @@
       );
     }
 
+    function atualizarLembrarCredenciais(lembrar, entradaBruta, senha) {
+      if (lembrar) {
+        localStorage.setItem('lembrar_email', entradaBruta);
+        localStorage.setItem('lembrar_senha', senha);
+      } else {
+        localStorage.removeItem('lembrar_email');
+        localStorage.removeItem('lembrar_senha');
+      }
+    }
+
     async function executarLogin(event) {
       event.preventDefault();
       document.getElementById('avisoLogin').style.display = 'none';
 
       const entradaBruta = document.getElementById('loginEmail').value.trim();
       const entrada = entradaBruta.toLowerCase();
-      const senha = document.getElementById('loginSenha').value.trim();
+      const senha = document.getElementById('loginSenha').value;
       const lembrar = document.getElementById('chkLembrar').checked;
 
+      if (!entrada || !senha || senha.length < 1) {
+        mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
+        return;
+      }
+
+      if (entrada.includes('@') && !validarEmailReal(entrada)) {
+        mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
+        return;
+      }
+
+      const usuariosCadastrados = garantirContasAdminCadastradas();
+      const usuarioEncontrado = usuariosCadastrados.find(u =>
+        u && (
+          (u.email && String(u.email).trim().toLowerCase() === entrada) ||
+          (u.nome && String(u.nome).trim().toLowerCase() === entrada)
+        )
+      );
+
+      let houveRespostaSupabase = false;
       if (typeof loginUsuarioSupabase === 'function') {
         try {
           const supaRes = await loginUsuarioSupabase(entradaBruta, senha);
           if (supaRes && supaRes.ok && supaRes.usuario) {
-            if (lembrar) {
-              localStorage.setItem('lembrar_email', entradaBruta);
-              localStorage.setItem('lembrar_senha', senha);
-            } else {
-              localStorage.removeItem('lembrar_email');
-              localStorage.removeItem('lembrar_senha');
+            houveRespostaSupabase = true;
+            const senhaRegistro = supaRes.usuario.senha ?? supaRes.usuario.senha_hash ?? '';
+            if (!senhaRegistro || String(senhaRegistro) !== senha) {
+              mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
+              return;
             }
-            salvarSessaoLocal(supaRes.usuario);
+            const telEfetivo = supaRes.usuario.telefone || (usuarioEncontrado && usuarioEncontrado.telefone) || '';
+            const telValido = validarTelefoneReal(telEfetivo);
+            if (!telValido && supaRes.usuario.tipo !== 'admin') {
+              mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
+              return;
+            }
+            salvarSessaoLocal({
+              ...supaRes.usuario,
+              email: String(supaRes.usuario.email || entrada).trim().toLowerCase(),
+              telefone: telEfetivo,
+              idade: supaRes.usuario.idade || (usuarioEncontrado && usuarioEncontrado.idade) || '',
+              endereco: supaRes.usuario.endereco || (usuarioEncontrado && usuarioEncontrado.endereco) || '',
+              contaVerificada: true,
+              visitante: false
+            });
+            atualizarLembrarCredenciais(lembrar, entradaBruta, senha);
+            limparCamposFormularioIndex();
             abrirQuadradoBoasVindas(
               supaRes.usuario.nome,
               'Login realizado!',
@@ -1436,58 +1704,43 @@
             );
             return;
           }
+          if (supaRes && supaRes.ok === false) {
+            houveRespostaSupabase = true;
+            if (!supaRes.rede || !usuarioEncontrado) {
+              mostrarAviso('avisoLogin', supaRes.mensagem || 'E-mail ou senha inválidos, ou conta não cadastrada.');
+              return;
+            }
+          }
         } catch (e) {}
       }
 
-      const apiRes = await chamarApiAuth({
-        acao: 'login',
-        email: entrada,
-        senha
-      });
-
-      if (apiRes && apiRes.ok) {
-        if (lembrar) {
-          localStorage.setItem('lembrar_email', entradaBruta);
-          localStorage.setItem('lembrar_senha', senha);
-        } else {
-          localStorage.removeItem('lembrar_email');
-          localStorage.removeItem('lembrar_senha');
-        }
-        const usuario = apiRes.usuario || { nome: entradaBruta, email: entrada };
-        salvarSessaoLocal(usuario);
-        abrirQuadradoBoasVindas(usuario.nome, 'Login realizado!', resMensagem(apiRes), usuario.tipo === 'admin' ? 'admin.html' : 'cardapio.html');
+      if (!usuarioEncontrado || !usuarioEncontrado.email || !usuarioEncontrado.senha) {
+        mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
         return;
       }
 
-      const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      const usuarioEncontrado = usuariosCadastrados.find(u => 
-        u.email === entrada || (u.nome && u.nome.toLowerCase() === entrada)
-      );
-
-      if (usuarioEncontrado) {
-        if (lembrar) {
-          localStorage.setItem('lembrar_email', entradaBruta);
-          localStorage.setItem('lembrar_senha', senha);
-        } else {
-          localStorage.removeItem('lembrar_email');
-          localStorage.removeItem('lembrar_senha');
-        }
-
-        salvarSessaoLocal(usuarioEncontrado);
-        abrirQuadradoBoasVindas(usuarioEncontrado.nome);
-      } else {
-        const contaRapida = {
-          nome: entradaBruta.includes('@') ? entradaBruta.split('@')[0] : entradaBruta,
-          email: entrada,
-          senha
-        };
-        if (lembrar) {
-          localStorage.setItem('lembrar_email', entradaBruta);
-          localStorage.setItem('lembrar_senha', senha);
-        }
-        salvarSessaoLocal(contaRapida);
-        abrirQuadradoBoasVindas(contaRapida.nome);
+      if (String(usuarioEncontrado.senha) !== senha) {
+        mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
+        return;
       }
+
+      if (!validarTelefoneReal(usuarioEncontrado.telefone) && usuarioEncontrado.tipo !== 'admin') {
+        mostrarAviso('avisoLogin', 'E-mail ou senha inválidos, ou conta não cadastrada.');
+        return;
+      }
+
+      if (houveRespostaSupabase) {
+        salvarSessaoLocal({ ...usuarioEncontrado, contaVerificada: true, visitante: false });
+        atualizarLembrarCredenciais(lembrar, entradaBruta, senha);
+        limparCamposFormularioIndex();
+        abrirQuadradoBoasVindas(usuarioEncontrado.nome);
+        return;
+      }
+
+      salvarSessaoLocal({ ...usuarioEncontrado, contaVerificada: true, visitante: false });
+      atualizarLembrarCredenciais(lembrar, entradaBruta, senha);
+      limparCamposFormularioIndex();
+      abrirQuadradoBoasVindas(usuarioEncontrado.nome);
     }
 
     function resMensagem(apiRes) {
@@ -1530,10 +1783,10 @@
       }
 
       const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      let idx = usuariosCadastrados.findIndex(u => u.email === email);
+      const idx = usuariosCadastrados.findIndex(u => u.email === email);
       if (idx === -1) {
-        usuariosCadastrados.push({ nome: email.split('@')[0], email, senha: '' });
-        idx = usuariosCadastrados.length - 1;
+        mostrarAviso('avisoRecuperar', 'Nenhum cadastro encontrado com esse e-mail.');
+        return;
       }
       const codigoLocal = String(Math.floor(100000 + Math.random() * 900000));
       usuariosCadastrados[idx].codigo_recuperacao = codigoLocal;
@@ -1546,6 +1799,11 @@
       const email = document.getElementById('recEmail').value.trim().toLowerCase();
       const codigo = document.getElementById('recCodigo').value.trim();
       const novaSenha = document.getElementById('recNovaSenha').value.trim();
+
+      if (novaSenha.length < 6) {
+        mostrarAviso('avisoRecuperar', 'A nova senha deve ter pelo menos 6 caracteres.');
+        return;
+      }
 
       if (typeof redefinirSenhaSupabase === 'function') {
         try {
@@ -1574,13 +1832,13 @@
       }
 
       const usuariosCadastrados = JSON.parse(localStorage.getItem('usuarios_db')) || [];
-      let idx = usuariosCadastrados.findIndex(u => u.email === email);
-      if (idx === -1) {
-        usuariosCadastrados.push({ nome: email.split('@')[0], email, senha: novaSenha });
-      } else {
-        usuariosCadastrados[idx].senha = novaSenha;
-        delete usuariosCadastrados[idx].codigo_recuperacao;
+      const idx = usuariosCadastrados.findIndex(u => u.email === email);
+      if (idx === -1 || usuariosCadastrados[idx].codigo_recuperacao !== codigo) {
+        mostrarAviso('avisoRecuperar', 'Código inválido ou e-mail não encontrado.');
+        return;
       }
+      usuariosCadastrados[idx].senha = novaSenha;
+      delete usuariosCadastrados[idx].codigo_recuperacao;
       localStorage.setItem('usuarios_db', JSON.stringify(usuariosCadastrados));
       mostrarAviso('avisoRecuperar', 'Senha alterada com sucesso! Voltando para o login...', true);
       document.getElementById('loginEmail').value = email;
@@ -1589,43 +1847,59 @@
 
     async function executarLoginAdmin(event) {
       event.preventDefault();
+      document.getElementById('avisoAdmin').style.display = 'none';
+
       const usuario = document.getElementById('admUsuario').value.trim();
+      const usuarioLower = usuario.toLowerCase();
       const senha = document.getElementById('admSenha').value.trim();
+
+      if (!emailAdmAutorizado(usuarioLower)) {
+        mostrarAviso('avisoAdmin', 'Acesso negado! Apenas e-mails administrativos autorizados podem entrar no painel.');
+        return;
+      }
+
+      const usuariosCadastrados = garantirContasAdminCadastradas();
+      const contaLocal = usuariosCadastrados.find(u => u.email && u.email.toLowerCase() === usuarioLower);
 
       if (typeof loginUsuarioSupabase === 'function') {
         try {
-          const supaRes = await loginUsuarioSupabase(usuario, senha);
-          if (supaRes && supaRes.ok && supaRes.usuario && supaRes.usuario.tipo === 'admin') {
-            localStorage.setItem('admin_nome', supaRes.usuario.nome || usuario);
-            localStorage.setItem('usuario_ativo', JSON.stringify(supaRes.usuario));
+          const supaRes = await loginUsuarioSupabase(usuarioLower, senha);
+          if (supaRes && supaRes.ok && supaRes.usuario) {
+            const emailConta = String(supaRes.usuario.email || usuarioLower).trim().toLowerCase();
+            if (!emailAdmAutorizado(emailConta)) {
+              mostrarAviso('avisoAdmin', 'Acesso negado! Este e-mail não tem permissão administrativa.');
+              return;
+            }
+            localStorage.setItem('admin_nome', supaRes.usuario.nome || (contaLocal && contaLocal.nome) || usuario);
+            localStorage.setItem('usuario_ativo', JSON.stringify({
+              ...supaRes.usuario,
+              email: emailConta,
+              tipo: 'admin',
+              visitante: false
+            }));
+            limparCamposFormularioIndex();
             window.location.href = 'admin.html';
             return;
           }
         } catch (e) {}
       }
 
-      const apiRes = await chamarApiAuth({
-        acao: 'login',
-        email: usuario.toLowerCase(),
-        senha
-      });
+      const senhaGerente = (contaLocal && contaLocal.senha) || localStorage.getItem('senha_gerente') || '1234';
 
-      if (apiRes && apiRes.ok && apiRes.usuario && apiRes.usuario.tipo === 'admin') {
-        localStorage.setItem('admin_nome', apiRes.usuario.nome || usuario);
-        localStorage.setItem('usuario_ativo', JSON.stringify(apiRes.usuario));
-        window.location.href = 'admin.html';
-        return;
-      }
-
-      const senhaGerente = localStorage.getItem('senha_gerente') || '1234';
       if (senha === senhaGerente) {
-        localStorage.setItem('admin_nome', usuario);
+        localStorage.setItem('admin_nome', (contaLocal && contaLocal.nome) || usuario);
+        localStorage.setItem('usuario_ativo', JSON.stringify({
+          nome: (contaLocal && contaLocal.nome) || usuario,
+          email: usuarioLower,
+          tipo: 'admin',
+          visitante: false
+        }));
+        limparCamposFormularioIndex();
         window.location.href = 'admin.html';
       } else {
-        mostrarAviso('avisoAdmin', apiRes && !apiRes.ok ? apiRes.mensagem : 'Senha administrativa incorreta! (Senha padrão inicial: 1234)');
+        mostrarAviso('avisoAdmin', 'Senha administrativa incorreta!');
       }
     }
   </script>
-  <script src="supabase-conta.js"></script>
 </body>
 </html>

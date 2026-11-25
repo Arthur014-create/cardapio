@@ -5,7 +5,7 @@ const SUPABASE_LOJA_KEY = "sb_publishable_NNO9de18IgIO-8DyfBJRng_19ayZhS0";
 // Envia uma alteração do admin para o Supabase (todos os usuários cadastrados)
 async function salvarGlobalNoSupabase(chave, valor) {
   try {
-    await fetch(`${SUPABASE_LOJA_URL}/rest/v1/config_sistema_global`, {
+    const resp = await fetch(`${SUPABASE_LOJA_URL}/rest/v1/config_sistema_global`, {
       method: "POST",
       headers: {
         "apikey": SUPABASE_LOJA_KEY,
@@ -19,8 +19,14 @@ async function salvarGlobalNoSupabase(chave, valor) {
         atualizado_em: new Date().toISOString()
       })
     });
+    if (!resp.ok) {
+      console.warn("Supabase recusou a gravação global:", resp.status);
+      return false;
+    }
+    return true;
   } catch (e) {
     console.warn("Erro ao salvar no Supabase:", e);
+    return false;
   }
 }
 
