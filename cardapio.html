@@ -1162,7 +1162,8 @@
     })();
 
     const CHAVE_PRODUTOS_DIRETA = 'produtos_db';
-    
+    const VERSAO_BEBIDAS_2000 = 'bebidas_2001_2020_v1';
+
     const produtosPadraoDiretos = [
       {
         id: 1001,
@@ -1385,72 +1386,294 @@
         descricao: "Hambúrguer artesanal com queijo cheddar, servido em pão tipo brioche."
       },
       {
-            "id": 1021,
-            "nome": "Refrigerante Cola Lata 350ml",
-            "categoria": "bebidas",
-            "sub": "Refrigerantes",
-            "tag": "Mais Pedido",
-            "estoque": 30,
-            "imagem": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=600",
-            "preco": 6.5,
-            "descricao": "Refrigerante cola bem gelado em lata de 350ml, ideal para acompanhar seu lanche."
+        id: 1021,
+        nome: "Refrigerante Cola Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Mais Pedido",
+        estoque: 30,
+        imagem: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=600",
+        preco: 6.5,
+        descricao: "Refrigerante cola bem gelado em lata de 350ml, ideal para acompanhar seu lanche."
       },
       {
-            "id": 1022,
-            "nome": "Guaraná Natural Gelado 350ml",
-            "categoria": "bebidas",
-            "sub": "Refrigerantes",
-            "tag": "Artesanal",
-            "estoque": 30,
-            "imagem": "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?q=80&w=600",
-            "preco": 6.0,
-            "descricao": "Refrigerante de guaraná servido bem gelado, refrescante e equilibrado."
+        id: 1022,
+        nome: "Guaraná Natural Gelado 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Artesanal",
+        estoque: 30,
+        imagem: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?q=80&w=600",
+        preco: 6.0,
+        descricao: "Refrigerante de guaraná servido bem gelado, refrescante e equilibrado."
       },
       {
-            "id": 1023,
-            "nome": "Suco Natural de Laranja 400ml",
-            "categoria": "bebidas",
-            "sub": "Sucos Naturais",
-            "tag": "Mais Pedido",
-            "estoque": 25,
-            "imagem": "https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=600",
-            "preco": 11.9,
-            "descricao": "Suco de laranja espremido na hora, sem conservantes e com gelo a gosto."
+        id: 1023,
+        nome: "Suco Natural de Laranja 400ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Mais Pedido",
+        estoque: 25,
+        imagem: "https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=600",
+        preco: 11.9,
+        descricao: "Suco de laranja espremido na hora, sem conservantes e com gelo a gosto."
       },
       {
-            "id": 1024,
-            "nome": "Suco Natural de Maracujá 400ml",
-            "categoria": "bebidas",
-            "sub": "Sucos Naturais",
-            "tag": "Artesanal",
-            "estoque": 25,
-            "imagem": "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=600",
-            "preco": 12.5,
-            "descricao": "Suco natural de maracujá fresco, cremoso e refrescante."
+        id: 1024,
+        nome: "Suco Natural de Maracujá 400ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Artesanal",
+        estoque: 25,
+        imagem: "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=600",
+        preco: 12.5,
+        descricao: "Suco natural de maracujá fresco, cremoso e refrescante."
       },
       {
-            "id": 1025,
-            "nome": "Água Mineral sem Gás 500ml",
-            "categoria": "bebidas",
-            "sub": "Águas",
-            "tag": "Essencial",
-            "estoque": 40,
-            "imagem": "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=600",
-            "preco": 4.5,
-            "descricao": "Água mineral pura e gelada em garrafa de 500ml."
+        id: 1025,
+        nome: "Água Mineral sem Gás 500ml",
+        categoria: "bebidas",
+        sub: "Águas",
+        tag: "Essencial",
+        estoque: 40,
+        imagem: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=600",
+        preco: 4.5,
+        descricao: "Água mineral pura e gelada em garrafa de 500ml."
       },
       {
-            "id": 1026,
-            "nome": "Água Mineral com Gás 500ml",
-            "categoria": "bebidas",
-            "sub": "Águas",
-            "tag": "Refrescante",
-            "estoque": 40,
-            "imagem": "https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=600",
-            "preco": 5.0,
-            "descricao": "Água mineral gaseificada gelada, perfeita para acompanhar entradas e porções."
+        id: 1026,
+        nome: "Água Mineral com Gás 500ml",
+        categoria: "bebidas",
+        sub: "Águas",
+        tag: "Refrescante",
+        estoque: 40,
+        imagem: "https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=600",
+        preco: 5.0,
+        descricao: "Água mineral gaseificada gelada, perfeita para acompanhar entradas e porções."
+      },
+      {
+        id: 2001,
+        nome: "Coca-Cola Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Mais Pedido",
+        estoque: 30,
+        imagem: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=600",
+        preco: 6.00,
+        descricao: "Coca-Cola original em lata de 350ml, servida bem gelada e refrescante."
+      },
+      {
+        id: 2002,
+        nome: "Coca-Cola Zero Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Zero Açúcar",
+        estoque: 25,
+        imagem: "https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=600",
+        preco: 6.00,
+        descricao: "Refrigerante Coca-Cola Zero Açúcar, com sabor original e sem açúcar."
+      },
+      {
+        id: 2003,
+        nome: "Guaraná Antarctica Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Mais Pedido",
+        estoque: 25,
+        imagem: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?q=80&w=600",
+        preco: 6.00,
+        descricao: "Refrigerante de guaraná com sabor brasileiro, gaseificado e refrescante."
+      },
+      {
+        id: 2004,
+        nome: "Fanta Laranja Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Refrescante",
+        estoque: 20,
+        imagem: "https://images.unsplash.com/photo-1624517452488-04869289c4ca?q=80&w=600",
+        preco: 6.00,
+        descricao: "Refrigerante sabor laranja, com sabor cítrico e delicioso."
+      },
+      {
+        id: 2005,
+        nome: "Sprite Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Refrescante",
+        estoque: 20,
+        imagem: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?q=80&w=600",
+        preco: 6.00,
+        descricao: "Refrigerante de limão com gás, sabor leve e refrescante."
+      },
+      {
+        id: 2006,
+        nome: "Pepsi Lata 350ml",
+        categoria: "bebidas",
+        sub: "Refrigerantes",
+        tag: "Tradicional",
+        estoque: 20,
+        imagem: "https://images.unsplash.com/photo-1553451166-2321127d209d?q=80&w=600",
+        preco: 6.00,
+        descricao: "Refrigerante Pepsi clássico, servido gelado em lata de 350ml."
+      },
+      {
+        id: 2007,
+        nome: "Água Mineral sem Gás 500ml",
+        categoria: "bebidas",
+        sub: "Águas",
+        tag: "Natural",
+        estoque: 40,
+        imagem: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=600",
+        preco: 3.50,
+        descricao: "Água mineral natural sem gás, ideal para acompanhar qualquer refeição."
+      },
+      {
+        id: 2008,
+        nome: "Água Mineral com Gás 500ml",
+        categoria: "bebidas",
+        sub: "Águas",
+        tag: "Refrescante",
+        estoque: 30,
+        imagem: "https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=600",
+        preco: 4.50,
+        descricao: "Água mineral gaseificada, leve e refrescante para qualquer momento."
+      },
+      {
+        id: 2009,
+        nome: "Suco Natural de Laranja 300ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Natural",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=600",
+        preco: 9.00,
+        descricao: "Suco natural de laranja preparado com frutas frescas e sabor cítrico."
+      },
+      {
+        id: 2010,
+        nome: "Suco de Maracujá 300ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Natural",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=600",
+        preco: 9.00,
+        descricao: "Suco de maracujá com sabor tropical, levemente ácido e refrescante."
+      },
+      {
+        id: 2011,
+        nome: "Suco de Morango 300ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Especial",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?q=80&w=600",
+        preco: 10.00,
+        descricao: "Suco de morango saboroso, preparado para oferecer uma bebida doce e refrescante."
+      },
+      {
+        id: 2012,
+        nome: "Suco de Abacaxi com Hortelã 300ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Especial",
+        estoque: 12,
+        imagem: "https://images.unsplash.com/photo-1589734580586-9d5f9a6e82b4?q=80&w=600",
+        preco: 10.00,
+        descricao: "Combinação de abacaxi com hortelã, proporcionando sabor tropical e refrescante."
+      },
+      {
+        id: 2013,
+        nome: "Suco de Uva Integral 300ml",
+        categoria: "bebidas",
+        sub: "Sucos Naturais",
+        tag: "Integral",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1595981267035-7b04ca84a82d?q=80&w=600",
+        preco: 9.00,
+        descricao: "Suco de uva integral com sabor intenso e naturalmente adocicado."
+      },
+      {
+        id: 2014,
+        nome: "Milk-shake de Chocolate 400ml",
+        categoria: "bebidas",
+        sub: "Milk-shakes",
+        tag: "Mais Pedido",
+        estoque: 10,
+        imagem: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=600",
+        preco: 16.00,
+        descricao: "Milk-shake cremoso de chocolate preparado com sorvete e cobertura especial."
+      },
+      {
+        id: 2015,
+        nome: "Milk-shake de Morango 400ml",
+        categoria: "bebidas",
+        sub: "Milk-shakes",
+        tag: "Especial",
+        estoque: 10,
+        imagem: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?q=80&w=600",
+        preco: 16.00,
+        descricao: "Milk-shake de morango com textura cremosa e sabor doce e irresistível."
+      },
+      {
+        id: 2016,
+        nome: "Milk-shake de Ovomaltine 400ml",
+        categoria: "bebidas",
+        sub: "Milk-shakes",
+        tag: "Premium",
+        estoque: 10,
+        imagem: "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=600",
+        preco: 18.00,
+        descricao: "Milk-shake cremoso com Ovomaltine, sabor marcante e cobertura especial."
+      },
+      {
+        id: 2017,
+        nome: "Vitamina de Banana 400ml",
+        categoria: "bebidas",
+        sub: "Vitaminas",
+        tag: "Cremoso",
+        estoque: 10,
+        imagem: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?q=80&w=600",
+        preco: 12.00,
+        descricao: "Vitamina de banana preparada com leite, textura cremosa e sabor suave."
+      },
+      {
+        id: 2018,
+        nome: "Chá Gelado de Limão 300ml",
+        categoria: "bebidas",
+        sub: "Chás Gelados",
+        tag: "Refrescante",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=600",
+        preco: 8.00,
+        descricao: "Chá gelado com toque de limão, sabor leve e ideal para dias quentes."
+      },
+      {
+        id: 2019,
+        nome: "Energético Red Bull 250ml",
+        categoria: "bebidas",
+        sub: "Energéticos",
+        tag: "Energia",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?q=80&w=600",
+        preco: 12.00,
+        descricao: "Bebida energética Red Bull em lata de 250ml, servida gelada."
+      },
+      {
+        id: 2020,
+        nome: "Água de Coco 300ml",
+        categoria: "bebidas",
+        sub: "Bebidas Naturais",
+        tag: "Natural",
+        estoque: 15,
+        imagem: "https://images.unsplash.com/photo-1536657464919-892534f60d6d?q=80&w=600",
+        preco: 8.00,
+        descricao: "Água de coco com sabor suave e tropical, uma opção leve e refrescante."
       }
     ];
+
+    const IMAGEM_FALLBACK_BEBIDA = "https://images.unsplash.com/photo-1544145945-f90425340c7e?q=80&w=600";
 
     const formatarPreco = (preco) =>
       Number(preco || 0).toLocaleString("pt-BR", {
@@ -1462,7 +1685,7 @@
     let favoritos = lerFavoritosUsuario();
     let categoriaAtual = 'todos';
 
-function padronizarPrecoCardapio(valor) {
+    function padronizarPrecoCardapio(valor) {
       if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
       let str = String(valor ?? '0').replace(/R\$/gi, '').replace(/\s+/g, '').trim();
       if (!str) return 0;
@@ -1583,6 +1806,7 @@ function padronizarPrecoCardapio(valor) {
           estoque: item.estoque ?? 20
         }));
         localStorage.setItem(CHAVE_PRODUTOS_DIRETA, JSON.stringify(inicial));
+        localStorage.setItem(VERSAO_BEBIDAS_2000, '1');
         produtos = inicial;
         return;
       }
@@ -1591,18 +1815,35 @@ function padronizarPrecoCardapio(valor) {
       produtos = lista.map(item => {
         const precoNum = padronizarPrecoCardapio(item.preco);
         const catNorm = String(item.categoria || '').trim().toLowerCase();
+        const imgPadrao = produtosPadraoDiretos.find(p => Number(p.id) === Number(item.id))?.imagem;
+        let imgFinal = String(item.imagem || '').trim();
+        if (!imgFinal) {
+          imgFinal = imgPadrao || (catNorm === 'bebidas' ? IMAGEM_FALLBACK_BEBIDA : '');
+          if (imgFinal) alterou = true;
+        }
         if (item.preco !== precoNum || item.categoria !== catNorm) alterou = true;
-        return { ...item, preco: precoNum, categoria: catNorm };
+        return { ...item, preco: precoNum, categoria: catNorm, imagem: imgFinal };
       });
 
-      // Garante a aba Bebidas preenchida (refrigerantes, sucos e água)
-      if (!produtos.some(p => p.categoria === 'bebidas') && localStorage.getItem('bebidas_padrao_semeadas') !== '1') {
-        localStorage.setItem('bebidas_padrao_semeadas', '1');
-        const idsExistentes = new Set(produtos.map(p => Number(p.id)));
-        produtosPadraoDiretos
-          .filter(p => p.categoria === 'bebidas' && !idsExistentes.has(Number(p.id)))
-          .forEach(p => produtos.push({ ...p, preco: padronizarPrecoCardapio(p.preco) }));
-        alterou = true;
+      const bebidasNovas = produtosPadraoDiretos.filter(p => Number(p.id) >= 2001 && Number(p.id) <= 2020);
+      const jaAplicouVersao = localStorage.getItem(VERSAO_BEBIDAS_2000) === '1';
+
+      if (!jaAplicouVersao) {
+        const mapaAtual = new Map(produtos.map(p => [Number(p.id), p]));
+        bebidasNovas.forEach(bebidaNova => {
+          const existente = mapaAtual.get(Number(bebidaNova.id));
+          if (!existente) {
+            produtos.push({ ...bebidaNova, preco: padronizarPrecoCardapio(bebidaNova.preco) });
+            alterou = true;
+          } else {
+            const imgAtual = String(existente.imagem || '').trim();
+            if (!imgAtual) {
+              existente.imagem = bebidaNova.imagem;
+              alterou = true;
+            }
+          }
+        });
+        localStorage.setItem(VERSAO_BEBIDAS_2000, '1');
       }
 
       if (alterou) {
@@ -1644,6 +1885,7 @@ function padronizarPrecoCardapio(valor) {
         const eFav = eProdutoFavorito(prod.id);
         const precoNum = padronizarPrecoCardapio(prod.preco);
         const tagTexto = prod.tag || prod.sub || 'Destaque';
+        const imgSrc = prod.imagem || (prod.categoria === 'bebidas' ? IMAGEM_FALLBACK_BEBIDA : '');
 
         grid.innerHTML += `
           <div class="card-produto">
@@ -1652,7 +1894,7 @@ function padronizarPrecoCardapio(valor) {
               <button type="button" class="btn-favorito ${eFav ? 'ativo' : ''}" onclick="alternarFavorito(${prod.id}, event)">
                 <i class="${eFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
               </button>
-              <img src="${prod.imagem}" alt="${prod.nome}" loading="lazy">
+              <img src="${imgSrc}" alt="${prod.nome}" loading="lazy" onerror="this.onerror=null;this.src='${IMAGEM_FALLBACK_BEBIDA}';">
             </div>
             <div class="produto-detalhes">
               <div class="produto-info">
